@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRESSURE.ed — how peer pressure works, and how to hold your line</title>
+<meta name="description" content="A scroll-driven lesson on peer pressure: why we conform, how pressure shows up, and how to say no. A study project inspired by Zajno's motion.ed.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='10' fill='%23F7F5F0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ PRELOADER ============ -->
+<div id="preloader" aria-hidden="true">
+  <div class="pre-count"><span id="preNum">0</span></div>
+  <h1 class="pre-title">PRESSURE<span class="pre-dot">.ed</span></h1>
+  <p class="pre-sub">a lesson in holding your line</p>
+</div>
+
+<!-- ============ FIXED CHROME ============ -->
+<div id="progress" role="presentation"><span id="progressBar"></span></div>
+
+<header class="chrome chrome-tl">
+  <span class="logo-dot" aria-hidden="true"></span>
+  <span class="logo-dot logo-dot--ring" aria-hidden="true"></span>
+  <a class="pill logo-pill" href="#intro">pressure.ed</a>
+  <span class="pill crumb" id="crumb" aria-live="polite">Introduction</span>
+</header>
+
+<div class="chrome chrome-tr">
+  <button class="pill menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay">menu <span aria-hidden="true">&#9776;</span></button>
+</div>
+
+<div class="chrome chrome-br">
+  <button class="round-btn" id="soundToggle" aria-pressed="false" aria-label="Toggle sound (currently muted)">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <g class="snd-waves">
+        <path class="snd-bar b1" d="M7 9v6"/><path class="snd-bar b2" d="M12 6v12"/><path class="snd-bar b3" d="M17 9v6"/>
+      </g>
+      <line class="snd-mute" x1="5" y1="19" x2="19" y2="5"/>
+    </svg>
+  </button>
+</div>
+
+<nav id="menuOverlay" aria-hidden="true">
+  <button class="pill menu-close" id="menuClose">close &times;</button>
+  <ol class="menu-list">
+    <li><a href="#intro">Introduction</a></li>
+    <li><a href="#belonging">Belonging</a></li>
+    <li><a href="#conformity">Conformity</a></li>
+    <li><a href="#fitting-in">Fitting In</a></li>
+    <li><a href="#looking">Looking to Others</a></li>
+    <li><a href="#direct">Direct Pressure</a></li>
+    <li><a href="#unspoken">Unspoken Pressure</a></li>
+    <li><a href="#online">Online Pressure</a></li>
+    <li><a href="#saying-no">Saying No</a></li>
+    <li><a href="#resources">Resources</a></li>
+  </ol>
+  <p class="menu-foot mono">pressure.ed — a study project on peer pressure</p>
+</nav>
+
+<div id="cursor" aria-hidden="true"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<main>
+
+<!-- ============ 1 · HERO ============ -->
+<section id="intro" class="dark" data-name="Introduction" data-bg="#0C0B0B" data-mode="dark">
+  <div class="hero-stage">
+    <div class="hero-lines">
+      <h1 class="hero-line line-1">PEER PRESSURE IS THE QUIET FORCE OF OTHER PEOPLE ON THE CHOICES YOU MAKE.</h1>
+      <p class="hero-line line-2">IT SHAPES WHAT YOU WEAR, SAY, BUY, AND BELIEVE — <em class="serif">often without a word.</em></p>
+    </div>
+    <svg id="heroSvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-label="A white ball sitting on a horizontal line, about to be nudged by approaching peer dots">
+      <line class="hero-baseline" x1="-100" y1="450" x2="1540" y2="450"/>
+      <circle class="hero-ring" cx="720" cy="450" r="46"/>
+      <circle class="peer hero-peer p1" cx="1560" cy="450" r="14"/>
+      <circle class="peer hero-peer p2" cx="1640" cy="450" r="11"/>
+      <g id="heroBall"><circle class="ballc" cx="720" cy="450" r="26"/></g>
+    </svg>
+    <div class="hero-hint mono" id="scrollHint"><span id="hintLottie" aria-hidden="true"></span>scroll — this ball is you</div>
+  </div>
+</section>
+
+<!-- ============ 2 · STORYTELLING STRETCH ============ -->
+<section id="story" class="dark" data-name="Introduction" data-bg="#0C0B0B" data-mode="dark">
+  <div class="story-stage">
+    <svg id="storySvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid meet" aria-label="The ball travels a winding path while line drawings of a lunch table, a phone, a crowd and a doorway appear, and peer dots push it off course">
+      <!-- invisible travel path -->
+      <path id="storyPath" d="M80,180 C380,120 560,260 460,420 C370,565 620,700 860,610 C1080,530 960,330 1150,270 C1310,220 1380,400 1280,560" fill="none" stroke="none"/>
+
+      <!-- self-drawing line-art scenes (pathLength=1 so dash reveal is trivial) -->
+      <g class="scene scene-table" aria-hidden="true">
+        <ellipse class="art" cx="260" cy="560" rx="120" ry="34" pathLength="1"/>
+        <circle class="art" cx="170" cy="500" r="16" pathLength="1"/>
+        <circle class="art" cx="260" cy="488" r="16" pathLength="1"/>
+        <circle class="art" cx="350" cy="500" r="16" pathLength="1"/>
+        <text class="scene-label" x="260" y="640">the lunch table</text>
+      </g>
+      <g class="scene scene-phone" aria-hidden="true">
+        <rect class="art" x="640" y="160" width="110" height="200" rx="18" pathLength="1"/>
+        <line class="art" x1="668" y1="330" x2="722" y2="330" pathLength="1"/>
+        <circle class="art" cx="695" cy="210" r="22" pathLength="1"/>
+        <text class="scene-label" x="695" y="410">the phone</text>
+      </g>
+      <g class="scene scene-crowd" aria-hidden="true">
+        <circle class="art" cx="1150" cy="640" r="14" pathLength="1"/>
+        <circle class="art" cx="1195" cy="615" r="11" pathLength="1"/>
+        <circle class="art" cx="1235" cy="650" r="13" pathLength="1"/>
+        <circle class="art" cx="1185" cy="675" r="9" pathLength="1"/>
+        <circle class="art" cx="1265" cy="612" r="10" pathLength="1"/>
+        <text class="scene-label" x="1205" y="730">the crowd</text>
+      </g>
+      <g class="scene scene-door" aria-hidden="true">
+        <rect class="art" x="1240" y="90" width="120" height="190" rx="4" pathLength="1"/>
+        <line class="art" x1="1240" y1="280" x2="1200" y2="310" pathLength="1"/>
+        <circle class="art" cx="1330" cy="190" r="5" pathLength="1"/>
+        <text class="scene-label" x="1300" y="330">the doorway</text>
+      </g>
+
+      <!-- peer dots that nudge the traveling ball -->
+      <circle class="peer story-peer sp1" cx="560" cy="640" r="13"/>
+      <circle class="peer story-peer sp2" cx="1040" cy="420" r="12"/>
+
+      <g id="storyBall"><circle class="ballc" r="26"/></g>
+    </svg>
+    <!-- traveling word pills -->
+    <div class="story-words" aria-hidden="true">
+      <span class="pill story-word" style="left:12%;top:16%">It quietly</span>
+      <span class="pill story-word" style="left:34%;top:44%">shapes</span>
+      <span class="pill story-word" style="left:44%;top:76%">what you</span>
+      <span class="pill story-word" style="left:64%;top:62%">say</span>
+      <span class="pill story-word" style="left:72%;top:32%">and what you</span>
+      <span class="pill story-word" style="left:86%;top:56%">do</span>
+    </div>
+    <p class="visually-hidden">As you scroll, peer dots visibly push the ball off its path — that push is peer pressure.</p>
+  </div>
+</section>
+
+<!-- ============ 3 · SCENARIO SHOWCASE ============ -->
+<section id="scenarios" class="dark" data-name="Scenarios" data-bg="#0C0B0B" data-mode="dark">
+  <div class="scenario-stage">
+    <h2 class="section-heading split">YOU HAVE FELT IT BEFORE</h2>
+    <div class="scenario-track">
+      <figure class="scenario-card">
+        <div class="video-ph g1" role="img" aria-label="Placeholder video: a party scene"><span class="mono">SCENARIO: THE PARTY</span></div>
+        <figcaption class="mono">A drink is pushed into your hand — you didn't ask for it.</figcaption>
+      </figure>
+      <figure class="scenario-card">
+        <div class="video-ph g2" role="img" aria-label="Placeholder video: a group chat"><span class="mono">SCENARIO: THE GROUP CHAT</span></div>
+        <figcaption class="mono">Everyone is piling on one person. The next message is yours.</figcaption>
+      </figure>
+      <figure class="scenario-card">
+        <div class="video-ph g3" role="img" aria-label="Placeholder video: a classroom"><span class="mono">SCENARIO: THE CLASSROOM</span></div>
+        <figcaption class="mono">You know the answer. Nobody raises a hand, so neither do you.</figcaption>
+      </figure>
+      <figure class="scenario-card">
+        <div class="video-ph g4" role="img" aria-label="Placeholder video: a sports team"><span class="mono">SCENARIO: THE TEAM</span></div>
+        <figcaption class="mono">Your ankle is screaming. "Tough it out" — so you play on.</figcaption>
+      </figure>
+      <figure class="scenario-card">
+        <div class="video-ph g5" role="img" aria-label="Placeholder video: a shopping trip"><span class="mono">SCENARIO: THE SHOPPING TRIP</span></div>
+        <figcaption class="mono">You can't afford it. You buy it anyway, to belong.</figcaption>
+      </figure>
+      <figure class="scenario-card">
+        <div class="video-ph g6" role="img" aria-label="Placeholder video: an office at night"><span class="mono">SCENARIO: THE OFFICE</span></div>
+        <figcaption class="mono">It's 7pm. Nobody has left, so nobody leaves.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · TWO TYPES ============ -->
+<section id="two-types" class="dark" data-name="Two Types" data-bg="#0C0B0B" data-mode="dark">
+  <h2 class="section-heading split">PRESSURE HAS TWO FACES</h2>
+  <div class="types-grid">
+    <article class="type-card type-neg">
+      <h3>NEGATIVE</h3>
+      <p class="mono">Pressure that pushes you toward harm: risky choices, silence when you should speak, spending you can't afford, being someone you're not.</p>
+      <svg class="type-art" viewBox="0 0 300 120" aria-hidden="true">
+        <line class="dash" x1="10" y1="60" x2="290" y2="60"/>
+        <circle class="peer" cx="110" cy="60" r="10"/><circle class="peer" cx="140" cy="60" r="8"/>
+        <circle class="ballc-ink" cx="200" cy="92" r="14"/>
+        <path class="dash" d="M170,60 C185,60 195,75 200,92"/>
+      </svg>
+      <p class="mono small">the ball gets pushed off its line</p>
+    </article>
+    <article class="type-card type-pos">
+      <h3>POSITIVE</h3>
+      <p class="mono">Pressure that pulls you toward good: the study group that keeps you honest, the friend who runs at 6am, the teammate whose courage is contagious.</p>
+      <svg class="type-art" viewBox="0 0 300 120" aria-hidden="true">
+        <line class="dash" x1="10" y1="60" x2="290" y2="60"/>
+        <circle class="peer" cx="110" cy="60" r="10"/><circle class="peer" cx="250" cy="60" r="8"/>
+        <circle class="ballc-ink" cx="180" cy="60" r="14"/>
+      </svg>
+      <p class="mono small">the ball is carried further along it</p>
+    </article>
+  </div>
+  <p class="types-note mono">Same force. What matters is the direction it moves you — and whether you chose it.</p>
+</section>
+
+<!-- ============ 5 · HOW-IT-WORKS INTRO ============ -->
+<section id="how-intro" class="dark" data-name="How It Works" data-bg="#0C0B0B" data-mode="dark">
+  <p class="kicker mono">eight ideas · scroll to scrub each one</p>
+  <h2 class="giant-heading split">HOW PRESSURE WORKS ON US</h2>
+</section>
+
+<!-- ============ CONCEPT 1 · BELONGING ============ -->
+<section id="belonging" class="concept" data-name="01 · Belonging" data-bg="#C8CFE8" data-mode="light" style="background:#C8CFE8">
+  <div class="concept-inner">
+    <header class="concept-head">
+      <span class="concept-num" aria-hidden="true">1</span>
+      <h2 class="concept-title split">THE NEED TO BELONG</h2>
+      <p class="concept-desc mono">Humans are wired to seek acceptance. For most of our history, being in a group meant safety and survival, so your brain treats exclusion almost like physical pain. Peer pressure starts here: the pull toward others isn't weakness — it's biology. Naming the pull makes it easier to notice.</p>
+    </header>
+    <div class="demo-scroll">
+      <div class="demo-stage">
+        <svg class="demo-svg" data-demo="belong" viewBox="0 0 1200 600" aria-label="Demo: a lone ball drifts toward a warm cluster of peer dots">
+          <path id="belongPath" d="M150,340 C350,340 430,230 630,265 C790,293 840,300 920,300" fill="none" stroke="none"/>
+          <circle class="soft-glow" cx="945" cy="300" r="130"/>
+          <g class="belong-cluster">
+            <circle class="peer" cx="905" cy="258" r="16"/><circle class="peer" cx="975" cy="250" r="13"/>
+            <circle class="peer" cx="1010" cy="315" r="15"/><circle class="peer" cx="960" cy="360" r="12"/>
+            <circle class="peer" cx="895" cy="335" r="11"/><circle class="peer" cx="945" cy="298" r="14"/>
+          </g>
+          <text class="d-label" x="150" y="410">you</text>
+          <text class="d-label" x="945" y="450">the group</text>
+          <g class="d-ball"><circle class="ballc" r="26"/></g>
+        </svg>
+      </div>
+    </div>
+    <h3 class="showsup split">HOW IT SHOWS UP</h3>
+    <div class="cards">
+      <figure class="ex-card"><div class="video-ph g1"><span class="mono">EXAMPLE 01</span></div><figcaption class="mono">Changing your music taste to match the group's.</figcaption><a class="see mono" href="#belonging">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g2"><span class="mono">EXAMPLE 02</span></div><figcaption class="mono">Laughing at a joke you didn't find funny.</figcaption><a class="see mono" href="#belonging">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g3"><span class="mono">EXAMPLE 03</span></div><figcaption class="mono">Staying in a group chat that makes you anxious.</figcaption><a class="see mono" href="#belonging">See it &rarr;</a></figure>
+    </div>
+    <svg class="deco" viewBox="0 0 100 100" aria-hidden="true"><path class="diamond" d="M50 14 C56 40 60 44 86 50 C60 56 56 60 50 86 C44 60 40 56 14 50 C40 44 44 40 50 14 Z"/></svg>
+  </div>
+</section>
+
+<!-- ============ CONCEPT 2 · CONFORMITY ============ -->
+<section id="conformity" class="concept" data-name="02 · Conformity" data-bg="#C8CFE8" data-mode="light" style="background:#C8CFE8">
+  <div class="concept-inner">
+    <header class="concept-head">
+      <span class="concept-num" aria-hidden="true">2</span>
+      <h2 class="concept-title split">CONFORMITY</h2>
+      <p class="concept-desc mono">In Solomon Asch's famous line-judgment studies, people denied what their own eyes told them rather than disagree with the room. We don't just copy behavior — under enough social weight, we can override our own perception. Watch the ball abandon what it saw to match the row.</p>
+    </header>
+    <div class="demo-scroll">
+      <div class="demo-stage">
+        <svg class="demo-svg" data-demo="conformity" viewBox="0 0 1200 600" aria-label="Demo: the ball changes its size and position to match a row of peer dots, even though a dashed marker shows what it originally saw">
+          <line class="ink-line" x1="380" y1="330" x2="1160" y2="330"/>
+          <circle class="peer" cx="480" cy="308" r="22"/><circle class="peer" cx="640" cy="308" r="22"/>
+          <circle class="peer" cx="800" cy="308" r="22"/><circle class="peer" cx="960" cy="308" r="22"/>
+          <circle class="dash-ghost" cx="220" cy="430" r="34"/>
+          <text class="d-label" x="220" y="500">what you saw</text>
+          <text class="d-label" x="770" y="270">what everyone says</text>
+          <g class="d-ball"><circle class="ballc" r="34"/></g>
+        </svg>
+      </div>
+    </div>
+    <h3 class="showsup split">HOW IT SHOWS UP</h3>
+    <div class="cards">
+      <figure class="ex-card"><div class="video-ph g4"><span class="mono">EXAMPLE 01</span></div><figcaption class="mono">Agreeing an answer is right because everyone said so.</figcaption><a class="see mono" href="#conformity">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g5"><span class="mono">EXAMPLE 02</span></div><figcaption class="mono">Doubting something you clearly saw happen.</figcaption><a class="see mono" href="#conformity">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g6"><span class="mono">EXAMPLE 03</span></div><figcaption class="mono">Voting with the majority just to end the discussion.</figcaption><a class="see mono" href="#conformity">See it &rarr;</a></figure>
+    </div>
+    <svg class="deco" viewBox="0 0 100 100" aria-hidden="true"><path class="diamond" d="M50 14 C56 40 60 44 86 50 C60 56 56 60 50 86 C44 60 40 56 14 50 C40 44 44 40 50 14 Z"/></svg>
+  </div>
+</section>
+
+<!-- ============ CONCEPT 3 · FITTING IN ============ -->
+<section id="fitting-in" class="concept" data-name="03 · Fitting In" data-bg="#E4E8C8" data-mode="light" style="background:#E4E8C8">
+  <div class="concept-inner">
+    <header class="concept-head">
+      <span class="concept-num" aria-hidden="true">3</span>
+      <h2 class="concept-title split">NORMATIVE INFLUENCE</h2>
+      <p class="concept-desc mono">Fitting in. Going along so that people will like and accept you — even when you privately disagree. Psychologists call it normative influence: the group sets a shape, and you trim yourself to fit it. The cost is quiet: a smaller, tidier version of you.</p>
+    </header>
+    <div class="demo-scroll">
+      <div class="demo-stage">
+        <svg class="demo-svg" data-demo="fitting" viewBox="0 0 1200 600" aria-label="Demo: peer dots form a ring with one empty slot; the ball shrinks itself to fit the slot">
+          <g class="ring-formation">
+            <circle class="peer" cx="750" cy="150" r="18"/><circle class="peer" cx="856" cy="211" r="18"/>
+            <circle class="peer" cx="856" cy="389" r="18"/><circle class="peer" cx="750" cy="450" r="18"/>
+            <circle class="peer" cx="644" cy="389" r="18"/><circle class="peer" cx="644" cy="211" r="18"/>
+          </g>
+          <circle class="dash-ghost slot" cx="600" cy="300" r="18"/>
+          <text class="d-label" x="600" y="530">the shape the group made</text>
+          <text class="d-label" x="160" y="370">you, full size</text>
+          <g class="d-ball"><circle class="ballc" r="27"/></g>
+        </svg>
+      </div>
+    </div>
+    <h3 class="showsup split">HOW IT SHOWS UP</h3>
+    <div class="cards">
+      <figure class="ex-card"><div class="video-ph g2"><span class="mono">EXAMPLE 01</span></div><figcaption class="mono">Wearing what everyone wears, even if it's not you.</figcaption><a class="see mono" href="#fitting-in">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g3"><span class="mono">EXAMPLE 02</span></div><figcaption class="mono">Hiding a hobby you love because it isn't "cool".</figcaption><a class="see mono" href="#fitting-in">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g1"><span class="mono">EXAMPLE 03</span></div><figcaption class="mono">Adopting opinions you'd never voice alone.</figcaption><a class="see mono" href="#fitting-in">See it &rarr;</a></figure>
+    </div>
+    <svg class="deco" viewBox="0 0 100 100" aria-hidden="true"><path class="diamond" d="M50 14 C56 40 60 44 86 50 C60 56 56 60 50 86 C44 60 40 56 14 50 C40 44 44 40 50 14 Z"/></svg>
+  </div>
+</section>
+
+<!-- ============ CONCEPT 4 · LOOKING TO OTHERS ============ -->
+<section id="looking" class="concept" data-name="04 · Looking to Others" data-bg="#C8E8E8" data-mode="light" style="background:#C8E8E8">
+  <div class="concept-inner">
+    <header class="concept-head">
+      <span class="concept-num" aria-hidden="true">4</span>
+      <h2 class="concept-title split">INFORMATIONAL INFLUENCE</h2>
+      <p class="concept-desc mono">When we're unsure what's right, we treat other people's behavior as evidence. Which queue, which answer, which door? Whatever they chose. Usually this is a smart shortcut — but it means an uncertain crowd can lead everyone down the same wrong branch, each person trusting the others.</p>
+    </header>
+    <div class="demo-scroll">
+      <div class="demo-stage">
+        <svg class="demo-svg" data-demo="looking" viewBox="0 0 1200 600" aria-label="Demo: at a fork in the path, the ball follows the branch the peer dots took">
+          <path class="guide-vis" id="stemPath" d="M120,300 C300,300 430,300 560,300"/>
+          <path class="guide-vis" id="branchA" d="M560,300 C720,300 880,190 1080,155"/>
+          <path class="guide-vis" id="branchB" d="M560,300 C720,300 880,410 1080,445"/>
+          <path id="peerPath" d="M120,332 C300,332 430,332 565,332 C725,332 885,430 1080,470" fill="none" stroke="none"/>
+          <text class="d-label" x="600" y="250">?</text>
+          <text class="d-label" x="1080" y="120">the right way</text>
+          <text class="d-label" x="1080" y="510">the way they went</text>
+          <circle class="peer look-peer" r="12"/><circle class="peer look-peer" r="10"/><circle class="peer look-peer" r="11"/>
+          <g class="d-ball"><circle class="ballc" r="24"/></g>
+        </svg>
+      </div>
+    </div>
+    <h3 class="showsup split">HOW IT SHOWS UP</h3>
+    <div class="cards">
+      <figure class="ex-card"><div class="video-ph g5"><span class="mono">EXAMPLE 01</span></div><figcaption class="mono">Picking the crowded restaurant over the empty one.</figcaption><a class="see mono" href="#looking">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g6"><span class="mono">EXAMPLE 02</span></div><figcaption class="mono">Copying what others do when instructions are unclear.</figcaption><a class="see mono" href="#looking">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g4"><span class="mono">EXAMPLE 03</span></div><figcaption class="mono">Needing reviews before you trust your own taste.</figcaption><a class="see mono" href="#looking">See it &rarr;</a></figure>
+    </div>
+    <svg class="deco" viewBox="0 0 100 100" aria-hidden="true"><path class="diamond" d="M50 14 C56 40 60 44 86 50 C60 56 56 60 50 86 C44 60 40 56 14 50 C40 44 44 40 50 14 Z"/></svg>
+  </div>
+</section>
+
+<!-- ============ CONCEPT 5 · DIRECT PRESSURE ============ -->
+<section id="direct" class="concept" data-name="05 · Direct Pressure" data-bg="#E8C8E5" data-mode="light" style="background:#E8C8E5">
+  <div class="concept-inner">
+    <header class="concept-head">
+      <span class="concept-num" aria-hidden="true">5</span>
+      <h2 class="concept-title split">DIRECT PRESSURE</h2>
+      <p class="concept-desc mono">The loud kind. Explicit asks, dares, teasing, ultimatums: "come on", "don't be boring", "everyone's doing it". Direct pressure is easiest to see and hardest to sit with, because refusing happens in front of an audience. It relies on making the moment more uncomfortable than the choice.</p>
+    </header>
+    <div class="demo-scroll">
+      <div class="demo-stage">
+        <svg class="demo-svg" data-demo="direct" viewBox="0 0 1200 600" aria-label="Demo: a peer dot charges into the ball and shoves it hard off its line, with a big squash on impact">
+          <line class="dash-line" x1="100" y1="300" x2="1100" y2="300"/>
+          <g class="spark">
+            <line x1="520" y1="252" x2="540" y2="228"/><line x1="545" y1="300" x2="580" y2="300"/>
+            <line x1="520" y1="348" x2="540" y2="372"/><line x1="490" y1="245" x2="490" y2="215"/>
+          </g>
+          <text class="d-label bully-say" x="1000" y="240">"come on, just this once"</text>
+          <circle class="peer bully" cx="1150" cy="300" r="20"/>
+          <g class="d-ball"><circle class="ballc" r="26"/></g>
+        </svg>
+      </div>
+    </div>
+    <h3 class="showsup split">HOW IT SHOWS UP</h3>
+    <div class="cards">
+      <figure class="ex-card"><div class="video-ph g3"><span class="mono">EXAMPLE 01</span></div><figcaption class="mono">"One won't hurt." Repeated until you give in.</figcaption><a class="see mono" href="#direct">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g1"><span class="mono">EXAMPLE 02</span></div><figcaption class="mono">A dare issued in front of the whole group.</figcaption><a class="see mono" href="#direct">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g2"><span class="mono">EXAMPLE 03</span></div><figcaption class="mono">Being teased as "scared" or "boring" for hesitating.</figcaption><a class="see mono" href="#direct">See it &rarr;</a></figure>
+    </div>
+    <svg class="deco" viewBox="0 0 100 100" aria-hidden="true"><path class="diamond" d="M50 14 C56 40 60 44 86 50 C60 56 56 60 50 86 C44 60 40 56 14 50 C40 44 44 40 50 14 Z"/></svg>
+  </div>
+</section>
+
+<!-- ============ CONCEPT 6 · UNSPOKEN PRESSURE ============ -->
+<section id="unspoken" class="concept" data-name="06 · Unspoken Pressure" data-bg="#E8C8C8" data-mode="light" style="background:#E8C8C8">
+  <div class="concept-inner">
+    <header class="concept-head">
+      <span class="concept-num" aria-hidden="true">6</span>
+      <h2 class="concept-title split">UNSPOKEN PRESSURE</h2>
+      <p class="concept-desc mono">Nobody asks you anything. The room simply moves, and you move with it. Indirect pressure is the pull of what everyone else is doing — dress codes nobody wrote, hours nobody set, silences nobody ordered. It's the strongest kind precisely because there's nothing to refuse.</p>
+    </header>
+    <div class="demo-scroll">
+      <div class="demo-stage">
+        <svg class="demo-svg" data-demo="unspoken" viewBox="0 0 1200 600" aria-label="Demo: peer dots drift in one direction and the ball is slowly, silently tugged along with them">
+          <line class="dash-line vert" x1="330" y1="140" x2="330" y2="460"/>
+          <text class="d-label" x="330" y="500">where you started</text>
+          <text class="d-label quiet-say" x="600" y="110">no one said anything</text>
+          <g class="drift-field">
+            <circle class="peer" cx="180" cy="200" r="12"/><circle class="peer" cx="260" cy="330" r="10"/>
+            <circle class="peer" cx="150" cy="420" r="13"/><circle class="peer" cx="310" cy="180" r="9"/>
+            <circle class="peer" cx="240" cy="250" r="11"/><circle class="peer" cx="360" cy="400" r="10"/>
+            <circle class="peer" cx="120" cy="310" r="12"/><circle class="peer" cx="400" cy="260" r="9"/>
+          </g>
+          <g class="d-ball"><circle class="ballc" r="26"/></g>
+        </svg>
+      </div>
+    </div>
+    <h3 class="showsup split">HOW IT SHOWS UP</h3>
+    <div class="cards">
+      <figure class="ex-card"><div class="video-ph g6"><span class="mono">EXAMPLE 01</span></div><figcaption class="mono">Everyone stays late, so you stay late.</figcaption><a class="see mono" href="#unspoken">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g4"><span class="mono">EXAMPLE 02</span></div><figcaption class="mono">Nobody raises a hand, so neither do you.</figcaption><a class="see mono" href="#unspoken">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g5"><span class="mono">EXAMPLE 03</span></div><figcaption class="mono">The whole table orders the same thing. So do you.</figcaption><a class="see mono" href="#unspoken">See it &rarr;</a></figure>
+    </div>
+    <svg class="deco" viewBox="0 0 100 100" aria-hidden="true"><path class="diamond" d="M50 14 C56 40 60 44 86 50 C60 56 56 60 50 86 C44 60 40 56 14 50 C40 44 44 40 50 14 Z"/></svg>
+  </div>
+</section>
+
+<!-- ============ CONCEPT 7 · ONLINE PRESSURE ============ -->
+<section id="online" class="concept" data-name="07 · Online Pressure" data-bg="#D6E8C8" data-mode="light" style="background:#D6E8C8">
+  <div class="concept-inner">
+    <header class="concept-head">
+      <span class="concept-num" aria-hidden="true">7</span>
+      <h2 class="concept-title split">ONLINE &amp; SOCIAL PRESSURE</h2>
+      <p class="concept-desc mono">Likes, follower counts, streaks, pile-ons, highlight reels. Online, the audience is always watching and the comparison never closes. It's the same old pressure — belonging, conformity, fear of standing out — but it scales to thousands of people and never sleeps. Log off; the dots keep pinging.</p>
+    </header>
+    <div class="demo-scroll">
+      <div class="demo-stage">
+        <svg class="demo-svg" data-demo="online" viewBox="0 0 1200 600" aria-label="Demo: the ball is surrounded by a grid of pinging notification dots and jitters under the barrage">
+          <g class="ping-grid"></g>
+          <g class="d-ball"><circle class="ballc" r="26"/></g>
+          <text class="d-label" x="600" y="560">the feed never sleeps</text>
+        </svg>
+      </div>
+    </div>
+    <h3 class="showsup split">HOW IT SHOWS UP</h3>
+    <div class="cards">
+      <figure class="ex-card"><div class="video-ph g1"><span class="mono">EXAMPLE 01</span></div><figcaption class="mono">Deleting a post because it didn't get enough likes.</figcaption><a class="see mono" href="#online">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g5"><span class="mono">EXAMPLE 02</span></div><figcaption class="mono">Joining a pile-on you would never start yourself.</figcaption><a class="see mono" href="#online">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g3"><span class="mono">EXAMPLE 03</span></div><figcaption class="mono">Keeping a streak alive long after it stopped being fun.</figcaption><a class="see mono" href="#online">See it &rarr;</a></figure>
+    </div>
+    <svg class="deco" viewBox="0 0 100 100" aria-hidden="true"><path class="diamond" d="M50 14 C56 40 60 44 86 50 C60 56 56 60 50 86 C44 60 40 56 14 50 C40 44 44 40 50 14 Z"/></svg>
+  </div>
+</section>
+
+<!-- ============ CONCEPT 8 · SAYING NO ============ -->
+<section id="saying-no" class="concept" data-name="08 · Saying No" data-bg="#C2D5D7" data-mode="light" style="background:#C2D5D7">
+  <div class="concept-inner">
+    <header class="concept-head">
+      <span class="concept-num" aria-hidden="true">8</span>
+      <h2 class="concept-title split">SAYING NO</h2>
+      <p class="concept-desc mono">Resistance is a skill, not a personality trait. Name the pressure out loud ("that's a dare, not a reason"). Buy time ("let me think about it"). Recruit an ally — one other "no" cuts conformity dramatically, as Asch found. And when all else fails: walking away is a full sentence.</p>
+    </header>
+    <div class="demo-scroll">
+      <div class="demo-stage">
+        <svg class="demo-svg" data-demo="sayingno" viewBox="0 0 1200 600" aria-label="Demo: the ball plants itself, absorbs the shove without moving, then reclaims its straight path — joined by an ally ball">
+          <line class="dash-line" x1="100" y1="300" x2="1100" y2="300"/>
+          <line class="reclaim-line" x1="600" y1="300" x2="1100" y2="300" pathLength="1"/>
+          <circle class="plant-ring" cx="600" cy="300" r="34"/>
+          <text class="d-label no-say" x="600" y="220">"no."</text>
+          <circle class="peer bully" cx="140" cy="300" r="20"/>
+          <g class="ally"><circle class="ally-ring" r="26"/><circle class="ballc ally-ball" r="17"/></g>
+          <g class="d-ball"><circle class="ballc" r="26"/></g>
+        </svg>
+      </div>
+    </div>
+    <h3 class="showsup split">HOW IT SHOWS UP</h3>
+    <div class="cards">
+      <figure class="ex-card"><div class="video-ph g2"><span class="mono">EXAMPLE 01</span></div><figcaption class="mono">Name it: "that's pressure, not a reason."</figcaption><a class="see mono" href="#saying-no">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g6"><span class="mono">EXAMPLE 02</span></div><figcaption class="mono">Buy time: "not tonight — maybe another time."</figcaption><a class="see mono" href="#saying-no">See it &rarr;</a></figure>
+      <figure class="ex-card"><div class="video-ph g4"><span class="mono">EXAMPLE 03</span></div><figcaption class="mono">Bring an ally — or simply leave. Both count.</figcaption><a class="see mono" href="#saying-no">See it &rarr;</a></figure>
+    </div>
+    <svg class="deco" viewBox="0 0 100 100" aria-hidden="true"><path class="diamond" d="M50 14 C56 40 60 44 86 50 C60 56 56 60 50 86 C44 60 40 56 14 50 C40 44 44 40 50 14 Z"/></svg>
+  </div>
+</section>
+
+<!-- ============ RESOURCES ============ -->
+<section id="resources" class="concept resources" data-name="Resources" data-bg="#FDFCFA" data-mode="light" style="background:#FDFCFA">
+  <div class="concept-inner">
+    <svg class="res-arrow" viewBox="0 0 200 200" aria-hidden="true">
+      <path class="arrow-art" d="M30 170 L170 30 M170 30 H90 M170 30 V110" pathLength="1"/>
+    </svg>
+    <h2 class="concept-title split">GO DEEPER</h2>
+    <div class="res-grid">
+      <div class="res-col">
+        <h3 class="mono">RECOMMENDED READING</h3>
+        <ul class="res-list mono">
+          <li><a href="https://en.wikipedia.org/wiki/Influence:_Science_and_Practice" rel="noopener">Robert B. Cialdini — <em>Influence: The Psychology of Persuasion</em></a></li>
+          <li><a href="https://www.simplypsychology.org/asch-conformity.html" rel="noopener">Solomon Asch's conformity experiments — overview (Simply Psychology)</a></li>
+          <li><span>Asch, S. E. (1955). "Opinions and Social Pressure." <em>Scientific American</em>, 193(5).</span></li>
+          <li><span>Deutsch, M. &amp; Gerard, H. B. (1955) — the classic study separating normative from informational influence.</span></li>
+          <li><span>Baumeister, R. F. &amp; Leary, M. R. (1995). "The Need to Belong." <em>Psychological Bulletin</em>, 117(3).</span></li>
+          <li><a href="https://www.apa.org/topics" rel="noopener">American Psychological Association — topic library (apa.org)</a></li>
+          <li><a href="https://kidshealth.org/en/teens/peer-pressure.html" rel="noopener">KidsHealth (Nemours) — "Peer Pressure" for teens</a></li>
+        </ul>
+      </div>
+      <div class="res-col">
+        <h3 class="mono">IF YOU'RE STRUGGLING</h3>
+        <p class="mono support-note">Peer pressure can shade into bullying, substance use, or feeling very low. If any of this page felt personal, please talk to a trusted adult — a parent, teacher, or counsellor — or reach a professional service below. You don't have to sort it out alone.</p>
+        <ul class="res-list mono">
+          <li><a href="https://www.befrienders.org.my" rel="noopener">Befrienders (Malaysia) — befrienders.org.my</a></li>
+          <li><a href="https://www.childline.org.uk" rel="noopener">Childline (UK) — childline.org.uk</a></li>
+          <li><a href="https://988lifeline.org" rel="noopener">988 Suicide &amp; Crisis Lifeline (US) — 988lifeline.org</a></li>
+          <li><a href="https://kidshelpline.com.au" rel="noopener">Kids Helpline (Australia) — kidshelpline.com.au</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="logo-row" aria-label="Source organisations (placeholder logos)">
+      <span class="logo-box mono">APA</span><span class="logo-box mono">SCI. AMERICAN</span>
+      <span class="logo-box mono">NEMOURS</span><span class="logo-box mono">BEFRIENDERS</span><span class="logo-box mono">CHILDLINE</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="site-footer" class="dark" data-name="Index" data-bg="#0C0B0B" data-mode="dark">
+  <nav class="footer-index" aria-label="Page index">
+    <ol class="mono">
+      <li><a href="#intro">00 Introduction</a></li>
+      <li><a href="#belonging">01 Belonging</a></li>
+      <li><a href="#conformity">02 Conformity</a></li>
+      <li><a href="#fitting-in">03 Fitting In</a></li>
+      <li><a href="#looking">04 Looking to Others</a></li>
+      <li><a href="#direct">05 Direct Pressure</a></li>
+      <li><a href="#unspoken">06 Unspoken Pressure</a></li>
+      <li><a href="#online">07 Online Pressure</a></li>
+      <li><a href="#saying-no">08 Saying No</a></li>
+      <li><a href="#resources">09 Resources</a></li>
+    </ol>
+  </nav>
+  <div class="footer-meta mono">
+    <p>PRESSURE.ed — made as a study project.</p>
+    <p>Structure &amp; interaction design inspired by <a href="https://motion.zajno.com" rel="noopener">Zajno's motion.ed</a>. All content original. Not affiliated with or endorsed by Zajno.</p>
+    <p>Media are labeled placeholders. Be kind to your ball.</p>
+  </div>
+</footer>
+
+</main>
+
+<!-- ============ LIBS (CDN) ============ -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie_light.min.js"></script>
+
+<!-- ============ SITE MODULES ============ -->
+<script src="js/audio.js"></script>
+<script src="js/video-lazy.js"></script>
+<script src="js/ball.js"></script>
+<script src="js/storytelling.js"></script>
+<script src="js/demos/belong.js"></script>
+<script src="js/demos/conformity.js"></script>
+<script src="js/demos/fitting.js"></script>
+<script src="js/demos/looking.js"></script>
+<script src="js/demos/direct.js"></script>
+<script src="js/demos/unspoken.js"></script>
+<script src="js/demos/online.js"></script>
+<script src="js/demos/sayingno.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
