@@ -21,24 +21,27 @@ window.DEMOS.looking = function (svg) {
   peers.forEach(function (p, i) {
     tl.to(p, {
       motionPath: { path: peerPath, align: peerPath, alignOrigin: [0.5, 0.5] },
-      duration: 4, ease: 'power1.inOut'
-    }, i * 0.7);
+      duration: 4.2, ease: EASE.inOut
+    }, i * 0.75);
   });
 
   // The ball travels the stem and stops at the fork — genuinely unsure
   tl.to(ball, {
     motionPath: { path: stem, align: stem, alignOrigin: [0.5, 0.5] },
-    duration: 2.5, ease: 'power1.out'
+    duration: 2.8, ease: EASE.out
   }, 1)
     // A "which way?" wobble while it watches where everyone went
-    .to(ballCircle, { y: -12, duration: 0.5, ease: 'sine.inOut' }, 3.6)
-    .to(ballCircle, { y: 10, duration: 0.5, ease: 'sine.inOut' }, 4.1)
-    .to(ballCircle, { y: 0, duration: 0.4, ease: 'sine.inOut' }, 4.6)
+    .to(ballCircle, { y: -12, duration: 0.55, ease: EASE.soft }, 4.0)
+    .to(ballCircle, { y: 10, duration: 0.55, ease: EASE.soft }, 4.55)
+    .to(ballCircle, { y: 0, duration: 0.45, ease: EASE.soft }, 5.1)
+    // Anticipation: a tiny pull-back before committing to the crowd's branch
+    .to(ballCircle, { x: -12, duration: 0.4, ease: EASE.soft }, 5.55)
+    .to(ballCircle, { x: 0, duration: 0.3, ease: EASE.in }, 5.95)
     // Decision: not the "right way" branch — the one with footprints on it
     .to(ball, {
       motionPath: { path: branchB, align: branchB, alignOrigin: [0.5, 0.5] },
-      duration: 3, ease: 'power1.inOut'
-    }, 5.2);
+      duration: 3.2, ease: EASE.inOut
+    }, 6.1);
 
   return tl;
 };

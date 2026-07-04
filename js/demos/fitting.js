@@ -18,18 +18,27 @@ window.DEMOS.fitting = function (svg) {
 
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
-  // The group clicks into its shape — the norm forms
-  tl.to(peers, { x: 0, y: 0, duration: 2, stagger: 0.15, ease: 'power2.inOut' }, 0)
-    .to(q('.slot'), { opacity: 1, duration: 0.6 }, 2.2)
+  // The group clicks into its shape — the norm forms, each dot overshooting
+  // its seat slightly before settling
+  tl.to(peers, {
+    x: 0, y: 0, duration: 2.2, ease: EASE.pop,
+    stagger: { each: 0.16, ease: EASE.soft }
+  }, 0)
+    .to(q('.slot'), { opacity: 1, duration: 0.7, ease: EASE.soft }, 2.4)
     // The ball approaches at full size...
-    .to(ball, { x: 480, y: 300, duration: 2.4, ease: 'power1.inOut' }, 2.8)
-    // ...squeezes to enter (slot r=18 vs ball r=27), a visible compression
-    .to(ballCircle, { scaleX: 0.55, scaleY: 0.85, duration: 0.5, ease: 'power2.in' }, 5.2)
-    .to(ball, { x: 600, y: 300, duration: 0.8, ease: 'power2.out' }, 5.5)
-    .to(ballCircle, { scaleX: 18 / 27, scaleY: 18 / 27, duration: 0.7, ease: 'elastic.out(1, 0.5)' }, 6.1)
+    .to(ball, { x: 480, y: 300, duration: 2.6, ease: EASE.inOut }, 3.0)
+    // ...takes a breath (anticipation: inflate slightly before compressing)...
+    .to(ballCircle, { scale: 1.08, duration: 0.4, ease: EASE.soft }, 5.4)
+    // ...then squeezes to enter (slot r=18 vs ball r=27) — visible compression
+    .to(ballCircle, { scaleX: 0.55, scaleY: 0.85, duration: 0.5, ease: EASE.in }, 5.85)
+    .to(ball, { x: 600, y: 300, duration: 0.9, ease: EASE.out }, 6.2)
+    .to(ballCircle, { scaleX: 18 / 27, scaleY: 18 / 27, duration: 0.9, ease: 'elastic.out(1, 0.45)' }, 6.9)
     // The formation gives a satisfied pulse: you fit now. Smaller, but you fit.
-    .to(peers, { scale: 1.12, transformOrigin: '50% 50%', duration: 0.4, ease: 'sine.out' }, 6.9)
-    .to(peers, { scale: 1, duration: 0.5, ease: 'sine.inOut' }, 7.3);
+    .to(peers, {
+      scale: 1.12, transformOrigin: '50% 50%', duration: 0.45, ease: EASE.out,
+      stagger: { each: 0.05, ease: EASE.soft }
+    }, 7.8)
+    .to(peers, { scale: 1, duration: 0.7, ease: EASE.soft, stagger: { each: 0.05 } }, 8.3);
 
   return tl;
 };

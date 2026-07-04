@@ -1,14 +1,27 @@
-/* demos/sayingno.js — Saying No: the shove comes, the ball plants and holds,
-   says no, then reclaims its straight path — and an ally joins it.
-   This resolves the arc every other demo set up. */
+/* demos/sayingno.js — Saying No: the finale. The shove comes, the ball
+   plants and holds (springy anticipation), pushes the pressure BACK
+   (repel impulse on the whole posse), reclaims its straight line with a
+   satisfying settle, and an ally eases in alongside. This resolves the arc
+   every other demo set up — it gets extra scroll room to breathe (see CSS)
+   and a soft chime when the plant lands. */
 window.DEMOS = window.DEMOS || {};
 window.DEMOS.sayingno = function (svg) {
   'use strict';
   var q = gsap.utils.selector(svg);
+  var NS = 'http://www.w3.org/2000/svg';
   var ball = q('.d-ball')[0];
   var ballCircle = q('.d-ball .ballc')[0];
   var bully = q('.bully')[0];
   var ally = q('.ally')[0];
+
+  // A small posse follows the bully in — so the push-back has a crowd to move
+  var posse = [];
+  [[70, 268, 11], [55, 328, 9], [104, 342, 8]].forEach(function (d) {
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('class', 'peer'); c.setAttribute('cx', d[0]); c.setAttribute('cy', d[1]); c.setAttribute('r', d[2]);
+    bully.parentNode.insertBefore(c, bully);
+    posse.push(c);
+  });
 
   gsap.set(ball, { x: 600, y: 300 });
   gsap.set(ally, { x: 520, y: 300 });
@@ -18,31 +31,50 @@ window.DEMOS.sayingno = function (svg) {
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
   // The same charge as section 5 — deliberately mirrored...
-  tl.to(bully, { attr: { cx: 100 }, duration: 0.4, ease: 'power1.out' }, 0.6)
-    .to(bully, { attr: { cx: 554 }, duration: 1.3, ease: 'power3.in' }, 1.2)
-    // ...but this time: PLANT. Squash absorbed, position held.
-    .to(ballCircle, { scaleX: 0.6, scaleY: 1.35, duration: 0.12, ease: 'power3.in' }, 2.5)
-    .to(ball, { x: 640, duration: 0.25, ease: 'power2.out' }, 2.55)  // gives a little...
-    .to(ball, { x: 600, duration: 0.5, ease: 'power2.out' }, 2.8)    // ...and takes it back
-    .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.7, ease: 'elastic.out(1, 0.35)' }, 2.65)
-    // The plant reads as a shockwave ring + the word itself
+  tl.to(bully, { attr: { cx: 92 }, duration: 0.5, ease: EASE.soft }, 0.6)      // wind-up
+    .to(bully, { attr: { cx: 554 }, duration: 1.4, ease: EASE.in }, 1.2)       // charge
+    .to(posse, { x: 300, duration: 1.6, ease: EASE.in, stagger: { each: 0.1 } }, 1.3);
+
+  // ...but this time: PLANT. Springy anticipation — the ball crouches
+  // (widens, grips the line) a beat BEFORE contact. It saw this coming.
+  tl.to(ballCircle, { scaleX: 1.18, scaleY: 0.82, duration: 0.35, ease: EASE.soft }, 2.15)
+    // impact absorbed: deep squash, position barely gives...
+    .to(ballCircle, { scaleX: 0.6, scaleY: 1.35, duration: 0.12, ease: EASE.in }, 2.6)
+    .to(ball, { x: 634, duration: 0.25, ease: EASE.out }, 2.65)
+    // ...and is taken back. Not shoved. Planted.
+    .to(ball, { x: 600, duration: 0.6, ease: EASE.out }, 2.9)
+    .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.9, ease: 'elastic.out(1, 0.32)' }, 2.75)
+    // The plant reads as a shockwave ring + the word itself + the chime
     .fromTo(q('.plant-ring')[0], { opacity: 0.9, scale: 0.8 },
-                                 { opacity: 0, scale: 2.6, duration: 1, ease: 'power1.out' }, 2.6)
-    .to(q('.no-say'), { opacity: 1, duration: 0.4 }, 2.9)
-    // The pressure retreats
-    .to(bully, { attr: { cx: 300 }, duration: 0.8, ease: 'power2.out' }, 3.2)
-    .to(bully, { attr: { cx: 140 }, opacity: 0.4, duration: 1.2, ease: 'power1.inOut' }, 4.2)
-    // The straight path redraws itself — the line is yours again
-    .to(q('.reclaim-line')[0], { strokeDashoffset: 0, duration: 1.6, ease: 'power1.inOut' }, 3.8)
-    .to(q('.no-say'), { opacity: 0, duration: 0.5 }, 4.6)
+                                 { opacity: 0, scale: 2.8, duration: 1.3, ease: EASE.out }, 2.7)
+    .to(q('.no-say'), { scale: 1, opacity: 1, duration: 0.5, ease: EASE.pop }, 2.95)
+    .call(function () { if (window.AUDIO) AUDIO.chime(); }, [], 2.8);
+
+  // REPEL IMPULSE: the pressure gets pushed back — bully hard, posse
+  // staggered a beat later (follow-through on the crowd)
+  tl.to(bully, { attr: { cx: 310 }, duration: 0.9, ease: EASE.out }, 3.1)
+    .to(posse, {
+      x: 60, duration: 1.2, ease: EASE.out,
+      stagger: { each: 0.12, ease: EASE.soft }
+    }, 3.25)
+    .to(bully, { attr: { cx: 140 }, opacity: 0.4, duration: 1.6, ease: EASE.soft }, 4.4)
+    .to(posse, { opacity: 0.35, duration: 1.4, ease: EASE.soft }, 4.6);
+
+  // The straight path redraws itself — the line is yours again.
+  // Given timing room deliberately: this is the emotional payoff.
+  tl.to(q('.reclaim-line')[0], { strokeDashoffset: 0, duration: 2.0, ease: EASE.inOut }, 4.2)
+    .to(q('.no-say'), { opacity: 0, duration: 0.6, ease: EASE.soft }, 5.4)
     // An ally appears — one other "no" makes the next one easier
-    .to(ally, { opacity: 1, duration: 0.6 }, 4.8)
-    // Both travel the reclaimed line together, ally trailing slightly
-    .to(ball, { x: 1040, duration: 3, ease: 'power1.inOut' }, 5.4)
-    .to(ally, { x: 950, duration: 3, ease: 'power1.inOut' }, 5.55)
+    .fromTo(ally, { x: 470 }, { opacity: 1, x: 520, duration: 1.0, ease: EASE.out }, 5.6)
+    // Both travel the reclaimed line together, ally trailing slightly (overlap)
+    .to(ball, { x: 1040, duration: 3.4, ease: EASE.inOut }, 6.4)
+    .to(ally, { x: 950, duration: 3.4, ease: EASE.inOut }, 6.65)
     // A small victory stretch at the end — momentum, not struggle
-    .to(ballCircle, { scaleX: 1.12, scaleY: 0.9, duration: 0.3, ease: 'sine.out' }, 8.2)
-    .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' }, 8.5);
+    .to(ballCircle, { scaleX: 1.12, scaleY: 0.9, duration: 0.35, ease: EASE.out }, 9.6)
+    .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.7, ease: 'elastic.out(1, 0.45)' }, 9.95);
+
+  // "no." pops rather than fades — set its start state
+  gsap.set(q('.no-say'), { scale: 0.6, transformOrigin: '50% 50%', opacity: 0 });
 
   return tl;
 };

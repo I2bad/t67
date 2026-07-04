@@ -39,20 +39,20 @@ window.DEMOS.online = function (svg) {
   // spread across the whole scrub so it never stops
   pings.forEach(function (p) {
     var t = rand(0.2, 6.5);
-    tl.to(p.dot, { scale: 1, duration: 0.3, ease: 'back.out(2.5)', transformOrigin: '50% 50%' }, t)
+    tl.to(p.dot, { scale: 1, duration: 0.45, ease: EASE.pop, transformOrigin: '50% 50%' }, t)
       .fromTo(p.ring, { attr: { r: 9 }, opacity: 0.8 },
-                      { attr: { r: 42 }, opacity: 0, duration: 1.2, ease: 'power1.out' }, t + 0.1)
+                      { attr: { r: 42 }, opacity: 0, duration: 1.4, ease: EASE.out }, t + 0.1)
       .fromTo(p.ring, { attr: { r: 9 }, opacity: 0.8 },
-                      { attr: { r: 42 }, opacity: 0, duration: 1.2, ease: 'power1.out' }, t + rand(1.6, 3));
+                      { attr: { r: 42 }, opacity: 0, duration: 1.4, ease: EASE.out }, t + rand(1.8, 3.2));
   });
 
   // The ball can't settle: continuous jitter, and it shrinks under the noise
   var jx = [8, -10, 5, -7, 11, -4, 6, -9];
   jx.forEach(function (dx, i) {
-    tl.to(ballCircle, { x: dx, y: jx[(i + 3) % jx.length] * 0.7, duration: 0.6, ease: 'sine.inOut' }, 1 + i * 0.75);
+    tl.to(ballCircle, { x: dx, y: jx[(i + 3) % jx.length] * 0.7, duration: 0.65, ease: EASE.soft }, 1 + i * 0.78);
   });
-  tl.to(ballCircle, { scale: 0.82, duration: 6, ease: 'power1.in' }, 1.5)
-    .to(q('.d-label')[0], { opacity: 1, duration: 1 }, 5.5);
+  tl.to(ballCircle, { scale: 0.82, duration: 6.2, ease: EASE.in }, 1.5)
+    .to(q('.d-label')[0], { opacity: 1, duration: 1.2, ease: EASE.soft }, 5.5);
 
   return tl;
 };

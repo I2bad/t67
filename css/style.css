@@ -13,6 +13,8 @@
   --pill-pad: 0.5em 1.1em;
   --radius-panel: clamp(1.5rem, 4vw, 3rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-pop: cubic-bezier(0.3, 1.4, 0.35, 1);   /* CSS twin of EASE.pop */
+  --ease-soft: cubic-bezier(0.36, 0, 0.22, 1);   /* CSS twin of EASE.soft */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -103,9 +105,8 @@ body.light .logo-dot--ring { background: transparent; border-color: var(--ink); 
   padding: var(--pill-pad);
   font-family: var(--font-mono); font-size: 0.8rem;
   text-decoration: none; line-height: 1; white-space: nowrap;
-  transition: background 0.5s, color 0.5s, transform 0.25s var(--ease-out);
+  transition: background 0.5s, color 0.5s;
 }
-.pill:hover { transform: scale(1.05); }
 body.light .pill { background: var(--ink); color: var(--cream); }
 
 .crumb { opacity: 0.85; }
@@ -114,9 +115,8 @@ body.light .pill { background: var(--ink); color: var(--cream); }
   width: 52px; height: 52px; border-radius: 50%;
   border: none; background: var(--cream); color: var(--ink);
   display: grid; place-items: center;
-  transition: background 0.5s, color 0.5s, transform 0.25s var(--ease-out);
+  transition: background 0.5s, color 0.5s;
 }
-.round-btn:hover { transform: scale(1.08); }
 body.light .round-btn { background: var(--ink); color: var(--cream); }
 
 #soundToggle svg { stroke: currentColor; stroke-width: 2; stroke-linecap: round; fill: none; }
@@ -169,9 +169,17 @@ html.reduced #soundToggle .snd-bar { animation: none !important; }
   background: var(--cream); mix-blend-mode: difference;
   pointer-events: none;
   transform: translate(-100px, -100px);
-  transition: width 0.25s var(--ease-out), height 0.25s var(--ease-out);
+  display: grid; place-items: center;
+  transition: width 0.35s var(--ease-pop), height 0.35s var(--ease-pop);
 }
-#cursor.grow { width: 56px; height: 56px; }
+#cursor.grow { width: 64px; height: 64px; }
+.cursor-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+  color: var(--ink); opacity: 0; transform: scale(0.6);
+  transition: opacity 0.25s var(--ease-soft), transform 0.35s var(--ease-pop);
+  white-space: nowrap;
+}
+#cursor.grow.labeled .cursor-label { opacity: 1; transform: scale(1); }
 @media (pointer: coarse) { #cursor { display: none; } }
 html.reduced #cursor { display: none; }
 
@@ -200,8 +208,12 @@ html.reduced #cursor { display: none; }
 .dark .dash { stroke: var(--cream); }
 
 /* word-split reveal */
-.split .w { display: inline-block; overflow: hidden; vertical-align: bottom; }
-.split .wi { display: inline-block; will-change: transform; }
+.split .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.06em; }
+.split .wi { display: inline-block; will-change: transform; transform-origin: 0% 100%; }
+.ch { display: inline-block; white-space: pre; }
+
+/* the finale deserves extra scroll room to breathe */
+#saying-no .demo-scroll { height: 320vh; }
 
 /* ============================================================
    Hero
@@ -292,10 +304,31 @@ html.reduced .scene-label { opacity: 1; }
 
 .video-ph {
   aspect-ratio: 16 / 10; border-radius: 18px;
-  display: grid; place-items: center;
+  display: grid; place-items: center; overflow: hidden;
   color: rgba(12, 11, 11, 0.8); font-size: 0.8rem; letter-spacing: 0.08em;
+  background-size: 160% 160%; background-position: 30% 30%;
+  transition: transform 0.7s var(--ease-pop), box-shadow 0.7s var(--ease-soft),
+              background-position 0.9s var(--ease-soft);
 }
-.video-ph span { background: rgba(247,245,240,0.85); padding: 0.4em 0.9em; border-radius: 999px; }
+.video-ph span {
+  background: rgba(247,245,240,0.85); padding: 0.4em 0.9em; border-radius: 999px;
+  transition: transform 0.55s var(--ease-pop);
+}
+/* card hover: lift + gradient shift + label follow-through — never a flat fade */
+.ex-card, .scenario-card { cursor: none; }
+.ex-card:hover .video-ph, .scenario-card:hover .video-ph {
+  transform: scale(1.035) translateY(-5px);
+  background-position: 70% 70%;
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.22);
+}
+.ex-card:hover .video-ph span, .scenario-card:hover .video-ph span {
+  transform: translateY(-4px) scale(1.06);
+}
+.ex-card figcaption, .scenario-card figcaption {
+  transition: transform 0.6s var(--ease-soft);
+}
+.ex-card:hover figcaption, .scenario-card:hover figcaption { transform: translateX(6px); }
+@media (pointer: coarse) { .ex-card, .scenario-card { cursor: auto; } }
 .g1 { background: linear-gradient(135deg, #3d2f5e, #b06ab3); }
 .g2 { background: linear-gradient(135deg, #134e5e, #71b280); }
 .g3 { background: linear-gradient(135deg, #5f2c40, #d98f6c); }
@@ -390,7 +423,9 @@ html.reduced .ally { opacity: 1; }
 .ex-card .see {
   display: inline-block; margin-top: 0.5rem; font-size: 0.8rem;
   color: var(--ink); text-underline-offset: 4px;
+  transition: letter-spacing 0.45s var(--ease-pop);
 }
+.ex-card .see:hover { letter-spacing: 0.08em; }
 .deco {
   position: absolute; top: 0; right: 0;
   width: clamp(48px, 6vw, 90px); opacity: 0.7;

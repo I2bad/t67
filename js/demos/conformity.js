@@ -15,17 +15,23 @@ window.DEMOS.conformity = function (svg) {
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
   // The row asserts itself, one identical dot at a time
-  tl.to(q('.peer'), { scale: 1, duration: 0.5, stagger: 0.4, ease: 'back.out(2)' }, 0)
+  tl.to(q('.peer'), {
+    scale: 1, duration: 0.7, ease: EASE.pop,
+    stagger: { each: 0.45, ease: EASE.soft }
+  }, 0)
     // Hesitation: the ball leans toward its own answer twice...
-    .to(ball, { x: 250, y: 420, duration: 0.8, ease: 'sine.inOut' }, 2)
-    .to(ball, { x: 220, y: 430, duration: 0.8, ease: 'sine.inOut' }, 2.8)
-    // ...then caves: moves up to join the row AND shrinks to match (r 34 → 22)
-    .to(ball, { x: 1120, y: 308, duration: 3, ease: 'power2.inOut' }, 4)
-    .to(ballCircle, { scale: 22 / 34, duration: 3, ease: 'power2.inOut' }, 4)
+    .to(ball, { x: 250, y: 420, duration: 0.9, ease: EASE.soft }, 2.2)
+    .to(ball, { x: 220, y: 430, duration: 0.9, ease: EASE.soft }, 3.1)
+    // ...pulls back a touch (anticipation)...
+    .to(ball, { x: 205, y: 438, duration: 0.5, ease: EASE.soft }, 4.0)
+    // ...then caves: joins the row AND shrinks to match (r 34 → 22)
+    .to(ball, { x: 1120, y: 308, duration: 3.2, ease: EASE.inOut }, 4.5)
+    .to(ballCircle, { scale: 22 / 34, duration: 3.2, ease: EASE.inOut }, 4.5)
     // The dashed ghost of what it actually saw lingers, accusing
-    .to(q('.dash-ghost'), { opacity: 0.9, duration: 1 }, 5.5)
-    .to(ballCircle, { scaleX: (22 / 34) * 1.12, scaleY: (22 / 34) * 0.88, duration: 0.25, ease: 'power2.out' }, 7)
-    .to(ballCircle, { scaleX: 22 / 34, scaleY: 22 / 34, duration: 0.5, ease: 'elastic.out(1, 0.5)' }, 7.25);
+    .to(q('.dash-ghost'), { opacity: 0.9, duration: 1.2, ease: EASE.soft }, 6.2)
+    // Landing settle — a beat late, like it isn't quite sure it fits
+    .to(ballCircle, { scaleX: (22 / 34) * 1.12, scaleY: (22 / 34) * 0.88, duration: 0.3, ease: EASE.out }, 7.8)
+    .to(ballCircle, { scaleX: 22 / 34, scaleY: 22 / 34, duration: 0.7, ease: 'elastic.out(1, 0.45)' }, 8.1);
 
   return tl;
 };
