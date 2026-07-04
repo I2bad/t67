@@ -183,6 +183,25 @@ html.reduced #soundToggle .snd-bar { animation: none !important; }
 @media (pointer: coarse) { #cursor { display: none; } }
 html.reduced #cursor { display: none; }
 
+/* WebGL layers (created by JS on medium/high tiers) */
+main { position: relative; z-index: 1; }
+#glbg {
+  position: fixed; inset: 0; z-index: 0;
+  width: 100%; height: 100%; pointer-events: none;
+}
+.metaball-canvas {
+  position: absolute; inset: 0; z-index: 1;
+  width: 100%; height: 100%; pointer-events: none;
+}
+.zoom-dot {
+  /* big base circle scaled DOWN first so edges stay crisp when it fills
+     the viewport during the zoom-through transition */
+  position: fixed; z-index: 40; left: 50%; top: 42%;
+  width: 400px; height: 400px; margin: -200px 0 0 -200px;
+  border-radius: 50%; background: var(--cream);
+  pointer-events: none; visibility: hidden; will-change: transform;
+}
+
 #grain {
   position: fixed; inset: -50%; z-index: 80; pointer-events: none;
   opacity: 0.05;

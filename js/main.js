@@ -260,6 +260,24 @@
     });
   }
 
+  /* ---------- Quality-gated layers: WebGL background + hero physics ----------
+     Booted BEFORE initHero so ball.js knows whether physics owns the ball. */
+  function bootLayers(tier) {
+    if (reduced) return;
+    if (tier !== 'low' && window.initBackgroundGL && !window.BG) {
+      window.BG = window.initBackgroundGL(tier);
+    }
+    if (tier === 'high' && window.initHeroPhysics && !window.PHYSICS && !QUALITY.mobile) {
+      window.PHYSICS = window.initHeroPhysics();
+    }
+  }
+  bootLayers(QUALITY.tier);
+  QUALITY.on(function (tier) {
+    // dropping a tier: tear down what no longer belongs
+    if (tier !== 'high' && window.PHYSICS) { PHYSICS.destroy(); window.PHYSICS = null; }
+    if (tier === 'low' && window.BG) { BG.destroy(); window.BG = null; }
+  });
+
   /* ---------- Hero + storytelling (ball.js / storytelling.js) ---------- */
   var mm = gsap.matchMedia();
   mm.add('(min-width: 769px)', function () {
@@ -400,23 +418,6 @@
       cursor.classList.toggle('labeled', !!text);
     });
   }
-
-  /* ---------- Quality-gated layers: WebGL background + hero physics ---------- */
-  function bootLayers(tier) {
-    if (reduced) return;
-    if (tier !== 'low' && window.initBackgroundGL && !window.BG) {
-      window.BG = window.initBackgroundGL(tier);
-    }
-    if (tier === 'high' && window.initHeroPhysics && !window.PHYSICS && !QUALITY.mobile) {
-      window.PHYSICS = window.initHeroPhysics();
-    }
-  }
-  bootLayers(QUALITY.tier);
-  QUALITY.on(function (tier) {
-    // dropping a tier: tear down what no longer belongs
-    if (tier !== 'high' && window.PHYSICS) { PHYSICS.destroy(); window.PHYSICS = null; }
-    if (tier === 'low' && window.BG) { BG.destroy(); window.BG = null; }
-  });
 
   /* ---------- The killer transition: ball zooms through into lesson one ---------- */
   if (window.initZoomTransition) window.initZoomTransition(ctx);
