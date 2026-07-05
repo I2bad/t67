@@ -232,6 +232,9 @@ main { position: relative; z-index: 1; }
    ============================================================ */
 .art-bold { stroke-width: 4.5 !important; }
 .art-thin { stroke-width: 1.5 !important; }
+/* any .art stroke draws on via pathLength=1 → dashoffset 1 → 0 */
+.demo-svg .art { stroke-dasharray: 1; stroke-dashoffset: 1; }
+html.reduced .demo-svg .art { stroke-dashoffset: 0; }
 
 /* dark story stretch: cream line-art + soft glows */
 .lamp-glow { fill: var(--cream); opacity: 0.06; }

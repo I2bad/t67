@@ -229,16 +229,22 @@
     </header>
     <div class="demo-scroll">
       <div class="demo-stage">
-        <svg class="demo-svg" data-demo="belong" viewBox="0 0 1200 600" aria-label="Demo: a lone ball drifts toward a warm cluster of peer dots">
-          <path id="belongPath" d="M150,340 C350,340 430,230 630,265 C790,293 840,300 920,300" fill="none" stroke="none"/>
-          <circle class="soft-glow" cx="945" cy="300" r="130"/>
-          <g class="belong-cluster">
-            <circle class="peer" cx="905" cy="258" r="16"/><circle class="peer" cx="975" cy="250" r="13"/>
-            <circle class="peer" cx="1010" cy="315" r="15"/><circle class="peer" cx="960" cy="360" r="12"/>
-            <circle class="peer" cx="895" cy="335" r="11"/><circle class="peer" cx="945" cy="298" r="14"/>
+        <svg class="demo-svg" data-demo="belong" viewBox="0 0 1200 600" aria-label="Demo: a warm huddle of overlapping circles breathes together; the lone ball tests its edge, a member shifts aside, and the huddle absorbs it">
+          <path id="belongPath" d="M150,340 C350,340 430,230 630,265 C780,292 840,300 882,308" fill="none" stroke="none"/>
+          <circle class="soft-glow" cx="945" cy="300" r="150"/>
+          <g class="huddle">
+            <circle class="peer soft" cx="918" cy="252" r="26"/>
+            <circle class="peer soft" cx="978" cy="242" r="22"/>
+            <circle class="peer soft" cx="1018" cy="298" r="25"/>
+            <circle class="peer soft" cx="978" cy="356" r="23"/>
+            <circle class="peer soft huddle-opener" cx="914" cy="346" r="21"/>
+            <circle class="peer soft" cx="950" cy="300" r="24"/>
           </g>
+          <g class="huddle-threads"></g>
+          <circle class="gap-ghost" cx="882" cy="308" r="24"/>
+          <circle class="self-ghost belong-start" cx="150" cy="340" r="26"/>
           <text class="d-label" x="150" y="410">you</text>
-          <text class="d-label" x="945" y="450">the group</text>
+          <text class="d-label" x="950" y="460">the group</text>
           <g class="d-ball"><circle class="ballc" r="26"/></g>
         </svg>
       </div>
@@ -263,14 +269,23 @@
     </header>
     <div class="demo-scroll">
       <div class="demo-stage">
-        <svg class="demo-svg" data-demo="conformity" viewBox="0 0 1200 600" aria-label="Demo: the ball changes its size and position to match a row of peer dots, even though a dashed marker shows what it originally saw">
-          <line class="ink-line" x1="380" y1="330" x2="1160" y2="330"/>
-          <circle class="peer" cx="480" cy="308" r="22"/><circle class="peer" cx="640" cy="308" r="22"/>
-          <circle class="peer" cx="800" cy="308" r="22"/><circle class="peer" cx="960" cy="308" r="22"/>
-          <circle class="dash-ghost" cx="220" cy="430" r="34"/>
-          <text class="d-label" x="220" y="500">what you saw</text>
-          <text class="d-label" x="770" y="270">what everyone says</text>
-          <g class="d-ball"><circle class="ballc" r="34"/></g>
+        <svg class="demo-svg" data-demo="conformity" viewBox="0 0 1200 600" aria-label="Demo: an Asch-style panel — peers commit one by one to the wrong line; the ball trembles, abandons the answer it believed, and joins them">
+          <rect class="asch-card art" x="130" y="130" width="230" height="230" rx="14" pathLength="1"/>
+          <line class="asch-line ref-line art" x1="245" y1="180" x2="245" y2="320" pathLength="1"/>
+          <text class="d-label" x="245" y="410">what you saw</text>
+          <rect class="asch-card art" x="460" y="100" width="620" height="290" rx="14" pathLength="1"/>
+          <line class="asch-line opt opt-a art" x1="590" y1="240" x2="590" y2="340" pathLength="1"/>
+          <line class="asch-line opt opt-b art" x1="770" y1="170" x2="770" y2="340" pathLength="1"/>
+          <line class="asch-line opt opt-c art" x1="950" y1="180" x2="950" y2="320" pathLength="1"/>
+          <circle class="self-ghost truth-hint" cx="950" cy="365" r="10"/>
+          <text class="d-label" x="770" y="70">what everyone says</text>
+          <g class="commit-row"></g>
+          <circle class="peer queue-peer" cx="170" cy="500" r="15"/>
+          <circle class="peer queue-peer" cx="215" cy="512" r="13"/>
+          <circle class="peer queue-peer" cx="255" cy="498" r="14"/>
+          <circle class="peer queue-peer" cx="298" cy="510" r="12"/>
+          <path class="thread belief-thread" d="M620,470 Q800,430 945,345" pathLength="1"/>
+          <g class="d-ball"><circle class="ballc" r="24"/></g>
         </svg>
       </div>
     </div>
@@ -294,14 +309,16 @@
     </header>
     <div class="demo-scroll">
       <div class="demo-stage">
-        <svg class="demo-svg" data-demo="fitting" viewBox="0 0 1200 600" aria-label="Demo: peer dots form a ring with one empty slot; the ball shrinks itself to fit the slot">
+        <svg class="demo-svg" data-demo="fitting" viewBox="0 0 1200 600" aria-label="Demo: the group merges into a single mold with one small notch; the ball squeezes in and comes out no longer perfectly round, leaving a ghost of its original shape behind">
+          <path class="mold-fill" d="M660,160 H980 Q1064,160 1064,244 V356 Q1064,440 980,440 H660 Q616,440 616,408 V332 A30,30 0 0 1 616,268 V192 Q616,160 660,160 Z"/>
           <g class="ring-formation">
-            <circle class="peer" cx="750" cy="150" r="18"/><circle class="peer" cx="856" cy="211" r="18"/>
-            <circle class="peer" cx="856" cy="389" r="18"/><circle class="peer" cx="750" cy="450" r="18"/>
-            <circle class="peer" cx="644" cy="389" r="18"/><circle class="peer" cx="644" cy="211" r="18"/>
+            <circle class="peer soft" cx="700" cy="170" r="20"/><circle class="peer soft" cx="960" cy="175" r="19"/>
+            <circle class="peer soft" cx="1045" cy="300" r="20"/><circle class="peer soft" cx="950" cy="428" r="19"/>
+            <circle class="peer soft" cx="700" cy="430" r="20"/><circle class="peer soft" cx="625" cy="230" r="18"/>
           </g>
-          <circle class="dash-ghost slot" cx="600" cy="300" r="18"/>
-          <text class="d-label" x="600" y="530">the shape the group made</text>
+          <circle class="dash-ghost slot" cx="634" cy="300" r="20"/>
+          <circle class="self-ghost fitting-echo" cx="440" cy="300" r="27"/>
+          <text class="d-label" x="840" y="530">the shape the group made</text>
           <text class="d-label" x="160" y="370">you, full size</text>
           <g class="d-ball"><circle class="ballc" r="27"/></g>
         </svg>
