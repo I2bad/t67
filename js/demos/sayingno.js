@@ -47,7 +47,7 @@ window.DEMOS.sayingno = function (svg) {
     // The plant reads as a shockwave ring + the word itself + the chime
     .fromTo(q('.plant-ring')[0], { opacity: 0.9, scale: 0.8 },
                                  { opacity: 0, scale: 2.8, duration: 1.3, ease: EASE.out, immediateRender: false }, 2.7)
-    .to(q('.no-say'), { scale: 1, opacity: 1, duration: 0.5, ease: EASE.pop }, 2.95)
+    .to(q('.no-bubble'), { scale: 1, opacity: 1, duration: 0.6, ease: EASE.pop }, 2.9)
     .call(function () { if (window.AUDIO) AUDIO.chime(); }, [], 2.8);
 
   // REPEL IMPULSE: the pressure gets pushed back — bully hard, posse
@@ -68,7 +68,7 @@ window.DEMOS.sayingno = function (svg) {
     .to(q('.glow-lift'), { opacity: 0.5, duration: 2.4, ease: EASE.soft }, 4.5)
     .to(ballCircle, { attr: { 'stroke-width': 4.5 }, duration: 1.2, ease: EASE.soft }, 4.6)
     .to(q('.reclaim-line')[0], { strokeDashoffset: 0, duration: 2.0, ease: EASE.inOut }, 4.2)
-    .to(q('.no-say'), { opacity: 0, duration: 0.6, ease: EASE.soft }, 5.4)
+    .to(q('.no-bubble'), { opacity: 0, duration: 0.6, ease: EASE.soft }, 5.4)
     // An ally appears — one other "no" makes the next one easier
     .fromTo(ally, { x: 470 }, { opacity: 1, x: 520, duration: 1.0, ease: EASE.out, immediateRender: false }, 5.6)
     // Both travel the reclaimed line together, ally trailing slightly (overlap)
@@ -79,7 +79,8 @@ window.DEMOS.sayingno = function (svg) {
     .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.7, ease: 'elastic.out(1, 0.45)' }, 9.95);
 
   // "no." pops rather than fades — set its start state
-  gsap.set(q('.no-say'), { scale: 0.6, transformOrigin: '50% 50%', opacity: 0 });
+  // the whole speech bubble pops in around its own centre (above the ball)
+  gsap.set(q('.no-bubble'), { scale: 0.5, transformOrigin: '600px 200px', opacity: 0 });
 
   ILLO.ballFX(svg, ball, ballCircle, { r: 26 });
   return tl;

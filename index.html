@@ -360,13 +360,12 @@
     <div class="demo-scroll">
       <div class="demo-stage">
         <svg class="demo-svg" data-demo="looking" viewBox="0 0 1200 600" aria-label="Demo: a foggy crossroads — the ball stalls unsure at the fork, a stream of peers flows down one branch and the ball follows the traffic; one contrarian dot takes the other path">
-          <ellipse class="fog fog-1" cx="850" cy="140" rx="330" ry="80"/>
-          <ellipse class="fog fog-2" cx="900" cy="300" rx="380" ry="95"/>
-          <ellipse class="fog fog-3" cx="820" cy="460" rx="330" ry="85"/>
           <path class="guide-vis" id="stemPath" d="M120,300 C300,300 430,300 560,300"/>
           <path class="guide-vis" id="branchA" d="M560,300 C720,300 880,190 1080,155"/>
           <path class="guide-vis" id="branchB" d="M560,300 C720,300 880,410 1080,445"/>
           <path id="peerPath" d="M120,332 C300,332 430,332 565,332 C725,332 885,430 1080,470" fill="none" stroke="none"/>
+          <!-- literal 'evidence of others': dashed footprints left down the branch the crowd took -->
+          <path class="footprints" d="M575,315 C725,315 885,415 1075,455" pathLength="1"/>
           <line class="art art-thin signpost" x1="580" y1="268" x2="580" y2="212" pathLength="1"/>
           <text class="d-label fork-q" x="580" y="196">?</text>
           <text class="d-label" x="1080" y="120">the right way</text>
@@ -449,10 +448,10 @@
           <text class="d-label" x="330" y="500">where you started</text>
           <text class="d-label quiet-say" x="600" y="110">no one said anything</text>
           <g class="drift-field">
-            <circle class="peer" cx="180" cy="200" r="12"/><circle class="peer" cx="260" cy="330" r="10"/>
-            <circle class="peer" cx="150" cy="420" r="13"/><circle class="peer" cx="310" cy="180" r="9"/>
-            <circle class="peer" cx="240" cy="250" r="11"/><circle class="peer" cx="360" cy="400" r="10"/>
-            <circle class="peer" cx="120" cy="310" r="12"/><circle class="peer" cx="400" cy="260" r="9"/>
+            <circle class="peer" cx="120" cy="238" r="12"/><circle class="peer" cx="188" cy="228" r="10"/>
+            <circle class="peer" cx="256" cy="250" r="13"/><circle class="peer" cx="322" cy="232" r="9"/>
+            <circle class="peer" cx="150" cy="360" r="11"/><circle class="peer" cx="216" cy="372" r="12"/>
+            <circle class="peer" cx="288" cy="352" r="10"/><circle class="peer" cx="356" cy="366" r="11"/>
           </g>
           <g class="d-ball"><circle class="ballc" r="26"/></g>
         </svg>
@@ -484,7 +483,10 @@
           <g class="ping-grid"></g>
           <text class="counter-text" x="600" y="234">0</text>
           <circle class="meter-ring" cx="600" cy="300" r="38" pathLength="1"/>
-          <g class="d-ball"><circle class="ballc" r="26"/></g>
+          <g class="d-ball">
+            <circle class="ballc" r="26"/>
+            <g class="badge"><circle class="badge-dot" cx="24" cy="-24" r="14"/><text class="badge-num" x="24" y="-19">0</text></g>
+          </g>
           <text class="d-label" x="600" y="560">the feed never sleeps</text>
         </svg>
       </div>
@@ -515,8 +517,12 @@
           <line class="dash-line line-past" x1="100" y1="300" x2="600" y2="300"/>
           <line class="reclaim-line" x1="600" y1="300" x2="1100" y2="300" pathLength="1"/>
           <circle class="plant-ring" cx="600" cy="300" r="34"/>
-          <text class="d-label no-say" x="600" y="220">"no."</text>
-          <circle class="peer bully" cx="140" cy="300" r="20"/>
+          <g class="no-bubble">
+            <path class="no-bubble-tail" d="M586,214 L600,246 L614,214 Z"/>
+            <rect class="no-bubble-bg" x="540" y="168" width="120" height="58" rx="29"/>
+            <text class="no-say" x="600" y="205">no.</text>
+          </g>
+          <circle class="peer bully" cx="140" cy="300" r="22"/>
           <g class="ally"><circle class="ally-ring" r="26"/><circle class="ballc ally-ball" r="17"/></g>
           <g class="d-ball"><circle class="ballc" r="26"/></g>
         </svg>

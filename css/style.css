@@ -306,6 +306,23 @@ html.reduced .demo-svg .art { stroke-dashoffset: 0; }
   stroke-dasharray: 8 10; stroke-linecap: round; opacity: 0.55;
 }
 .line-past { opacity: 0; }
+/* Saying No — the "no." speech bubble (lands with a scale-pop) */
+.no-bubble-bg { fill: var(--cream); stroke: var(--ink); stroke-width: 2.5; }
+.no-bubble-tail { fill: var(--cream); stroke: var(--ink); stroke-width: 2.5; }
+.no-say {
+  fill: var(--ink); font-family: var(--font-mono); font-weight: 700;
+  font-size: 30px; text-anchor: middle; letter-spacing: -0.01em;
+}
+/* Online — one red badge accent as the focal point on "you" */
+.badge-dot { fill: #DC3A2E; }
+.badge-num { fill: var(--cream); font-family: var(--font-mono); font-size: 15px; font-weight: 700; text-anchor: middle; }
+/* Looking — footprint trail (dotted path = evidence of others) */
+.footprints {
+  fill: none; stroke: var(--accent, var(--ink)); stroke-width: 7;
+  stroke-linecap: round; stroke-dasharray: 0.004 0.058; opacity: 0.75;
+  stroke-dashoffset: 1;
+}
+html.reduced .footprints { stroke-dashoffset: 0; }
 .wave { fill: none; stroke: var(--ink); stroke-width: 2; opacity: 0; }
 .feed-card-l { fill: var(--ink); opacity: 0.1; }
 .feed-avatar-l { fill: var(--ink); opacity: 0.4; }
@@ -506,7 +523,7 @@ html.reduced .scene-label { opacity: 1; }
 .dash-ghost { stroke-width: 2.5; }
 .spark line { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; }
 .spark { opacity: 0; }
-.bully-say, .quiet-say, .no-say { opacity: 0; font-size: 24px; }
+.bully-say, .quiet-say { opacity: 0; font-size: 24px; }
 .reclaim-line {
   stroke: var(--ink); stroke-width: 4; stroke-linecap: round;
   stroke-dasharray: 1; stroke-dashoffset: 1;
@@ -515,7 +532,7 @@ html.reduced .scene-label { opacity: 1; }
 .ally-ring { fill: none; stroke: var(--ink); stroke-width: 2; opacity: 0.5; }
 .ally { opacity: 0; }
 html.reduced .spark { opacity: 0; }
-html.reduced .bully-say, html.reduced .quiet-say, html.reduced .no-say { opacity: 1; }
+html.reduced .bully-say, html.reduced .quiet-say { opacity: 1; }
 html.reduced .reclaim-line { stroke-dashoffset: 0; }
 html.reduced .ally { opacity: 1; }
 

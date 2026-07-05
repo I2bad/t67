@@ -54,14 +54,20 @@ window.DEMOS.conformity = function (svg) {
     }, t)
       .to(ticks[i], { strokeDashoffset: 0, duration: 0.3, ease: EASE.out }, t + 0.6);
   });
-  // the ball watches — trembles, leans toward what it saw
+  // the ball watches — trembles, leans toward what it saw. Colour as
+  // narrative: the line it believes (C, the true match) glows green as it
+  // leans that way.
   tl.to(ballCircle, { x: 4, duration: 0.12, yoyo: true, repeat: 7, ease: EASE.soft }, 4.2)
     .to(ball, { x: 660, duration: 1.0, ease: EASE.soft }, 5.2)   // lean toward C
+    .to([q('.opt-c')[0], q('.truth-hint')[0]], { stroke: '#2F9E3A', duration: 0.9, ease: EASE.soft }, 5.0)
     .to(ball, { x: 630, duration: 0.8, ease: EASE.soft }, 6.3);  // ...pulled back
 
-  /* beat 3 — THE FLIP: gulp, sever the belief, join the row, tick the box */
+  /* beat 3 — THE FLIP: gulp, sever the belief, join the WRONG row (which
+     flushes red as the green truth drains away), tick the box */
   tl.to(ballCircle, { scaleY: 0.78, scaleX: 1.12, duration: 0.16, ease: EASE.in }, 7.3) // gulp
     .to(ballCircle, { scaleY: 1, scaleX: 1, duration: 0.4, ease: EASE.out }, 7.5)
+    .to(q('.opt-c'), { stroke: '#141313', duration: 0.7, ease: EASE.soft }, 7.4)  // truth drains
+    .to(q('.opt-b'), { stroke: '#C0392B', duration: 0.7, ease: EASE.soft }, 7.7)  // the wrong answer, chosen
     .to(q('.belief-thread'), { opacity: 0, duration: 0.8, ease: EASE.soft }, 7.5)
     .to(q('.truth-hint'), { opacity: 0.25, duration: 1.2, ease: EASE.soft }, 7.7)
     .to(ball, { x: 872, y: 430, duration: 1.6, ease: EASE.inOut }, 7.9)

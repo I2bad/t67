@@ -54,6 +54,18 @@ window.DEMOS.online = function (svg) {
     }
   }, 0.4);
 
+  // the red badge on "you": the single focal accent. Pops in, its unread
+  // count climbs, and it flinches bigger on the notification waves.
+  var badge = q('.badge')[0], bnum = q('.badge-num')[0], bn = { v: 0 };
+  gsap.set(badge, { scale: 0, transformOrigin: '50% 50%' });
+  tl.to(badge, { scale: 1, duration: 0.5, ease: EASE.pop }, 1.0)
+    .to(bn, {
+      v: 99, duration: 6, ease: EASE.in,
+      onUpdate: function () { bnum.textContent = bn.v >= 99 ? '99+' : Math.floor(bn.v); }
+    }, 1.2)
+    .to(badge, { scale: 1.25, duration: 0.2, yoyo: true, repeat: 1, ease: EASE.soft }, 3.4)
+    .to(badge, { scale: 1.25, duration: 0.2, yoyo: true, repeat: 1, ease: EASE.soft }, 5.6);
+
   // comparison meter around the ball: fills, dips, refills — never settles
   tl.to(q('.meter-ring'), { strokeDashoffset: 0.35, duration: 2.2, ease: EASE.out }, 1.2)
     .to(q('.meter-ring'), { strokeDashoffset: 0.75, duration: 1.4, ease: EASE.inOut }, 3.6)

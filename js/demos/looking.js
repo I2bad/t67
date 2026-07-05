@@ -22,16 +22,9 @@ window.DEMOS.looking = function (svg) {
   gsap.set(q('.guide-vis'), { opacity: 0 });
   gsap.set(q('.fork-q'), { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' });
 
-  // ambient: the fog banks drift slowly, out of phase — the air moves
-  if (!QUALITY.reduced) {
-    q('.fog').forEach(function (f, i) {
-      gsap.to(f, { x: i % 2 ? -46 : 40, duration: 7 + i * 1.6, yoyo: true, repeat: -1, ease: EASE.soft });
-    });
-  }
-
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
-  /* beat 1 — FOG & FORK: the roads surface out of the murk */
+  /* beat 1 — THE FORK: the roads surface, the signpost gives no answer */
   tl.to(q('.guide-vis'), { opacity: 0.55, duration: 1.4, ease: EASE.soft, stagger: 0.35 }, 0)
     .to(q('.signpost'), { strokeDashoffset: 0, duration: 0.5, ease: EASE.out }, 1.6);
 
@@ -42,6 +35,8 @@ window.DEMOS.looking = function (svg) {
       duration: 4.2, ease: EASE.inOut
     }, 1.2 + i * 0.75);
   });
+  // the crowd leaves footprints down its branch — literal evidence of others
+  tl.to(q('.footprints'), { strokeDashoffset: 0, duration: 3.4, ease: EASE.soft }, 2.4);
   // ...except one. The contrarian pauses at the fork, then goes the other way
   tl.to(contrarian, { opacity: 0.8, duration: 0.3 }, 2.6)
     .to(contrarian, {
@@ -68,14 +63,14 @@ window.DEMOS.looking = function (svg) {
     .to(ballCircle, { x: -12, duration: 0.4, ease: EASE.soft }, 5.9)
     .to(ballCircle, { x: 0, duration: 0.3, ease: EASE.in }, 6.3);
 
-  /* beat 3 — FOLLOW THE FOOTPRINTS: fog thins only where the crowd walked */
+  /* beat 3 — FOLLOW THE FOOTPRINTS: the ball walks the trodden trail */
   tl.to(q('.fork-q'), { opacity: 0, duration: 0.4 }, 6.4)
     .to(ball, {
       motionPath: { path: branchB, align: branchB, alignOrigin: [0.5, 0.5] },
       duration: 3.2, ease: EASE.inOut
     }, 6.6)
-    .to(q('.fog-3'), { opacity: 0.02, duration: 2.2, ease: EASE.soft }, 6.9)  // trodden branch clears
-    .to(q('.fog-1'), { opacity: 0.09, duration: 2.2, ease: EASE.soft }, 6.9); // the road not taken thickens
+    // the footprints it's following brighten as it commits to them
+    .to(q('.footprints'), { opacity: 0.9, duration: 1.6, ease: EASE.soft }, 6.6);
 
   ILLO.ballFX(svg, ball, ballCircle, { r: 24 });
   return tl;

@@ -33,9 +33,10 @@ window.DEMOS.unspoken = function (svg) {
     stagger: { each: 0.25, ease: EASE.soft }
   }, 0);
 
-  /* beat 2 — THE FIELD SLIDES: everyone drifts; nobody says a word */
+  /* beat 2 — THE FIELD SLIDES: the whole cohort moves the SAME way, as one
+     current — a uniform rightward drift that holds its formation */
   peers.forEach(function (p, i) {
-    tl.to(p, { x: 560 + (i % 3) * 60, duration: 7.5 + (i % 4) * 0.6, ease: EASE.soft }, 0.8 + i * 0.18);
+    tl.to(p, { x: '+=' + (475 + (i % 3) * 14), duration: 7.6, ease: EASE.soft }, 0.8 + i * 0.12);
   });
   // the ball resists for a moment — a half-lean back against the flow…
   tl.to(ballCircle, { x: -8, rotation: -3, duration: 0.9, ease: EASE.soft }, 2.0)
