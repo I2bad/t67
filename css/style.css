@@ -226,6 +226,63 @@ main { position: relative; z-index: 1; }
 }
 .dark .dash { stroke: var(--cream); }
 
+/* ============================================================
+   Illustration system — shared vocabulary for all scenes.
+   Line-weight variation + soft fills + ghosts, per design language.
+   ============================================================ */
+.art-bold { stroke-width: 4.5 !important; }
+.art-thin { stroke-width: 1.5 !important; }
+
+/* dark story stretch: cream line-art + soft glows */
+.lamp-glow { fill: var(--cream); opacity: 0.06; }
+.light-pool { fill: var(--cream); opacity: 0.09; }
+.scene-shadow { fill: #000; opacity: 0.55; }
+.talk-ring { fill: none; stroke: var(--cream); stroke-width: 1.5; opacity: 0; }
+.seat-ghost, .self-ghost {
+  fill: none; stroke-dasharray: 6 8; stroke-width: 2; stroke-linecap: round;
+  stroke: var(--cream); opacity: 0.55;
+}
+.concept .self-ghost { stroke: var(--ink); }
+.phone-screen { fill: var(--cream); opacity: 0.07; }
+.screen-glow { fill: var(--cream); opacity: 0.08; }
+.feed-card { fill: var(--cream); opacity: 0.16; }
+.feed-card-avatar { fill: var(--cream); opacity: 0.5; }
+.feed-card-line { fill: var(--cream); opacity: 0.3; }
+.like-count { fill: var(--cream-soft); font-size: 15px; text-anchor: middle; }
+.flock-dot { fill: var(--cream); }
+.table-peer { fill: var(--cream); }
+
+/* concept panels: soft fills, threads, fog, stage light */
+.peer.soft { fill: var(--ink); opacity: 0.16; }
+.thread {
+  fill: none; stroke: var(--ink); stroke-width: 1.5; opacity: 0.45;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+}
+.gap-ghost { fill: none; stroke: var(--ink); stroke-dasharray: 5 7; stroke-width: 2; opacity: 0; }
+.mold-fill { fill: var(--ink); opacity: 0.13; stroke: none; }
+.fog { fill: var(--ink); opacity: 0.06; }
+.ground-line { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; }
+.spotlight { fill: var(--cream); opacity: 0.4; }
+.shadow-soft { fill: var(--ink); opacity: 0.16; }
+.dare-pill-bg { fill: var(--ink); }
+.dare-pill-text { fill: var(--cream); font-family: var(--font-mono); font-size: 17px; text-anchor: middle; }
+.impact-ripple { fill: none; stroke: var(--ink); stroke-width: 2.5; opacity: 0; }
+.flow {
+  fill: none; stroke: var(--ink); stroke-width: 1.5;
+  stroke-dasharray: 8 16; opacity: 0.22; stroke-linecap: round;
+}
+.tick { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1; }
+.asch-card { fill: none; stroke: var(--ink); stroke-width: 2; opacity: 0.5; rx: 14; }
+.asch-line { stroke: var(--ink); stroke-width: 6; stroke-linecap: round; }
+.counter-text { font-family: var(--font-mono); font-size: 26px; fill: var(--ink); text-anchor: middle; }
+.meter-ring { fill: none; stroke: var(--ink); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.glow-lift { fill: var(--cream); opacity: 0; }
+.wavy-path {
+  fill: none; stroke: var(--ink); stroke-width: 3;
+  stroke-dasharray: 8 10; stroke-linecap: round; opacity: 0.55;
+}
+
 /* word-split reveal */
 .split .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.06em; }
 .split .wi { display: inline-block; will-change: transform; transform-origin: 0% 100%; }

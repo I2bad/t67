@@ -92,33 +92,44 @@
       <!-- invisible travel path -->
       <path id="storyPath" d="M80,180 C380,120 560,260 460,420 C370,565 620,700 860,610 C1080,530 960,330 1150,270 C1310,220 1380,400 1280,560" fill="none" stroke="none"/>
 
-      <!-- self-drawing line-art scenes (pathLength=1 so dash reveal is trivial) -->
+      <!-- self-drawing dioramas (pathLength=1 so dash reveal is trivial).
+           Each is a small world: setting, light, depth, life. -->
       <g class="scene scene-table" aria-hidden="true">
-        <ellipse class="art" cx="260" cy="560" rx="120" ry="34" pathLength="1"/>
-        <circle class="art" cx="170" cy="500" r="16" pathLength="1"/>
-        <circle class="art" cx="260" cy="488" r="16" pathLength="1"/>
-        <circle class="art" cx="350" cy="500" r="16" pathLength="1"/>
-        <text class="scene-label" x="260" y="640">the lunch table</text>
+        <line class="art art-thin lamp-cord" x1="260" y1="392" x2="260" y2="440" pathLength="1"/>
+        <path class="art lamp-shade" d="M232,452 Q260,418 288,452 Z" pathLength="1"/>
+        <path class="lamp-glow" d="M238,452 L178,548 L342,548 L282,452 Z"/>
+        <ellipse class="light-pool" cx="260" cy="556" rx="105" ry="22"/>
+        <ellipse class="scene-shadow" cx="262" cy="626" rx="95" ry="10"/>
+        <ellipse class="art art-bold table-top" cx="260" cy="560" rx="120" ry="30" pathLength="1"/>
+        <line class="art art-thin" x1="184" y1="582" x2="184" y2="622" pathLength="1"/>
+        <line class="art art-thin" x1="336" y1="582" x2="336" y2="622" pathLength="1"/>
+        <circle class="table-peer" cx="175" cy="514" r="15"/>
+        <circle class="table-peer" cx="248" cy="498" r="16"/>
+        <circle class="table-peer" cx="322" cy="510" r="14"/>
+        <circle class="seat-ghost" cx="370" cy="542" r="16"/>
+        <text class="scene-label" x="260" y="672">the lunch table</text>
       </g>
       <g class="scene scene-phone" aria-hidden="true">
-        <rect class="art" x="640" y="160" width="110" height="200" rx="18" pathLength="1"/>
-        <line class="art" x1="668" y1="330" x2="722" y2="330" pathLength="1"/>
-        <circle class="art" cx="695" cy="210" r="22" pathLength="1"/>
+        <ellipse class="screen-glow" cx="695" cy="255" rx="115" ry="135"/>
+        <rect class="phone-screen" x="650" y="162" width="90" height="186" rx="10"/>
+        <clipPath id="screenClip"><rect x="650" y="162" width="90" height="186" rx="10"/></clipPath>
+        <g class="feed" clip-path="url(#screenClip)"><g class="feed-roll"></g></g>
+        <rect class="art art-bold phone-body" x="640" y="150" width="110" height="210" rx="18" pathLength="1"/>
+        <text class="like-count mono" x="695" y="138">&#9825; 0</text>
         <text class="scene-label" x="695" y="410">the phone</text>
       </g>
       <g class="scene scene-crowd" aria-hidden="true">
-        <circle class="art" cx="1150" cy="640" r="14" pathLength="1"/>
-        <circle class="art" cx="1195" cy="615" r="11" pathLength="1"/>
-        <circle class="art" cx="1235" cy="650" r="13" pathLength="1"/>
-        <circle class="art" cx="1185" cy="675" r="9" pathLength="1"/>
-        <circle class="art" cx="1265" cy="612" r="10" pathLength="1"/>
-        <text class="scene-label" x="1205" y="730">the crowd</text>
+        <ellipse class="scene-shadow" cx="880" cy="700" rx="130" ry="12"/>
+        <g class="flock-home"></g>
+        <text class="scene-label" x="880" y="748">the crowd</text>
       </g>
       <g class="scene scene-door" aria-hidden="true">
-        <rect class="art" x="1240" y="90" width="120" height="190" rx="4" pathLength="1"/>
+        <path class="lamp-glow" d="M1242,272 L1150,320 L1242,140 Z"/>
+        <ellipse class="scene-shadow" cx="1296" cy="298" rx="70" ry="8"/>
+        <rect class="art art-bold" x="1240" y="90" width="120" height="190" rx="4" pathLength="1"/>
         <line class="art" x1="1240" y1="280" x2="1200" y2="310" pathLength="1"/>
-        <circle class="art" cx="1330" cy="190" r="5" pathLength="1"/>
-        <text class="scene-label" x="1300" y="330">the doorway</text>
+        <circle class="art art-thin" cx="1330" cy="190" r="5" pathLength="1"/>
+        <text class="scene-label" x="1300" y="342">the doorway</text>
       </g>
 
       <!-- peer dots that nudge the traveling ball -->
@@ -540,6 +551,7 @@
 <!-- ============ SITE MODULES ============ -->
 <script src="js/ease-tokens.js"></script>
 <script src="js/quality.js"></script>
+<script src="js/illustrations/primitives.js"></script>
 <script src="js/webgl/gl-layer.js"></script>
 <script src="js/webgl/background.js"></script>
 <script src="js/webgl/metaballs.js"></script>
