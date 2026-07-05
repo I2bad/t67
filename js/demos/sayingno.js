@@ -60,9 +60,14 @@ window.DEMOS.sayingno = function (svg) {
     .to(bully, { attr: { cx: 140 }, opacity: 0.4, duration: 1.6, ease: EASE.soft }, 4.4)
     .to(posse, { opacity: 0.35, duration: 1.4, ease: EASE.soft }, 4.6);
 
-  // The straight path redraws itself — the line is yours again.
-  // Given timing room deliberately: this is the emotional payoff.
-  tl.to(q('.reclaim-line')[0], { strokeDashoffset: 0, duration: 2.0, ease: EASE.inOut }, 4.2)
+  // THE SNAP: the wobbling dashed path straightens — the wavering version
+  // fades as the clean solid line draws itself. The scene brightens; the
+  // ball's own edge grows bolder. This is the payoff — give it room.
+  tl.to(q('.wavy-path'), { opacity: 0, duration: 1.4, ease: EASE.soft }, 4.1)
+    .to(q('.line-past'), { opacity: 0.4, duration: 1.4, ease: EASE.soft }, 4.4)
+    .to(q('.glow-lift'), { opacity: 0.5, duration: 2.4, ease: EASE.soft }, 4.5)
+    .to(ballCircle, { attr: { 'stroke-width': 4.5 }, duration: 1.2, ease: EASE.soft }, 4.6)
+    .to(q('.reclaim-line')[0], { strokeDashoffset: 0, duration: 2.0, ease: EASE.inOut }, 4.2)
     .to(q('.no-say'), { opacity: 0, duration: 0.6, ease: EASE.soft }, 5.4)
     // An ally appears — one other "no" makes the next one easier
     .fromTo(ally, { x: 470 }, { opacity: 1, x: 520, duration: 1.0, ease: EASE.out, immediateRender: false }, 5.6)

@@ -285,6 +285,11 @@ html.reduced .demo-svg .art { stroke-dashoffset: 0; }
   fill: none; stroke: var(--ink); stroke-width: 3;
   stroke-dasharray: 8 10; stroke-linecap: round; opacity: 0.55;
 }
+.line-past { opacity: 0; }
+.wave { fill: none; stroke: var(--ink); stroke-width: 2; opacity: 0; }
+.feed-card-l { fill: var(--ink); opacity: 0.1; }
+.feed-avatar-l { fill: var(--ink); opacity: 0.4; }
+.feed-line-l { fill: var(--ink); opacity: 0.28; }
 
 /* word-split reveal */
 .split .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.06em; }

@@ -463,8 +463,12 @@
     </header>
     <div class="demo-scroll">
       <div class="demo-stage">
-        <svg class="demo-svg" data-demo="online" viewBox="0 0 1200 600" aria-label="Demo: the ball is surrounded by a grid of pinging notification dots and jitters under the barrage">
+        <svg class="demo-svg" data-demo="online" viewBox="0 0 1200 600" aria-label="Demo: a living feed — notification cards stack and re-ping around the ball in waves while a counter climbs; the ball jitters and shrinks under a barrage that never stops">
+          <circle class="wave wave-1" cx="600" cy="300" r="40"/>
+          <circle class="wave wave-2" cx="600" cy="300" r="40"/>
           <g class="ping-grid"></g>
+          <text class="counter-text" x="600" y="234">0</text>
+          <circle class="meter-ring" cx="600" cy="300" r="38" pathLength="1"/>
           <g class="d-ball"><circle class="ballc" r="26"/></g>
           <text class="d-label" x="600" y="560">the feed never sleeps</text>
         </svg>
@@ -490,8 +494,10 @@
     </header>
     <div class="demo-scroll">
       <div class="demo-stage">
-        <svg class="demo-svg" data-demo="sayingno" viewBox="0 0 1200 600" aria-label="Demo: the ball plants itself, absorbs the shove without moving, then reclaims its straight path — joined by an ally ball">
-          <line class="dash-line" x1="100" y1="300" x2="1100" y2="300"/>
+        <svg class="demo-svg" data-demo="sayingno" viewBox="0 0 1200 600" aria-label="Demo: the ball plants itself, absorbs the shove without moving, pushes the crowd back with a boundary ripple, and its wobbling dashed path snaps into a clean solid line — joined by an ally ball as the scene brightens">
+          <ellipse class="glow-lift" cx="600" cy="300" rx="430" ry="240"/>
+          <path class="wavy-path" d="M100,300 C150,284 200,316 250,300 C300,284 350,316 400,300 C450,284 500,316 550,300 C580,291 590,296 600,300 C650,284 700,316 750,300 C800,284 850,316 900,300 C950,284 1000,316 1050,300 C1070,294 1085,298 1100,300"/>
+          <line class="dash-line line-past" x1="100" y1="300" x2="600" y2="300"/>
           <line class="reclaim-line" x1="600" y1="300" x2="1100" y2="300" pathLength="1"/>
           <circle class="plant-ring" cx="600" cy="300" r="34"/>
           <text class="d-label no-say" x="600" y="220">"no."</text>
