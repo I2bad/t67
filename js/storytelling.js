@@ -118,6 +118,10 @@
       .to(ballCircle, { x: 0, y: 0, duration: 1.4, ease: EASE.soft }, 8)
       .to('.sp2', { attr: { cx: 1080, cy: 380 }, duration: 0.9, ease: EASE.out }, 7.45);
 
+    // consistent ball identity: a cream ghost trail through the dark world
+    // (no contact shadow — ink-on-near-black wouldn't read)
+    ILLO.ballFX(svg, ball, ballCircle, { r: 26, contact: false });
+
     /* ---------- ambient life: loops that run while the story is on screen ---------- */
     var loops = [];
     var loopsOn = false;

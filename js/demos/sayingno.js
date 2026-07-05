@@ -81,5 +81,6 @@ window.DEMOS.sayingno = function (svg) {
   // "no." pops rather than fades — set its start state
   gsap.set(q('.no-say'), { scale: 0.6, transformOrigin: '50% 50%', opacity: 0 });
 
+  ILLO.ballFX(svg, ball, ballCircle, { r: 26 });
   return tl;
 };

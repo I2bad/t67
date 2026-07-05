@@ -76,5 +76,6 @@ window.DEMOS.belong = function (svg) {
     .to(ballCircle, { scaleX: 1.15, scaleY: 0.85, duration: 0.35, ease: EASE.out }, 9.3)
     .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.8, ease: 'elastic.out(1, 0.4)' }, 9.65);
 
+  ILLO.ballFX(svg, ball, ballCircle, { r: 26 });
   return tl;
 };

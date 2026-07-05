@@ -211,10 +211,16 @@ main { position: relative; z-index: 1; }
 /* ============================================================
    Shared SVG vocabulary
    ============================================================ */
-.ballc { fill: var(--cream); stroke: var(--ink); stroke-width: 0; }
+/* the "you" ball: one consistent identity everywhere — soft sphere gradient,
+   a lift shadow, and (via ball-fx.js) a contact shadow + ghost trail */
+.ballc { fill: url(#ballGrad); stroke: var(--ink); stroke-width: 0; }
 .concept .ballc { stroke-width: 3; }
+.dark .ballc { filter: drop-shadow(0 3px 13px rgba(247, 245, 240, 0.18)); }
+.concept .ballc { filter: drop-shadow(0 6px 12px rgba(20, 19, 19, 0.32)); }
+.ball-echo { fill: url(#ballGrad); pointer-events: none; }
+.ball-contact { fill: var(--ink); opacity: 0.16; pointer-events: none; }
 .peer { fill: var(--cream); opacity: 0.85; }
-.concept .peer { fill: var(--ink); opacity: 0.8; }
+.concept .peer { fill: var(--ink); opacity: 0.82; }
 .d-label {
   font-family: var(--font-mono); font-size: 20px;
   fill: var(--ink-soft); text-anchor: middle;

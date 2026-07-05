@@ -77,5 +77,6 @@ window.DEMOS.looking = function (svg) {
     .to(q('.fog-3'), { opacity: 0.02, duration: 2.2, ease: EASE.soft }, 6.9)  // trodden branch clears
     .to(q('.fog-1'), { opacity: 0.09, duration: 2.2, ease: EASE.soft }, 6.9); // the road not taken thickens
 
+  ILLO.ballFX(svg, ball, ballCircle, { r: 24 });
   return tl;
 };

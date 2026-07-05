@@ -49,5 +49,6 @@ window.DEMOS.unspoken = function (svg) {
     .to(ballCircle, { y: -7, duration: 1.1, yoyo: true, repeat: 5, ease: EASE.soft }, 3.2)
     .to(q('.quiet-say'), { opacity: 1, duration: 1.2, ease: EASE.soft }, 5.5);
 
+  ILLO.ballFX(svg, ball, ballCircle, { r: 26 });
   return tl;
 };

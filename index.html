@@ -13,6 +13,17 @@
 </head>
 <body>
 
+<!-- shared paint servers: one gradient every "you" ball references site-wide -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <radialGradient id="ballGrad" cx="38%" cy="30%" r="78%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="42%" stop-color="#F7F5F0"/>
+      <stop offset="100%" stop-color="#DFD8CA"/>
+    </radialGradient>
+  </defs>
+</svg>
+
 <!-- ============ PRELOADER ============ -->
 <div id="preloader" aria-hidden="true">
   <div class="pre-count"><span id="preNum">0</span></div>
@@ -595,6 +606,7 @@
 <script src="js/ease-tokens.js"></script>
 <script src="js/quality.js"></script>
 <script src="js/illustrations/primitives.js"></script>
+<script src="js/illustrations/ball-fx.js"></script>
 <script src="js/webgl/gl-layer.js"></script>
 <script src="js/webgl/background.js"></script>
 <script src="js/webgl/metaballs.js"></script>
