@@ -317,13 +317,29 @@
     gsap.set('.type-neg', { x: -90, rotation: -2, autoAlpha: 0 });
     gsap.set('.type-pos', { x: 90, rotation: 2, autoAlpha: 0 });
     gsap.set('.types-note', { autoAlpha: 0, y: 20 });
+    // diagram start states (both balls sit on their line; peers offstage)
+    gsap.set('.tn-peer', { x: -60, autoAlpha: 0 });
+    gsap.set('.tp-peer', { scale: 0, autoAlpha: 0, transformOrigin: '50% 50%' });
+    gsap.set(['.tn-ball', '.tp-ball'], { transformOrigin: '50% 50%' });
     ScrollTrigger.create({
       trigger: '.types-grid', start: 'top 75%', once: true,
       onEnter: function () {
         gsap.timeline()
           .to('.type-neg', { x: 0, rotation: 0, autoAlpha: 1, duration: 1.2, ease: EASE.out }, 0)
           .to('.type-pos', { x: 0, rotation: 0, autoAlpha: 1, duration: 1.2, ease: EASE.out }, 0.14)
-          .to('.types-note', { autoAlpha: 1, y: 0, duration: 0.9, ease: EASE.out }, 0.55);
+          .to('.types-note', { autoAlpha: 1, y: 0, duration: 0.9, ease: EASE.out }, 0.55)
+          // NEGATIVE: pink peers crowd in, shove the ball down off its line;
+          // a dashed ghost marks where it should have stayed
+          .to('.tn-peer', { x: 0, autoAlpha: 1, duration: 0.8, ease: EASE.pop, stagger: 0.08 }, 0.7)
+          .to('.tn-ghost', { autoAlpha: 1, duration: 0.6, ease: EASE.soft }, 1.5)
+          .to('.tn-ball', { scaleX: 1.25, scaleY: 0.78, duration: 0.14, ease: EASE.in }, 1.55)
+          .to('.tn-ball', { y: 64, duration: 0.9, ease: EASE.out }, 1.6)
+          .to('.tn-ball', { scaleX: 1, scaleY: 1, duration: 0.8, ease: 'elastic.out(1, 0.4)' }, 1.7)
+          // POSITIVE: green peers ahead pull the ball further ALONG the line
+          .to('.tp-peer', { scale: 1, autoAlpha: 1, duration: 0.7, ease: EASE.pop, stagger: 0.1 }, 0.85)
+          .to('.tp-ball', { x: 96, duration: 1.4, ease: EASE.inOut }, 1.3)
+          .to('.tp-ball', { scaleX: 1.12, scaleY: 0.9, duration: 0.22, yoyo: true, repeat: 1, ease: EASE.soft }, 2.4)
+          .to('.tp-peer', { scale: 1.12, duration: 0.5, yoyo: true, repeat: 1, ease: EASE.soft, stagger: 0.06 }, 2.6);
       }
     });
   }

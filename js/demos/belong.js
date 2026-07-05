@@ -36,7 +36,9 @@ window.DEMOS.belong = function (svg) {
   /* beat 1 — SETUP: the group warms up, threads bind it together */
   tl.to(q('.soft-glow'), { scale: 1, opacity: 0.06, duration: 1.8, ease: EASE.soft }, 0)
     .to(members, {
-      opacity: 0.16, duration: 0.8, ease: EASE.soft,
+      // tone variation between members — they read as distinct people
+      opacity: function (i) { return [0.62, 0.44, 0.56, 0.48, 0.6, 0.5][i] || 0.5; },
+      duration: 0.8, ease: EASE.soft,
       stagger: { each: 0.15, from: 'center' }
     }, 0.2)
     .to(q('.huddle-threads .thread'), {

@@ -30,7 +30,8 @@ window.DEMOS.fitting = function (svg) {
     stagger: { each: 0.14, ease: EASE.soft }
   }, 0)
     // the merge: the silhouette rises as the individuals dissolve into it
-    .to(mold, { opacity: 0.13, duration: 1.4, ease: EASE.soft }, 2.3)
+    // (element opacity → 1; the soft fill + outline come from fill/stroke-opacity)
+    .to(mold, { opacity: 1, duration: 1.4, ease: EASE.soft }, 2.3)
     .to(peers, { opacity: 0, duration: 1.1, ease: EASE.soft, stagger: { each: 0.07 } }, 2.5)
     .to(q('.slot'), { opacity: 1, duration: 0.7, ease: EASE.soft }, 3.4);
 
@@ -45,9 +46,9 @@ window.DEMOS.fitting = function (svg) {
   /* beat 3 — ALTERED SELF: it fits now… but it isn't round anymore */
   tl.to(ballCircle, { scaleX: 0.62, scaleY: 0.76, duration: 0.9, ease: 'elastic.out(1, 0.5)' }, 7.6)
     .to(q('.slot'), { opacity: 0, duration: 0.5 }, 7.7)
-    // the mold gives a satisfied pulse around its newest piece
-    .to(mold, { opacity: 0.19, duration: 0.5, ease: EASE.out }, 8.3)
-    .to(mold, { opacity: 0.14, duration: 0.8, ease: EASE.soft }, 8.8)
+    // the mold gives a satisfied pulse around its newest piece (outline thickens)
+    .to(mold, { attr: { 'stroke-width': 5 }, duration: 0.5, ease: EASE.out }, 8.3)
+    .to(mold, { attr: { 'stroke-width': 2.5 }, duration: 0.8, ease: EASE.soft }, 8.8)
     // and the ball's own edge fades a little — less distinct than it was
     .to(ballCircle, { opacity: 0.85, duration: 1.0, ease: EASE.soft }, 8.8);
 

@@ -261,14 +261,28 @@ html.reduced .demo-svg .art { stroke-dashoffset: 0; }
 .flock-dot { fill: var(--cream); }
 .table-peer { fill: var(--cream); }
 
+/* one saturated accent per pastel section — pulls the group out of the
+   near-monochrome flatness that made these panels disappear */
+#belonging   { --accent: #5A46D6; }  /* indigo on lavender */
+#conformity  { --accent: #5A46D6; }
+#fitting-in  { --accent: #6E7A22; }  /* olive on beige */
+#looking     { --accent: #13867B; }  /* teal on mint */
+#direct      { --accent: #B23A86; }  /* magenta on pink */
+#unspoken    { --accent: #B24230; }  /* rust on rose */
+#online      { --accent: #3E8E2C; }  /* green */
+#saying-no   { --accent: #1F6E72; }  /* teal-slate */
+
 /* concept panels: soft fills, threads, fog, stage light */
-.peer.soft { fill: var(--ink); opacity: 0.16; }
+.peer.soft { fill: var(--accent, var(--ink)); opacity: 0.5; }
 .thread {
-  fill: none; stroke: var(--ink); stroke-width: 1.5; opacity: 0.45;
+  fill: none; stroke: var(--accent, var(--ink)); stroke-width: 1.75; opacity: 0.4;
   stroke-dasharray: 1; stroke-dashoffset: 1;
 }
 .gap-ghost { fill: none; stroke: var(--ink); stroke-dasharray: 5 7; stroke-width: 2; opacity: 0; }
-.mold-fill { fill: var(--ink); opacity: 0.13; stroke: none; }
+.mold-fill {
+  fill: var(--accent, var(--ink)); fill-opacity: 0.2;
+  stroke: var(--accent, var(--ink)); stroke-opacity: 0.6; stroke-width: 2.5;
+}
 .fog { fill: var(--ink); opacity: 0.06; }
 .ground-line { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; }
 .spotlight { fill: var(--cream); opacity: 0.4; }
@@ -444,9 +458,11 @@ html.reduced .scene-label { opacity: 1; }
   font-size: clamp(1.8rem, 4vw, 3.4rem); font-weight: 500; letter-spacing: -0.02em;
 }
 .type-card p { font-size: 0.9rem; line-height: 1.6; color: var(--cream-soft); }
-.type-art { width: 100%; max-width: 320px; }
-.type-art .peer { fill: var(--cream); }
-.type-art .ballc-ink { fill: var(--cream); }
+.type-art { width: 100%; max-width: none; margin-top: 0.4rem; overflow: visible; }
+.tl-line { opacity: 0.5; }
+.tn-peer { fill: #E8A9A9; }        /* negative → the pink accent from the heading */
+.tp-peer { fill: #BCE8A9; }        /* positive → the green accent */
+.tn-ghost { fill: none; stroke: #E8A9A9; stroke-dasharray: 5 7; stroke-width: 2; opacity: 0; }
 .type-neg h3 { color: #E8A9A9; }
 .type-pos h3 { color: #BCE8A9; }
 .types-note { color: var(--cream-soft); font-size: 0.9rem; }
