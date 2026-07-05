@@ -12,13 +12,28 @@ window.DEMOS.belong = function (svg) {
   var members = q('.huddle .peer');
   var opener = q('.huddle-opener')[0];
 
-  // connective threads between neighbours (and one saved for the ball)
+  // clean proximity network: connect each member to its two nearest
+  // neighbours with straight threads (replaces the old crossing arcs that
+  // read as scribble). Dedupe edges so no line is drawn twice.
   var centers = [[918, 252], [978, 242], [1018, 298], [978, 356], [914, 346], [950, 300]];
   var threadWrap = q('.huddle-threads')[0];
-  [[0, 1], [1, 2], [2, 3], [3, 4], [5, 0], [5, 2], [5, 4]].forEach(function (p) {
-    ILLO.thread(threadWrap, centers[p[0]][0], centers[p[0]][1], centers[p[1]][0], centers[p[1]][1]);
+  function link(x1, y1, x2, y2) {
+    return ILLO.create('line', {
+      x1: x1, y1: y1, x2: x2, y2: y2, pathLength: 1, 'class': 'thread'
+    }, threadWrap);
+  }
+  var seen = {};
+  centers.forEach(function (c, i) {
+    centers.map(function (o, j) { return { j: j, d: Math.hypot(o[0] - c[0], o[1] - c[1]) }; })
+      .filter(function (e) { return e.j !== i; })
+      .sort(function (a, b) { return a.d - b.d; })
+      .slice(0, 2).forEach(function (e) {
+        var key = Math.min(i, e.j) + '-' + Math.max(i, e.j);
+        if (seen[key]) return; seen[key] = 1;
+        link(centers[i][0], centers[i][1], centers[e.j][0], centers[e.j][1]);
+      });
   });
-  var ballThread = ILLO.thread(threadWrap, 950, 300, 884, 308);
+  var ballThread = link(950, 300, 884, 308); // the newcomer's first tie-in
 
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
   gsap.set(ball, { motionPath: { path: path, align: path, alignOrigin: [0.5, 0.5], end: 0 } });
@@ -56,6 +71,8 @@ window.DEMOS.belong = function (svg) {
   }, 2.6)
     // a dashed echo of where it started stays behind
     .to(q('.belong-start'), { opacity: 0.4, duration: 1, ease: EASE.soft }, 3.2)
+    // the group turns toward the newcomer — a collective lean its way
+    .to(members, { x: '-=7', duration: 1.1, ease: EASE.soft, stagger: { each: 0.05, from: 'edges' } }, 5.6)
     // test touch: bump the edge, small polite recoil
     .to(ballCircle, { x: 14, duration: 0.3, ease: EASE.in }, 6.8)
     .to(ballCircle, { x: -8, scaleX: 0.92, duration: 0.3, ease: EASE.out }, 7.1)

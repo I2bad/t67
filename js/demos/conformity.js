@@ -25,6 +25,12 @@ window.DEMOS.conformity = function (svg) {
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
   gsap.set(q('.truth-hint'), { opacity: 0 });
 
+  // the waiting crowd feels like people: tone variation + a soft idle
+  // breathing while they stand in line (independent of the scrub)
+  var queue = q('.queue-peer');
+  queue.forEach(function (p, i) { gsap.set(p, { opacity: [0.9, 0.72, 0.84, 0.68][i] || 0.8, transformOrigin: '50% 50%' }); });
+  if (!QUALITY.reduced) ILLO.breathe(queue, 0.06, 2.7);
+
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
   /* beat 1 — THE TEST: cards and lines draw themselves */
