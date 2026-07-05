@@ -15,6 +15,8 @@ window.DEMOS.direct = function (svg) {
 
   gsap.set(ball, { x: 520, y: 300 });
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
+  // pressure field emanating from the bully — compresses against the ball as it charges
+  ILLO.field(svg, { follow: bully, base: 42, gap: 22, ball: ballCircle, near: 66, far: 300, min: 0.06, max: 0.16 });
   gsap.set(q('.spotlight'), { opacity: 0 });
   gsap.set(q('.shadow-soft'), { opacity: 0 });
   gsap.set(q('.dare'), { opacity: 0, scale: 0.7, transformOrigin: '1005px 223px' });

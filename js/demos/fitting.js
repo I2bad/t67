@@ -22,6 +22,9 @@ window.DEMOS.fitting = function (svg) {
     gsap.set(p, { x: scatter[i][0] - +p.getAttribute('cx'), y: scatter[i][1] - +p.getAttribute('cy') });
   });
 
+  // pressure field radiating from the mold — the group shape's pull
+  ILLO.field(svg, { x: 840, y: 300, base: 118, gap: 40, ball: ballCircle, near: 150, far: 420, min: 0.04, max: 0.1 });
+
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
   /* beat 1 — THE MOLD FORMS: individuals gather, then melt into one shape */

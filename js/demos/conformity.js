@@ -31,6 +31,9 @@ window.DEMOS.conformity = function (svg) {
   queue.forEach(function (p, i) { gsap.set(p, { opacity: [0.9, 0.72, 0.84, 0.68][i] || 0.8, transformOrigin: '50% 50%' }); });
   if (!QUALITY.reduced) ILLO.breathe(queue, 0.06, 2.7);
 
+  // pressure field over the committed row the ball is pulled toward
+  ILLO.field(svg, { x: 773, y: 415, base: 56, gap: 24, ball: ballCircle, near: 80, far: 340, min: 0.05, max: 0.13 });
+
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
   /* beat 1 — THE TEST: cards and lines draw themselves */

@@ -36,6 +36,11 @@ window.DEMOS.online = function (svg) {
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
   var rand = gsap.utils.random;
 
+  // pressure field pulsing around "you" — the feed's constant compression
+  var onField = ILLO.field(svg, { x: 600, y: 300, base: 80, gap: 34, min: 0.04, max: 0.12 });
+  tl.to(onField.i, { v: 0.72, duration: 5, ease: EASE.in }, 1)
+    .to(onField.i, { v: 0.52, duration: 2, ease: EASE.soft }, 6.5);
+
   /* beat 1 + 2 — cards stack in, each landing with a ping; the counter
      climbs; the meter on the ball swings with every hit */
   cards.forEach(function (card) {

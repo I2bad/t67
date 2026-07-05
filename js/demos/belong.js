@@ -95,6 +95,8 @@ window.DEMOS.belong = function (svg) {
     .to(ballCircle, { scaleX: 1.15, scaleY: 0.85, duration: 0.35, ease: EASE.out }, 9.3)
     .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.8, ease: 'elastic.out(1, 0.4)' }, 9.65);
 
+  // pressure field around the group — tightens as the ball is drawn in
+  ILLO.field(svg, { x: 945, y: 300, base: 74, gap: 26, ball: ballCircle, near: 130, far: 380, min: 0.05, max: 0.15 });
   ILLO.ballFX(svg, ball, ballCircle, { r: 26 });
   return tl;
 };

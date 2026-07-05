@@ -37,6 +37,9 @@ window.DEMOS.looking = function (svg) {
   });
   // the crowd leaves footprints down its branch — literal evidence of others
   tl.to(q('.footprints'), { strokeDashoffset: 0, duration: 3.4, ease: EASE.soft }, 2.4);
+  // a pressure field builds where the traffic gathered — the pull of the crowd
+  var lookField = ILLO.field(svg, { x: 985, y: 430, base: 68, gap: 28, min: 0.05, max: 0.13 });
+  tl.to(lookField.i, { v: 0.7, duration: 3.2, ease: EASE.soft }, 2.6);
   // ...except one. The contrarian pauses at the fork, then goes the other way
   tl.to(contrarian, { opacity: 0.8, duration: 0.3 }, 2.6)
     .to(contrarian, {

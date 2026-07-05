@@ -13,6 +13,8 @@ window.DEMOS.unspoken = function (svg) {
 
   gsap.set(ball, { x: 330, y: 300 });
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
+  // one broad ambient field over the whole lane — pressure with no visible source
+  ILLO.field(svg, { x: 640, y: 300, rings: 3, base: 150, gap: 92, broad: true, min: 0.035, max: 0.08 });
   gsap.set(q('.flow'), { opacity: 0 });
   gsap.set(q('.drift-ghost'), { opacity: 0 });
 

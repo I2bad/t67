@@ -28,6 +28,9 @@ window.DEMOS.sayingno = function (svg) {
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
   gsap.set(q('.plant-ring')[0], { transformOrigin: '50% 50%' });
 
+  // pressure field from the pressing dot — peaks on impact, disperses on the plant
+  ILLO.field(svg, { follow: bully, base: 40, gap: 22, ball: ballCircle, near: 60, far: 280, min: 0.05, max: 0.15 });
+
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
   // The same charge as section 5 — deliberately mirrored...
