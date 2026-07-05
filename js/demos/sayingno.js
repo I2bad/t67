@@ -31,6 +31,21 @@ window.DEMOS.sayingno = function (svg) {
   // pressure field from the pressing dot — peaks on impact, disperses on the plant
   ILLO.field(svg, { follow: bully, base: 40, gap: 22, ball: ballCircle, near: 60, far: 280, min: 0.05, max: 0.15 });
 
+  // CLIMAX veil: a slate wash that dims the whole scene for the plant beat.
+  // The ball + "no." bubble are lifted above it so they stay lit (spotlight).
+  var veil = null;
+  if (!QUALITY.reduced && QUALITY.tier !== 'low') {
+    veil = document.createElementNS(NS, 'rect');
+    veil.setAttribute('class', 'climax-veil');
+    veil.setAttribute('x', 0); veil.setAttribute('y', 0);
+    veil.setAttribute('width', 1200); veil.setAttribute('height', 600);
+    veil.setAttribute('fill', '#C2D5D7');
+    gsap.set(veil, { opacity: 0 });
+    svg.appendChild(veil);
+    svg.appendChild(q('.no-bubble')[0]); // raise above the veil
+    svg.appendChild(ball);
+  }
+
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
   // The same charge as section 5 — deliberately mirrored...
@@ -53,6 +68,14 @@ window.DEMOS.sayingno = function (svg) {
     .to(q('.no-bubble'), { scale: 1, opacity: 1, duration: 0.6, ease: EASE.pop }, 2.9)
     .call(function () { if (window.AUDIO) AUDIO.chime(); }, [], 2.8);
 
+  // THE BEAT DROP: the world dims for ~a beat while the biggest shockwave of
+  // the whole site fires — and physically knocks the crowd back a few px.
+  if (veil) tl.to(veil, { opacity: 0.5, duration: 0.22, ease: EASE.out }, 2.52)
+              .to(veil, { opacity: 0, duration: 0.7, ease: EASE.soft }, 3.02);
+  ILLO.impact(tl, 2.7, svg, 600, 300, { size: 230, particles: 6, nudge: 2 });
+  tl.to(bully, { attr: { cx: 500 }, duration: 0.22, ease: EASE.out }, 2.68)   // shock shoves them back
+    .to(posse, { x: '-=34', duration: 0.26, ease: EASE.out }, 2.7);
+
   // REPEL IMPULSE: the pressure gets pushed back — bully hard, posse
   // staggered a beat later (follow-through on the crowd)
   tl.to(bully, { attr: { cx: 310 }, duration: 0.9, ease: EASE.out }, 3.1)
@@ -71,6 +94,8 @@ window.DEMOS.sayingno = function (svg) {
     .to(q('.glow-lift'), { opacity: 0.5, duration: 2.4, ease: EASE.soft }, 4.5)
     .to(ballCircle, { attr: { 'stroke-width': 4.5 }, duration: 1.2, ease: EASE.soft }, 4.6)
     .to(q('.reclaim-line')[0], { strokeDashoffset: 0, duration: 2.0, ease: EASE.inOut }, 4.2)
+    // the straightened line drops into place with an elastic overshoot
+    .fromTo(q('.reclaim-line')[0], { y: -6 }, { y: 0, duration: 1.1, ease: 'elastic.out(1, 0.45)', immediateRender: false }, 5.5)
     .to(q('.no-bubble'), { opacity: 0, duration: 0.6, ease: EASE.soft }, 5.4)
     // An ally appears — one other "no" makes the next one easier
     .fromTo(ally, { x: 470 }, { opacity: 1, x: 520, duration: 1.0, ease: EASE.out, immediateRender: false }, 5.6)

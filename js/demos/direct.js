@@ -39,14 +39,13 @@ window.DEMOS.direct = function (svg) {
     // the ball sees it coming — a flinch just before contact
     .to(ballCircle, { x: 10, duration: 0.25, ease: EASE.soft }, 4.35);
 
-  /* beat 3 — THE SHOVE: spark, ripples, squash; knocked out of the light */
+  /* beat 3 — THE SHOVE: spark, shockwave, squash; knocked out of the light */
   tl.to(q('.spark'), { opacity: 1, duration: 0.08 }, 4.7)
     .to(q('.spark'), { opacity: 0, duration: 0.45, ease: EASE.soft }, 4.85)
-    .fromTo(q('.ir-1'), { opacity: 0.7, attr: { r: 20 } },
-      { opacity: 0, attr: { r: 120 }, duration: 1.0, ease: EASE.out, immediateRender: false }, 4.72)
-    .fromTo(q('.ir-2'), { opacity: 0.5, attr: { r: 20 } },
-      { opacity: 0, attr: { r: 180 }, duration: 1.4, ease: EASE.out, immediateRender: false }, 4.85)
-    .to(ballCircle, { x: 0, scaleX: 0.45, scaleY: 1.5, duration: 0.12, ease: EASE.in }, 4.68)
+    .to(ballCircle, { x: 0, scaleX: 0.45, scaleY: 1.5, duration: 0.12, ease: EASE.in }, 4.68);
+  // shared impact language — dust sprays leftward with the shove; small nudge
+  ILLO.impact(tl, 4.7, svg, 548, 300, { size: 150, particles: 4, dir: Math.PI, nudge: 1.5 });
+  tl
     .to(ball, { x: 250, duration: 1.3, ease: EASE.out }, 4.8)                 // shoved out of the pool
     .to(shadowYou, { attr: { cx: 250 }, duration: 1.3, ease: EASE.out }, 4.8) // shadow chases it
     .to(ball, { y: 288, duration: 0.28, ease: EASE.out }, 4.8)                // lifts…

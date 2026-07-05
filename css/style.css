@@ -243,6 +243,14 @@ main { position: relative; z-index: 1; }
 }
 .field-broad { stroke-width: 1.6; }
 
+/* SYSTEM 2 — impact language: shockwave ring + dust particles (accent-tinted;
+   cream on the dark scenes so they read against near-black) */
+.impact-shock { fill: none; stroke: var(--accent, var(--ink)); stroke-width: 2; opacity: 0; pointer-events: none; }
+.impact-dust { fill: var(--accent, var(--ink)); opacity: 0; pointer-events: none; }
+.dark .impact-shock { stroke: var(--cream); }
+.dark .impact-dust { fill: var(--cream); }
+.climax-veil { pointer-events: none; }
+
 .art-bold { stroke-width: 4.5 !important; }
 .art-thin { stroke-width: 1.5 !important; }
 /* any .art stroke draws on via pathLength=1 → dashoffset 1 → 0 */

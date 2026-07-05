@@ -80,5 +80,8 @@ window.DEMOS.conformity = function (svg) {
     .to(ballCircle, { scaleX: (15 / 24) * 1.1, scaleY: (15 / 24) * 0.9, duration: 0.25, ease: EASE.out }, 9.95)
     .to(ballCircle, { scaleX: 15 / 24, scaleY: 15 / 24, duration: 0.6, ease: 'elastic.out(1, 0.45)' }, 10.2);
 
+  // the swerve into the wrong row lands with a small impact (dust toward the line)
+  ILLO.impact(tl, 8.9, svg, 872, 430, { size: 88, particles: 3, dir: -Math.PI / 2 });
+
   return tl;
 };
