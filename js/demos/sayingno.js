@@ -46,7 +46,7 @@ window.DEMOS.sayingno = function (svg) {
     .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.9, ease: 'elastic.out(1, 0.32)' }, 2.75)
     // The plant reads as a shockwave ring + the word itself + the chime
     .fromTo(q('.plant-ring')[0], { opacity: 0.9, scale: 0.8 },
-                                 { opacity: 0, scale: 2.8, duration: 1.3, ease: EASE.out }, 2.7)
+                                 { opacity: 0, scale: 2.8, duration: 1.3, ease: EASE.out, immediateRender: false }, 2.7)
     .to(q('.no-say'), { scale: 1, opacity: 1, duration: 0.5, ease: EASE.pop }, 2.95)
     .call(function () { if (window.AUDIO) AUDIO.chime(); }, [], 2.8);
 
@@ -65,7 +65,7 @@ window.DEMOS.sayingno = function (svg) {
   tl.to(q('.reclaim-line')[0], { strokeDashoffset: 0, duration: 2.0, ease: EASE.inOut }, 4.2)
     .to(q('.no-say'), { opacity: 0, duration: 0.6, ease: EASE.soft }, 5.4)
     // An ally appears — one other "no" makes the next one easier
-    .fromTo(ally, { x: 470 }, { opacity: 1, x: 520, duration: 1.0, ease: EASE.out }, 5.6)
+    .fromTo(ally, { x: 470 }, { opacity: 1, x: 520, duration: 1.0, ease: EASE.out, immediateRender: false }, 5.6)
     // Both travel the reclaimed line together, ally trailing slightly (overlap)
     .to(ball, { x: 1040, duration: 3.4, ease: EASE.inOut }, 6.4)
     .to(ally, { x: 950, duration: 3.4, ease: EASE.inOut }, 6.65)

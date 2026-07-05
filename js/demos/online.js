@@ -41,9 +41,9 @@ window.DEMOS.online = function (svg) {
     var t = rand(0.2, 6.5);
     tl.to(p.dot, { scale: 1, duration: 0.45, ease: EASE.pop, transformOrigin: '50% 50%' }, t)
       .fromTo(p.ring, { attr: { r: 9 }, opacity: 0.8 },
-                      { attr: { r: 42 }, opacity: 0, duration: 1.4, ease: EASE.out }, t + 0.1)
+                      { attr: { r: 42 }, opacity: 0, duration: 1.4, ease: EASE.out, immediateRender: false }, t + 0.1)
       .fromTo(p.ring, { attr: { r: 9 }, opacity: 0.8 },
-                      { attr: { r: 42 }, opacity: 0, duration: 1.4, ease: EASE.out }, t + rand(1.8, 3.2));
+                      { attr: { r: 42 }, opacity: 0, duration: 1.4, ease: EASE.out, immediateRender: false }, t + rand(1.8, 3.2));
   });
 
   // The ball can't settle: continuous jitter, and it shrinks under the noise

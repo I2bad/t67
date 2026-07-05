@@ -344,15 +344,20 @@
     </header>
     <div class="demo-scroll">
       <div class="demo-stage">
-        <svg class="demo-svg" data-demo="looking" viewBox="0 0 1200 600" aria-label="Demo: at a fork in the path, the ball follows the branch the peer dots took">
+        <svg class="demo-svg" data-demo="looking" viewBox="0 0 1200 600" aria-label="Demo: a foggy crossroads — the ball stalls unsure at the fork, a stream of peers flows down one branch and the ball follows the traffic; one contrarian dot takes the other path">
+          <ellipse class="fog fog-1" cx="850" cy="140" rx="330" ry="80"/>
+          <ellipse class="fog fog-2" cx="900" cy="300" rx="380" ry="95"/>
+          <ellipse class="fog fog-3" cx="820" cy="460" rx="330" ry="85"/>
           <path class="guide-vis" id="stemPath" d="M120,300 C300,300 430,300 560,300"/>
           <path class="guide-vis" id="branchA" d="M560,300 C720,300 880,190 1080,155"/>
           <path class="guide-vis" id="branchB" d="M560,300 C720,300 880,410 1080,445"/>
           <path id="peerPath" d="M120,332 C300,332 430,332 565,332 C725,332 885,430 1080,470" fill="none" stroke="none"/>
-          <text class="d-label" x="600" y="250">?</text>
+          <line class="art art-thin signpost" x1="580" y1="268" x2="580" y2="212" pathLength="1"/>
+          <text class="d-label fork-q" x="580" y="196">?</text>
           <text class="d-label" x="1080" y="120">the right way</text>
           <text class="d-label" x="1080" y="510">the way they went</text>
           <circle class="peer look-peer" r="12"/><circle class="peer look-peer" r="10"/><circle class="peer look-peer" r="11"/>
+          <circle class="peer contrarian" r="9"/>
           <g class="d-ball"><circle class="ballc" r="24"/></g>
         </svg>
       </div>
@@ -377,14 +382,23 @@
     </header>
     <div class="demo-scroll">
       <div class="demo-stage">
-        <svg class="demo-svg" data-demo="direct" viewBox="0 0 1200 600" aria-label="Demo: a peer dot charges into the ball and shoves it hard off its line, with a big squash on impact">
+        <svg class="demo-svg" data-demo="direct" viewBox="0 0 1200 600" aria-label="Demo: a confrontation under a spotlight — a bigger, bolder peer winds up, delivers its dare, and shoves the ball out of the light with a hard squash, ripple and wobble">
+          <path class="spotlight" d="M480,-20 L340,336 L860,336 L720,-20 Z"/>
+          <ellipse class="spotlight spot-pool" cx="600" cy="336" rx="260" ry="26"/>
           <line class="dash-line" x1="100" y1="300" x2="1100" y2="300"/>
+          <ellipse class="shadow-soft shadow-you" cx="520" cy="338" rx="34" ry="7"/>
+          <ellipse class="shadow-soft shadow-bully" cx="1150" cy="340" rx="32" ry="7"/>
           <g class="spark">
             <line x1="520" y1="252" x2="540" y2="228"/><line x1="545" y1="300" x2="580" y2="300"/>
             <line x1="520" y1="348" x2="540" y2="372"/><line x1="490" y1="245" x2="490" y2="215"/>
           </g>
-          <text class="d-label bully-say" x="1000" y="240">"come on, just this once"</text>
-          <circle class="peer bully" cx="1150" cy="300" r="20"/>
+          <circle class="impact-ripple ir-1" cx="548" cy="300" r="20"/>
+          <circle class="impact-ripple ir-2" cx="548" cy="300" r="20"/>
+          <g class="dare">
+            <rect class="dare-pill-bg" x="860" y="200" width="290" height="46" rx="23"/>
+            <text class="dare-pill-text" x="1005" y="230">"come on, just this once"</text>
+          </g>
+          <circle class="peer bully" cx="1150" cy="300" r="26"/>
           <g class="d-ball"><circle class="ballc" r="26"/></g>
         </svg>
       </div>
@@ -409,8 +423,14 @@
     </header>
     <div class="demo-scroll">
       <div class="demo-stage">
-        <svg class="demo-svg" data-demo="unspoken" viewBox="0 0 1200 600" aria-label="Demo: peer dots drift in one direction and the ball is slowly, silently tugged along with them">
+        <svg class="demo-svg" data-demo="unspoken" viewBox="0 0 1200 600" aria-label="Demo: a silent current — flow lines and the whole field of peers slide one way, and the ball, touching no one, is quietly carried along; a faint ghost marks where it meant to stay">
+          <path class="flow" d="M60,150 C260,138 460,162 660,150 C860,138 1060,162 1160,152"/>
+          <path class="flow" d="M40,225 C240,215 440,237 640,226 C840,215 1040,236 1170,227"/>
+          <path class="flow" d="M60,300 C260,290 460,312 660,301 C860,290 1060,311 1160,302"/>
+          <path class="flow" d="M40,375 C240,364 440,386 640,376 C840,365 1040,386 1170,377"/>
+          <path class="flow" d="M60,450 C260,440 460,461 660,451 C860,440 1060,461 1160,452"/>
           <line class="dash-line vert" x1="330" y1="140" x2="330" y2="460"/>
+          <circle class="self-ghost drift-ghost" cx="330" cy="300" r="26"/>
           <text class="d-label" x="330" y="500">where you started</text>
           <text class="d-label quiet-say" x="600" y="110">no one said anything</text>
           <g class="drift-field">
