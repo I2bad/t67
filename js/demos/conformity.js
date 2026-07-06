@@ -83,5 +83,12 @@ window.DEMOS.conformity = function (svg) {
   // the swerve into the wrong row lands with a small impact (dust toward the line)
   ILLO.impact(tl, 8.9, svg, 872, 430, { size: 88, particles: 3, dir: -Math.PI / 2 });
 
+  // field notes: the crowd's weight, then the override
+  ILLO.notes(svg, tl, [
+    { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 02 — CONFORMITY', at: 0.2 },
+    { k: 'label', x: 1050, y: 435, t: '← the whole room', at: 6.0 },
+    { k: 'label', x: 1040, y: 500, t: 'perception: overridden', anchor: 'end', at: 8.4 }
+  ]);
+
   return tl;
 };

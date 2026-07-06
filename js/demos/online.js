@@ -116,5 +116,11 @@ window.DEMOS.online = function (svg) {
     onToggle: function (self) { self.isActive ? startLoops() : stopLoops(); }
   });
 
+  // field notes: the comparison that never resolves (scene is busy — keep it to two)
+  ILLO.notes(svg, tl, [
+    { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 07 — ONLINE & SOCIAL PRESSURE', at: 0.2 },
+    { k: 'label', x: 150, y: 505, t: 'comparison: never closes', at: 3.0 }
+  ]);
+
   return tl;
 };

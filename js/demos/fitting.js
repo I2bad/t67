@@ -55,5 +55,12 @@ window.DEMOS.fitting = function (svg) {
     // and the ball's own edge fades a little — less distinct than it was
     .to(ballCircle, { opacity: 0.85, duration: 1.0, ease: EASE.soft }, 8.8);
 
+  // field notes: measure the self before the mold, and the trimmed self after
+  ILLO.notes(svg, tl, [
+    { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 03 — NORMATIVE INFLUENCE', at: 0.2 },
+    { k: 'bracket', x1: 120, y1: 273, x2: 120, y2: 327, side: 'left', t: 'you: 100%', at: 0.6 },
+    { k: 'bracket', x1: 596, y1: 284, x2: 596, y2: 316, side: 'left', t: '≈ 70%', at: 8.2 }
+  ]);
+
   return tl;
 };

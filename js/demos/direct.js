@@ -59,5 +59,13 @@ window.DEMOS.direct = function (svg) {
     .to(ballCircle, { opacity: 0.85, duration: 1.0, ease: EASE.soft }, 6.2)
     .to(q('.spot-pool'), { opacity: 0.5, duration: 1.2, ease: EASE.soft }, 6.2); // the light stays where it was
 
+  // field notes: the mounting force (with the field), then displacement
+  ILLO.notes(svg, tl, [
+    { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 05 — DIRECT PRESSURE', at: 0.2 },
+    { k: 'arrow', x: 800, y: 300, a: Math.PI, len: 64, at: 3.4, out: 4.7 },
+    { k: 'label', x: 620, y: 250, t: 'force: increasing', anchor: 'end', at: 3.4 },
+    { k: 'label', x: 170, y: 250, t: 'knocked off its line', at: 5.4 }
+  ]);
+
   return tl;
 };

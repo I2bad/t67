@@ -53,5 +53,11 @@ window.DEMOS.unspoken = function (svg) {
     .to(q('.quiet-say'), { opacity: 1, duration: 1.2, ease: EASE.soft }, 5.5);
 
   ILLO.ballFX(svg, ball, ballCircle, { r: 26 });
+
+  // field notes: measure the drift you never chose
+  ILLO.notes(svg, tl, [
+    { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 06 — INDIRECT PRESSURE', at: 0.2 },
+    { k: 'bracket', x1: 330, y1: 540, x2: 750, y2: 540, side: 'down', t: 'carried — no one touched you', at: 6.0 }
+  ]);
   return tl;
 };

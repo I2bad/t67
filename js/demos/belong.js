@@ -98,5 +98,12 @@ window.DEMOS.belong = function (svg) {
   // pressure field around the group — tightens as the ball is drawn in
   ILLO.field(svg, { x: 945, y: 300, base: 74, gap: 26, ball: ballCircle, near: 130, far: 380, min: 0.05, max: 0.15 });
   ILLO.ballFX(svg, ball, ballCircle, { r: 26 });
+
+  // field notes: the pull named as a force, and the gap it closes
+  ILLO.notes(svg, tl, [
+    { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 01 — THE NEED TO BELONG', at: 0.2 },
+    { k: 'arrow', x: 196, y: 340, a: 0, len: 62, at: 1.6, out: 2.7 },
+    { k: 'label', x: 430, y: 150, t: 'distance from group: closing', at: 4.0 }
+  ]);
   return tl;
 };

@@ -76,5 +76,12 @@ window.DEMOS.looking = function (svg) {
     .to(q('.footprints'), { opacity: 0.9, duration: 1.6, ease: EASE.soft }, 6.6);
 
   ILLO.ballFX(svg, ball, ballCircle, { r: 24 });
+
+  // field notes: the crowd read as evidence, the inferred path drawn in
+  ILLO.notes(svg, tl, [
+    { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 04 — INFORMATIONAL INFLUENCE', at: 0.2 },
+    { k: 'label', x: 800, y: 250, t: '3 of 4 chose this way', at: 4.5 },
+    { k: 'dline', x1: 560, y1: 300, x2: 980, y2: 440, at: 6.6, dur: 1.4 }
+  ]);
   return tl;
 };

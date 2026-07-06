@@ -266,6 +266,25 @@ main { position: relative; z-index: 1; }
 .dark .diorama .prop-line { stroke: var(--cream); opacity: 0.18; }
 .dark .diorama .prop-label { fill: var(--cream); opacity: 0.32; }
 
+/* SYSTEM 2 — field-notes: physics-diagram annotations. Low-contrast ink via
+   fill/stroke-opacity, so the element's own opacity is free for scrubbed fades */
+.notes, .notes * { pointer-events: none; }
+.note-label {
+  fill: var(--ink); fill-opacity: 0.5;
+  font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.05em;
+}
+.note-fig { font-size: 13px; fill-opacity: 0.36; letter-spacing: 0.14em; }
+.note-dline {
+  fill: none; stroke: var(--ink); stroke-opacity: 0.4; stroke-width: 1.3;
+  stroke-dasharray: 2 7; stroke-linecap: round;
+}
+.note-bracket { fill: none; stroke: var(--ink); stroke-opacity: 0.45; stroke-width: 1.3; }
+.note-arrow {
+  stroke: var(--accent, var(--ink)); stroke-opacity: 0.8; stroke-width: 2.4;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+.dark .note-label, .dark .note-dline, .dark .note-bracket { fill: var(--cream); stroke: var(--cream); }
+
 .art-bold { stroke-width: 4.5 !important; }
 .art-thin { stroke-width: 1.5 !important; }
 /* any .art stroke draws on via pathLength=1 → dashoffset 1 → 0 */

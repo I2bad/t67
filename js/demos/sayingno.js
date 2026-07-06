@@ -111,5 +111,11 @@ window.DEMOS.sayingno = function (svg) {
   gsap.set(q('.no-bubble'), { scale: 0.5, transformOrigin: '600px 200px', opacity: 0 });
 
   ILLO.ballFX(svg, ball, ballCircle, { r: 26 });
+
+  // field notes: keep the climax clean — just name the outcome
+  ILLO.notes(svg, tl, [
+    { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 08 — SAYING NO', at: 0.2 },
+    { k: 'label', x: 850, y: 232, t: 'boundary: held', at: 3.2 }
+  ]);
   return tl;
 };
