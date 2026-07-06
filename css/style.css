@@ -285,6 +285,11 @@ main { position: relative; z-index: 1; }
 }
 .dark .note-label, .dark .note-dline, .dark .note-bracket { fill: var(--cream); stroke: var(--cream); }
 
+/* SYSTEM 3 (trial) — minimal eyes: two small marks, no mouth */
+.faces, .faces * { pointer-events: none; }
+.eye-ink { fill: var(--ink); opacity: 0.82; }
+.eye-cream { fill: var(--cream); opacity: 0.9; }
+
 .art-bold { stroke-width: 4.5 !important; }
 .art-thin { stroke-width: 1.5 !important; }
 /* any .art stroke draws on via pathLength=1 → dashoffset 1 → 0 */
