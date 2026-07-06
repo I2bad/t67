@@ -357,6 +357,9 @@
     var svg = wrap.querySelector('.demo-svg');
     var build = window.DEMOS && window.DEMOS[svg.dataset.demo];
     if (!build) return;
+    // top-down setting behind the actors (static props); built before the demo
+    // so it sits at the back of the paint order
+    if (window.ILLO && ILLO.diorama) ILLO.diorama(svg, svg.dataset.demo);
     var tl = build(svg);
     tl.pause();
     if (reduced) { tl.progress(1); return; } // show the idea's final state
@@ -364,6 +367,15 @@
       trigger: wrap, start: 'top top', end: 'bottom bottom',
       scrub: 0.6, animation: tl
     });
+    // subtle depth: the prop layer parallaxes a touch against the actors
+    // (skip on low tier — props stay, motion drops)
+    if (QUALITY.tier !== 'low') {
+      var dio = svg.querySelector('.diorama');
+      if (dio) gsap.fromTo(dio, { y: -14 }, {
+        y: 14, ease: 'none',
+        scrollTrigger: { trigger: wrap, start: 'top bottom', end: 'bottom top', scrub: 1 }
+      });
+    }
   });
 
   /* ---------- Resources arrow draws itself ---------- */

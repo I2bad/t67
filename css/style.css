@@ -251,6 +251,21 @@ main { position: relative; z-index: 1; }
 .dark .impact-dust { fill: var(--cream); }
 .climax-veil { pointer-events: none; }
 
+/* SYSTEM 1 — top-down diorama: static setting props behind the actors, in the
+   section accent at reduced opacity so the ball/dots always dominate */
+.diorama, .diorama * { pointer-events: none; }
+.diorama .prop { fill: var(--accent, var(--ink)); opacity: 0.34; }
+.diorama .prop-line { fill: none; stroke: var(--accent, var(--ink)); stroke-width: 2; opacity: 0.38; }
+.diorama .prop-dot { fill: var(--accent, var(--ink)); opacity: 0.3; }
+.diorama .prop-glow { fill: var(--accent, var(--ink)); opacity: 0.12; }
+.diorama .prop-label {
+  fill: var(--accent, var(--ink)); opacity: 0.5;
+  font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.08em;
+}
+.dark .diorama .prop, .dark .diorama .prop-dot { fill: var(--cream); opacity: 0.13; }
+.dark .diorama .prop-line { stroke: var(--cream); opacity: 0.18; }
+.dark .diorama .prop-label { fill: var(--cream); opacity: 0.32; }
+
 .art-bold { stroke-width: 4.5 !important; }
 .art-thin { stroke-width: 1.5 !important; }
 /* any .art stroke draws on via pathLength=1 → dashoffset 1 → 0 */
