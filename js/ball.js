@@ -71,5 +71,17 @@
       gsap.set(['#heroBall', '.hero-peer'], { autoAlpha: 0 });
       tl.to('.hero-ring', { attr: { r: 60 }, opacity: 0.25, duration: 2, ease: EASE.soft }, 6);
     }
+
+    // eyes: the ball looks ahead along its line, glances at each dot as it
+    // strikes, then in the shove direction (only when physics isn't driving it)
+    if (!physicsOwnsBall() && window.ILLO && ILLO.faces) {
+      var heroSvg = document.getElementById('heroSvg');
+      ILLO.faces(heroSvg, tl, [
+        { el: ballCircle, r: 26, tone: 'ink', look: [1, 0],
+          steps: [[4.9, 0.7, 0.2], [5.15, -0.5, 0.3], [6.9, -0.4, 0.5], [8.0, 0.1, 0]] },
+        { el: heroSvg.querySelector('.hero-peer.p1'), r: 14, tone: 'ink', look: [-1, 0] },
+        { el: heroSvg.querySelector('.hero-peer.p2'), r: 11, tone: 'ink', look: [-1, 0] }
+      ]);
+    }
   };
 })();

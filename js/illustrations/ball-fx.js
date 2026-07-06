@@ -14,14 +14,17 @@ ILLO.ballFX = function (svg, ballGroup, ballCircle, opts) {
   var r = opts.r || 26;
   var wantContact = opts.contact !== false;         // off for dark scenes (ink-on-ink)
   var N = QUALITY.tier === 'low' ? 0 : (opts.echoes || 3);
+  var contactRx = opts.contactRx || r * 0.86;
+  var contactRy = opts.contactRy || r * 0.3;
+  var contactDy = opts.contactDy || r * 0.92;
 
   var frag = document.createDocumentFragment();
   var contact = null;
   if (wantContact) {
     contact = document.createElementNS(NS, 'ellipse');
     contact.setAttribute('class', 'ball-contact');
-    contact.setAttribute('rx', r * 0.86);
-    contact.setAttribute('ry', r * 0.3);
+    contact.setAttribute('rx', contactRx);
+    contact.setAttribute('ry', contactRy);
     frag.appendChild(contact);
   }
   var echoes = [];
@@ -51,7 +54,7 @@ ILLO.ballFX = function (svg, ballGroup, ballCircle, opts) {
     if (!primed) { echoes.forEach(function (e) { e.x = c.x; e.y = c.y; }); primed = true; }
     if (contact) {
       contact.setAttribute('cx', c.x);
-      contact.setAttribute('cy', c.y + r * 0.92);
+      contact.setAttribute('cy', c.y + contactDy);
     }
     // chain-lerp tail: each echo trails the one ahead; opacity tracks how far
     // it has fallen behind, so the tail appears only while the ball is moving

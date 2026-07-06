@@ -114,8 +114,23 @@ window.DEMOS.sayingno = function (svg) {
 
   // field notes: keep the climax clean — just name the outcome
   ILLO.notes(svg, tl, [
+    { k: 'arrow', x: 600, y: 300, a: Math.PI, len: 72, at: 2.55, out: 3.15 },
+    { k: 'bracket', x1: 600, y1: 340, x2: 1100, y2: 340, side: 'down', t: 'line held', at: 5.0 },
     { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 08 — SAYING NO', at: 0.2 },
     { k: 'label', x: 850, y: 232, t: 'boundary: held', at: 3.2 }
   ]);
+
+  // eyes: the dot glares then looks away as it's pushed back; the ball closes
+  // its eyes on the plant, opens them steady as "no." pops; the ally looks
+  // forward alongside; the retreating posse looks away
+  ILLO.faces(svg, tl, [
+    { el: ballCircle, r: 26, tone: 'ink', look: [-1, 0],
+      steps: [[2.4, -1, 0, 0.05, 0.3], [2.9, 1, 0, 1.0, 0.5]] },
+    { el: bully, r: 22, tone: 'cream', look: [1, 0], open: 0.5,
+      steps: [[3.1, -1, 0, 0.7, 0.9]] },
+    { el: ally, r: 17, tone: 'ink', look: [1, 0] }
+  ].concat(posse.map(function (p) {
+    return { el: p, r: +p.getAttribute('r'), tone: 'cream', look: [-1, 0] };
+  })));
   return tl;
 };

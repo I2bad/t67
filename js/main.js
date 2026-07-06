@@ -27,19 +27,53 @@
     gsap.ticker.lagSmoothing(0);
   }
 
-  function scrollToHash(hash) {
+  var hashScrollTimer = null;
+  function getTargetScrollTop(target) {
+    return Math.max(0, window.pageYOffset + target.getBoundingClientRect().top);
+  }
+  function scrollToHash(hash, opts) {
     var target = document.querySelector(hash);
     if (!target) return;
+    opts = opts || {};
     // Pins above (scenarios) and lazy media can stale the measurements, which
-    // lands us on the wrong section. Recompute offsets before scrolling.
+    // lands us on the wrong section. Refresh, then wait a frame so the
+    // refreshed pin spacers are reflected before we resolve the target top.
+    if (hashScrollTimer) cancelAnimationFrame(hashScrollTimer);
+    if (ScrollTrigger.clearScrollMemory) ScrollTrigger.clearScrollMemory();
     ScrollTrigger.refresh();
-    if (lenis) lenis.scrollTo(target, { duration: 1.6, easing: function (t) { return 1 - Math.pow(1 - t, 4); } });
-    else target.scrollIntoView({ behavior: 'smooth' });
+    hashScrollTimer = requestAnimationFrame(function () {
+      hashScrollTimer = requestAnimationFrame(function () {
+        var top = getTargetScrollTop(target);
+        var immediate = !!opts.immediate;
+        if (immediate && lenis) {
+          lenis.scrollTo(top, { immediate: true, force: true });
+          applySection(target, { silent: true });
+          ScrollTrigger.update();
+        } else if (immediate || !lenis) {
+          window.scrollTo({ top: top, behavior: immediate ? 'auto' : 'smooth' });
+        } else {
+          lenis.scrollTo(top, {
+            duration: 1.6,
+            easing: function (t) { return 1 - Math.pow(1 - t, 4); }
+          });
+        }
+      });
+    });
+  }
+  function syncHashFromLocation(opts) {
+    if (location.hash.length > 1) scrollToHash(location.hash, opts);
   }
   // Direct hash edits / back-forward navigation (anchor clicks are handled below
-  // and go through scrollToHash too). ScrollTrigger already refreshes on resize.
+  // and go through scrollToHash too).
   window.addEventListener('hashchange', function () {
-    if (location.hash.length > 1) scrollToHash(location.hash);
+    syncHashFromLocation({ immediate: false });
+  });
+  var resizeHashTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeHashTimer);
+    resizeHashTimer = setTimeout(function () {
+      syncHashFromLocation({ immediate: true });
+    }, 180);
   });
 
   /* ---------- Split helpers (words for lines, chars for display type) ---------- */
@@ -132,7 +166,10 @@
     a.addEventListener('click', function (e) {
       e.preventDefault();
       if (overlay.classList.contains('open')) setMenu(false);
-      scrollToHash(a.getAttribute('href'));
+      var href = a.getAttribute('href');
+      if (history.pushState) history.pushState(null, '', href);
+      else location.hash = href;
+      scrollToHash(href, { immediate: false });
     });
   });
 
@@ -140,7 +177,8 @@
   var crumb = document.getElementById('crumb');
   var named = gsap.utils.toArray('[data-name]');
 
-  function applySection(section) {
+  function applySection(section, opts) {
+    opts = opts || {};
     // breadcrumb cross-fade with a little motion blur
     if (crumb.textContent !== section.dataset.name) {
       gsap.to(crumb, {
@@ -151,7 +189,7 @@
             { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.35, ease: EASE.out });
         }
       });
-      if (window.AUDIO) AUDIO.whoosh();
+      if (!opts.silent && window.AUDIO) AUDIO.whoosh();
     }
     // page background fades toward the section's color (visible in the
     // rounded-corner gaps and on dark sections); shader layer follows
@@ -350,6 +388,25 @@
           .to('.tp-peer', { scale: 1.12, duration: 0.5, yoyo: true, repeat: 1, ease: EASE.soft, stagger: 0.06 }, 2.6);
       }
     });
+  }
+
+  // Two Faces cards: eyes act, not decorate. Negative-side peers stare at the
+  // ball; positive-side peers look the direction it's travelling. Static gaze
+  // (also renders under reduced motion). Eyes track actor opacity as peers fade in.
+  if (window.ILLO && ILLO.faces) {
+    var negSvg = document.querySelector('.type-neg .type-art');
+    var posSvg = document.querySelector('.type-pos .type-art');
+    var toArr = function (nl) { return Array.prototype.slice.call(nl); };
+    if (negSvg) ILLO.faces(negSvg, null, [
+      { el: negSvg.querySelector('.tn-ball'), r: 22, tone: 'ink', look: [-0.5, 0.3] }
+    ].concat(toArr(negSvg.querySelectorAll('.tn-peer')).map(function (p) {
+      return { el: p, r: +p.getAttribute('r'), tone: 'ink', look: [1, 0] };
+    })));
+    if (posSvg) ILLO.faces(posSvg, null, [
+      { el: posSvg.querySelector('.tp-ball'), r: 22, tone: 'ink', look: [1, 0] }
+    ].concat(toArr(posSvg.querySelectorAll('.tp-peer')).map(function (p) {
+      return { el: p, r: +p.getAttribute('r'), tone: 'ink', look: [1, 0] };
+    })));
   }
 
   /* ---------- Concept demos: build each timeline, scrub it to scroll ---------- */

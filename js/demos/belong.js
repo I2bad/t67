@@ -102,8 +102,17 @@ window.DEMOS.belong = function (svg) {
   // field notes: the pull named as a force, and the gap it closes
   ILLO.notes(svg, tl, [
     { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 01 — THE NEED TO BELONG', at: 0.2 },
-    { k: 'arrow', x: 196, y: 340, a: 0, len: 62, at: 1.6, out: 2.7 },
+    { k: 'arrow', x: 150, y: 340, a: 0, len: 62, at: 1.6, out: 2.7 },
+    { k: 'bracket', x1: 150, y1: 444, x2: 882, y2: 444, side: 'down', t: 'distance closed', at: 3.4 },
     { k: 'label', x: 430, y: 150, t: 'distance from group: closing', at: 4.0 }
   ]);
+
+  // eyes: the huddle turns toward the newcomer; the ball looks into the group,
+  // then at the empty seat it's slipping into
+  ILLO.faces(svg, tl, [
+    { el: ballCircle, r: 26, tone: 'ink', look: [1, 0.08], steps: [[7.2, 0.5, 0.15]] }
+  ].concat(members.map(function (m) {
+    return { el: m, r: +m.getAttribute('r'), tone: 'cream', look: [-1, 0] };
+  })));
   return tl;
 };

@@ -118,8 +118,15 @@ window.DEMOS.online = function (svg) {
 
   // field notes: the comparison that never resolves (scene is busy — keep it to two)
   ILLO.notes(svg, tl, [
+    { k: 'bracket', x1: 450, y1: 546, x2: 750, y2: 546, side: 'down', t: 'comparison', at: 4.8 },
     { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 07 — ONLINE & SOCIAL PRESSURE', at: 0.2 },
     { k: 'label', x: 150, y: 505, t: 'comparison: never closes', at: 3.0 }
+  ]);
+
+  // eyes: the ball can't stop tracking the chips pinging in from every side
+  ILLO.faces(svg, tl, [
+    { el: ballCircle, r: 26, tone: 'ink', look: [1, -0.6],
+      steps: [[1.5, 1, -0.6], [2.5, -1, 0.5], [3.5, 1, 0.6], [4.5, -1, -0.6], [5.5, 0.8, 0], [6.5, -0.8, 0.2]] }
   ]);
 
   return tl;

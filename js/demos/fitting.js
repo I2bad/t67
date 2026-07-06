@@ -62,5 +62,15 @@ window.DEMOS.fitting = function (svg) {
     { k: 'bracket', x1: 596, y1: 284, x2: 596, y2: 316, side: 'left', t: '≈ 70%', at: 8.2 }
   ]);
 
+  // eyes: the group watches the ball; the ball eyes the too-small opening and
+  // squints through the squeeze. (Peer eyes fade with them as they merge, via
+  // the shared actor-opacity tracking.)
+  ILLO.faces(svg, tl, [
+    { el: ballCircle, r: 27, tone: 'ink', look: [1, 0],
+      steps: [[6.0, 1, 0, 0.55, 0.5], [7.6, 1, 0, 0.85, 0.8]] }
+  ].concat(peers.map(function (p) {
+    return { el: p, r: +p.getAttribute('r'), tone: 'cream', look: [-0.7, 0] };
+  })));
+
   return tl;
 };

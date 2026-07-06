@@ -24,6 +24,7 @@ window.DEMOS.conformity = function (svg) {
   gsap.set(ball, { x: 620, y: 480 });
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
   gsap.set(q('.truth-hint'), { opacity: 0 });
+  gsap.set(q('.ref-line'), { strokeDashoffset: 0 });
 
   // the waiting crowd feels like people: tone variation + a soft idle
   // breathing while they stand in line (independent of the scrub)
@@ -85,10 +86,20 @@ window.DEMOS.conformity = function (svg) {
 
   // field notes: the crowd's weight, then the override
   ILLO.notes(svg, tl, [
+    { k: 'bracket', x1: 460, y1: 392, x2: 1080, y2: 392, side: 'down', t: 'the room', at: 0.55 },
     { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 02 — CONFORMITY', at: 0.2 },
     { k: 'label', x: 1050, y: 435, t: '← the whole room', at: 6.0 },
     { k: 'label', x: 1040, y: 500, t: 'perception: overridden', anchor: 'end', at: 8.4 }
   ]);
+
+  // eyes: the queue stares up at the wrong line; the ball locks on the true
+  // match (C) first, then its gaze swerves to the line the room chose (B)
+  ILLO.faces(svg, tl, [
+    { el: ballCircle, r: 24, tone: 'ink', look: [0.4, -0.8],
+      steps: [[5.0, 0.6, -0.7], [7.4, 0.0, -0.9], [8.5, 0.1, -0.7]] }
+  ].concat(queue.map(function (p) {
+    return { el: p, r: +p.getAttribute('r'), tone: 'cream', look: [0.3, -0.85] };
+  })));
 
   return tl;
 };

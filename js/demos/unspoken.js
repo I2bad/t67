@@ -59,5 +59,13 @@ window.DEMOS.unspoken = function (svg) {
     { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 06 — INDIRECT PRESSURE', at: 0.2 },
     { k: 'bracket', x1: 330, y1: 540, x2: 750, y2: 540, side: 'down', t: 'carried — no one touched you', at: 6.0 }
   ]);
+
+  // eyes: nobody makes eye contact — every dot (and the ball) points its gaze
+  // the way the current flows. That absence is the whole section.
+  ILLO.faces(svg, tl, [
+    { el: ballCircle, r: 26, tone: 'ink', look: [1, 0] }
+  ].concat(peers.map(function (p) {
+    return { el: p, r: +p.getAttribute('r'), tone: 'cream', look: [1, 0] };
+  })));
   return tl;
 };

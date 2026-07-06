@@ -218,7 +218,7 @@ main { position: relative; z-index: 1; }
 .dark .ballc { filter: drop-shadow(0 3px 13px rgba(247, 245, 240, 0.18)); }
 .concept .ballc { filter: drop-shadow(0 6px 12px rgba(20, 19, 19, 0.32)); }
 .ball-echo { fill: url(#ballGrad); pointer-events: none; }
-.ball-contact { fill: var(--ink); opacity: 0.16; pointer-events: none; }
+.ball-contact { fill: var(--ink); opacity: 0.08; filter: blur(3px); pointer-events: none; }
 .peer { fill: var(--cream); opacity: 0.85; }
 .concept .peer { fill: var(--ink); opacity: 0.82; }
 .d-label {
@@ -270,10 +270,10 @@ main { position: relative; z-index: 1; }
    fill/stroke-opacity, so the element's own opacity is free for scrubbed fades */
 .notes, .notes * { pointer-events: none; }
 .note-label {
-  fill: var(--ink); fill-opacity: 0.5;
+  fill: var(--ink); fill-opacity: 0.68;
   font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.05em;
 }
-.note-fig { font-size: 13px; fill-opacity: 0.36; letter-spacing: 0.14em; }
+.note-fig { font-size: 13px; fill-opacity: 0.6; letter-spacing: 0.14em; }
 .note-dline {
   fill: none; stroke: var(--ink); stroke-opacity: 0.4; stroke-width: 1.3;
   stroke-dasharray: 2 7; stroke-linecap: round;
@@ -285,10 +285,11 @@ main { position: relative; z-index: 1; }
 }
 .dark .note-label, .dark .note-dline, .dark .note-bracket { fill: var(--cream); stroke: var(--cream); }
 
-/* SYSTEM 3 (trial) — minimal eyes: two small marks, no mouth */
+/* SYSTEM 3 — minimal eyes: two small marks, no mouth. Tone via fill-opacity so
+   the element's own opacity is free to track the actor's (fade with the dot) */
 .faces, .faces * { pointer-events: none; }
-.eye-ink { fill: var(--ink); opacity: 0.82; }
-.eye-cream { fill: var(--cream); opacity: 0.9; }
+.eye-ink { fill: var(--ink); fill-opacity: 0.85; }
+.eye-cream { fill: var(--cream); fill-opacity: 0.92; }
 
 .art-bold { stroke-width: 4.5 !important; }
 .art-thin { stroke-width: 1.5 !important; }
@@ -325,6 +326,24 @@ html.reduced .demo-svg .art { stroke-dashoffset: 0; }
 #unspoken    { --accent: #B24230; }  /* rust on rose */
 #online      { --accent: #3E8E2C; }  /* green */
 #saying-no   { --accent: #1F6E72; }  /* teal-slate */
+
+/* Belonging / Fitting / Looking props were reading too faintly against the
+   pastel panels. Lift the static diorama contrast to match Unspoken's office. */
+#belonging .diorama .prop,
+#fitting-in .diorama .prop,
+#looking .diorama .prop { opacity: 0.48; }
+#belonging .diorama .prop-line,
+#fitting-in .diorama .prop-line,
+#looking .diorama .prop-line { opacity: 0.56; }
+#belonging .diorama .prop-dot,
+#fitting-in .diorama .prop-dot,
+#looking .diorama .prop-dot { opacity: 0.42; }
+#belonging .diorama .prop-glow,
+#fitting-in .diorama .prop-glow,
+#looking .diorama .prop-glow { opacity: 0.16; }
+#belonging .diorama .prop-label,
+#fitting-in .diorama .prop-label,
+#looking .diorama .prop-label { opacity: 0.66; }
 
 /* concept panels: soft fills, threads, fog, stage light */
 .peer.soft { fill: var(--accent, var(--ink)); opacity: 0.5; }

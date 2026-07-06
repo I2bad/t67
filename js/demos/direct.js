@@ -62,57 +62,20 @@ window.DEMOS.direct = function (svg) {
   // field notes: the mounting force (with the field), then displacement
   ILLO.notes(svg, tl, [
     { k: 'label', fig: true, x: 40, y: 44, t: 'FIG. 05 — DIRECT PRESSURE', at: 0.2 },
-    { k: 'arrow', x: 800, y: 300, a: Math.PI, len: 64, at: 3.4, out: 4.7 },
+    { k: 'arrow', x: 520, y: 300, a: Math.PI, len: 64, at: 3.4, out: 4.7 },
+    { k: 'bracket', x1: 250, y1: 376, x2: 520, y2: 376, side: 'down', t: 'shoved off course', at: 5.2 },
     { k: 'label', x: 620, y: 250, t: 'force: increasing', anchor: 'end', at: 3.4 },
     { k: 'label', x: 170, y: 250, t: 'knocked off its line', at: 5.4 }
   ]);
 
-  // ---- SYSTEM 3 (trial, Direct only): minimal eyes — two marks each, no mouth.
-  // The pressuring dot's narrow as it advances; the ball's widen, then steady.
-  // Flip FACES to false to disable and judge the tone before rolling it out.
-  var FACES = true;
-  if (FACES && !QUALITY.reduced) {
-    var eg = ILLO.create('g', { 'class': 'faces' }, svg); // on top, over the actors
-    function eyePair(cls) {
-      return [ILLO.create('ellipse', { rx: 2.6, ry: 3.4, 'class': cls }, eg),
-              ILLO.create('ellipse', { rx: 2.6, ry: 3.4, 'class': cls }, eg)];
-    }
-    var ballEyes = eyePair('eye-ink');    // dark marks on the cream ball
-    var bullyEyes = eyePair('eye-cream'); // light marks on the dark dot
-
-    // position each pair on its actor's face every frame (tracks the shove)
-    var ept = svg.createSVGPoint();
-    function centre(el) {
-      var m = svg.getScreenCTM(); if (!m) return null;
-      var b = el.getBoundingClientRect();
-      ept.x = b.left + b.width / 2; ept.y = b.top + b.height / 2;
-      return ept.matrixTransform(m.inverse());
-    }
-    function place(eyes, c, look) {
-      if (!c) return;
-      eyes[0].setAttribute('cx', c.x - 8 + look); eyes[0].setAttribute('cy', c.y - 3);
-      eyes[1].setAttribute('cx', c.x + 8 + look); eyes[1].setAttribute('cy', c.y - 3);
-    }
-    var facesActive = false;
-    function facesTick() {
-      if (!facesActive) return;
-      place(ballEyes, centre(ballCircle), 2);   // the ball watches the dot
-      place(bullyEyes, centre(bully), -2);       // the dot fixes on the ball
-    }
-    gsap.ticker.add(facesTick);
-    ScrollTrigger.create({
-      trigger: svg.closest('section'), start: 'top bottom', end: 'bottom top',
-      onToggle: function (s) { facesActive = s.isActive; }
-    });
-
-    // expression, scrubbed with the scene (ry only — narrow/widen, no move)
-    tl.fromTo(bullyEyes, { attr: { ry: 3.4 } },
-      { attr: { ry: 1.2 }, duration: 1.4, ease: EASE.soft, immediateRender: false }, 2.4) // narrows advancing
-      .to(bullyEyes, { attr: { ry: 2.6 }, duration: 1.0, ease: EASE.soft }, 5.0);
-    tl.fromTo(ballEyes, { attr: { ry: 3.4 } },
-      { attr: { ry: 5.2 }, duration: 0.8, ease: EASE.out, immediateRender: false }, 2.0)  // widens in alarm
-      .to(ballEyes, { attr: { ry: 3.2 }, duration: 1.2, ease: EASE.soft }, 5.6);           // then steadies
-  }
+  // minimal eyes (shared system): the ball watches the dot and widens then
+  // steadies; the pressuring dot fixes on the ball and narrows as it advances
+  ILLO.faces(svg, tl, [
+    { el: ballCircle, r: 26, tone: 'ink', look: [1, 0],
+      steps: [[2.0, 1, 0, 1.6, 0.8], [5.6, 0.6, 0.1, 1.0, 1.2]] },       // widen → steady
+    { el: bully, r: 26, tone: 'cream', look: [-1, 0],
+      steps: [[2.4, -1, 0, 0.4, 1.4], [5.0, -1, 0, 0.75, 1.0]] }         // narrow, advancing
+  ]);
 
   return tl;
 };
