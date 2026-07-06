@@ -27,7 +27,10 @@ window.initZoomTransition = function (ctx) {
       trigger: '#how-intro', start: 'center center',
       endTrigger: panel, end: 'top top',
       scrub: 0.8, invalidateOnRefresh: true,
-      onToggle: function () { if (window.BG) BG.pulse(); } // flow spike at the seam
+      onToggle: function (self) {
+        if (self.isActive) { if (window.BG) BG.pulse(); }  // flow spike at the seam
+        else gsap.set(dot, { autoAlpha: 0 });              // never leave the dot stranded on-screen
+      }
     }
   });
 

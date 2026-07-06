@@ -30,9 +30,17 @@
   function scrollToHash(hash) {
     var target = document.querySelector(hash);
     if (!target) return;
+    // Pins above (scenarios) and lazy media can stale the measurements, which
+    // lands us on the wrong section. Recompute offsets before scrolling.
+    ScrollTrigger.refresh();
     if (lenis) lenis.scrollTo(target, { duration: 1.6, easing: function (t) { return 1 - Math.pow(1 - t, 4); } });
     else target.scrollIntoView({ behavior: 'smooth' });
   }
+  // Direct hash edits / back-forward navigation (anchor clicks are handled below
+  // and go through scrollToHash too). ScrollTrigger already refreshes on resize.
+  window.addEventListener('hashchange', function () {
+    if (location.hash.length > 1) scrollToHash(location.hash);
+  });
 
   /* ---------- Split helpers (words for lines, chars for display type) ---------- */
   function splitWords(el) {
