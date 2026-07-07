@@ -99,66 +99,23 @@
 <!-- ============ 2 · STORYTELLING STRETCH ============ -->
 <section id="story" class="dark" data-name="Introduction" data-bg="#0C0B0B" data-mode="dark">
   <div class="story-stage">
-    <svg id="storySvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid meet" aria-label="The ball travels a winding path while line drawings of a lunch table, a phone, a crowd and a doorway appear, and peer dots push it off course">
-      <!-- invisible travel path -->
-      <path id="storyPath" d="M80,180 C380,120 560,260 460,420 C370,565 620,700 860,610 C1080,530 960,330 1150,270 C1310,220 1380,400 1280,560" fill="none" stroke="none"/>
-
-      <!-- self-drawing dioramas (pathLength=1 so dash reveal is trivial).
-           Each is a small world: setting, light, depth, life. -->
-      <g class="scene scene-table" aria-hidden="true">
-        <line class="art art-thin lamp-cord" x1="260" y1="392" x2="260" y2="440" pathLength="1"/>
-        <path class="art lamp-shade" d="M232,452 Q260,418 288,452 Z" pathLength="1"/>
-        <path class="lamp-glow" d="M238,452 L178,548 L342,548 L282,452 Z"/>
-        <ellipse class="light-pool" cx="260" cy="556" rx="105" ry="22"/>
-        <ellipse class="scene-shadow" cx="262" cy="626" rx="95" ry="10"/>
-        <ellipse class="art art-bold table-top" cx="260" cy="560" rx="120" ry="30" pathLength="1"/>
-        <line class="art art-thin" x1="184" y1="582" x2="184" y2="622" pathLength="1"/>
-        <line class="art art-thin" x1="336" y1="582" x2="336" y2="622" pathLength="1"/>
-        <circle class="table-peer" cx="175" cy="514" r="15"/>
-        <circle class="table-peer" cx="248" cy="498" r="16"/>
-        <circle class="table-peer" cx="322" cy="510" r="14"/>
-        <circle class="seat-ghost" cx="370" cy="542" r="16"/>
-        <text class="scene-label" x="260" y="672">the lunch table</text>
+    <!-- The intro is a scroll obstacle course. The camera (the .course group)
+         pans down a tall world while the ball rolls, falls, bounces and launches
+         through four waypoints. Set dressing + pills are built in storytelling.js;
+         the ball nests anchor>ball>circle so the camera reads the anchor (path)
+         while knocks/squash live on the inner ball. -->
+    <svg id="storySvg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-label="The ball travels a scroll-driven obstacle course — rolling along a line, dropping onto the lunch table, rolling past the phone, being carried by the crowd, and finally rolling out through the doorway">
+      <path id="coursePath" fill="none" stroke="none"/>
+      <g class="course-far" aria-hidden="true"></g>
+      <g class="course" aria-hidden="true">
+        <g class="course-shapes"></g>
+        <g class="course-track"></g>
+        <g class="course-pills"></g>
+        <g class="course-peers"></g>
+        <g id="storyBallAnchor"><g id="storyBall"><circle class="ballc" r="26"/></g></g>
       </g>
-      <g class="scene scene-phone" aria-hidden="true">
-        <ellipse class="screen-glow" cx="695" cy="255" rx="115" ry="135"/>
-        <rect class="phone-screen" x="650" y="162" width="90" height="186" rx="10"/>
-        <clipPath id="screenClip"><rect x="650" y="162" width="90" height="186" rx="10"/></clipPath>
-        <g class="feed" clip-path="url(#screenClip)"><g class="feed-roll"></g></g>
-        <rect class="art art-bold phone-body" x="640" y="150" width="110" height="210" rx="18" pathLength="1"/>
-        <text class="like-count mono" x="695" y="138">&#9825; 0</text>
-        <text class="scene-label" x="695" y="410">the phone</text>
-      </g>
-      <g class="scene scene-crowd" aria-hidden="true">
-        <ellipse class="scene-shadow" cx="880" cy="700" rx="130" ry="12"/>
-        <g class="flock-home"></g>
-        <text class="scene-label" x="880" y="748">the crowd</text>
-      </g>
-      <g class="scene scene-door" aria-hidden="true">
-        <path class="lamp-glow" d="M1242,272 L1150,320 L1242,140 Z"/>
-        <ellipse class="scene-shadow" cx="1296" cy="298" rx="70" ry="8"/>
-        <rect class="art art-bold" x="1240" y="90" width="120" height="190" rx="4" pathLength="1"/>
-        <line class="art" x1="1240" y1="280" x2="1200" y2="310" pathLength="1"/>
-        <circle class="art art-thin" cx="1330" cy="190" r="5" pathLength="1"/>
-        <text class="scene-label" x="1300" y="342">the doorway</text>
-      </g>
-
-      <!-- peer dots that nudge the traveling ball -->
-      <circle class="peer story-peer sp1" cx="560" cy="640" r="13"/>
-      <circle class="peer story-peer sp2" cx="1040" cy="420" r="12"/>
-
-      <g id="storyBall"><circle class="ballc" r="26"/></g>
     </svg>
-    <!-- traveling word pills -->
-    <div class="story-words" aria-hidden="true">
-      <span class="pill story-word" style="left:12%;top:16%">It quietly</span>
-      <span class="pill story-word" style="left:34%;top:44%">shapes</span>
-      <span class="pill story-word" style="left:44%;top:76%">what you</span>
-      <span class="pill story-word" style="left:64%;top:62%">say</span>
-      <span class="pill story-word" style="left:72%;top:32%">and what you</span>
-      <span class="pill story-word" style="left:86%;top:56%">do</span>
-    </div>
-    <p class="visually-hidden">As you scroll, peer dots visibly push the ball off its path — that push is peer pressure.</p>
+    <p class="visually-hidden">As you scroll, the ball travels an obstacle course of social settings — a lunch table, a phone, a crowd that carries it, and a doorway it walks out of alone. The crowd carrying it off its path is peer pressure; walking out is holding your line. The sentence it spells: it quietly shapes what you say and what you do.</p>
   </div>
 </section>
 

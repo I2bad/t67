@@ -444,25 +444,22 @@ html.reduced .footprints { stroke-dashoffset: 0; }
 /* ============================================================
    Storytelling stretch
    ============================================================ */
-#story { height: 450vh; position: relative; }
+/* the intro obstacle course — a long pinned scrub the ball travels through */
+#story { height: 520vh; position: relative; }
 .story-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 #storySvg { width: 100%; height: 100%; }
-.scene .art {
-  fill: none; stroke: var(--cream); stroke-width: 2.5; stroke-linecap: round;
-  stroke-dasharray: 1; stroke-dashoffset: 1; /* pathLength=1 → animate to 0 */
-}
-.scene-label {
-  font-family: var(--font-mono); font-size: 18px;
-  fill: var(--cream-soft); text-anchor: middle; opacity: 0;
-}
-.story-words { position: absolute; inset: 0; pointer-events: none; }
-.story-word {
-  position: absolute; transform: scale(0);
-  font-size: clamp(0.75rem, 1.4vw, 1rem);
-}
-html.reduced .story-word { transform: none; }
-html.reduced .scene .art { stroke-dashoffset: 0; }
-html.reduced .scene-label { opacity: 1; }
+/* set dressing: giant thin outlines, two depths, the section's cream ink */
+.course-shape { fill: none; stroke: var(--cream); stroke-linecap: round; stroke-width: 2; opacity: 0.13; }
+.course-shape.deep { opacity: 0.06; stroke-width: 1.6; }
+/* the track the ball rolls on — brighter than set dressing (it's the floor) */
+.course-track-line { fill: none; stroke: var(--cream); stroke-width: 3; stroke-linecap: round; opacity: 0.32; }
+/* waypoint pills: thin outline until the ball lands, then a filled cream pill */
+.wp-box { fill: rgba(247, 245, 240, 0); stroke: var(--cream); stroke-width: 2.6; opacity: 0.55; }
+.wp-text { font-family: var(--font-mono); font-size: 27px; fill: #141313; text-anchor: middle; opacity: 0; }
+.wp.lit .wp-box { fill: rgba(247, 245, 240, 1); stroke-opacity: 0; }
+/* the sentence, as small cream pills */
+.sw-box { fill: var(--cream); }
+.sw-text { font-family: var(--font-mono); font-size: 20px; fill: #141313; text-anchor: middle; }
 
 /* ============================================================
    Section headings (dark sections)
@@ -695,7 +692,7 @@ html.reduced .arrow-art { stroke-dashoffset: 0; }
   .hero-stage { position: relative; height: 100vh; }
   .hero-lines { position: relative; padding-top: 5.5rem; }
   .hero-line { font-size: clamp(2rem, 9vw, 4rem); white-space: normal; }
-  #story { height: 300vh; }
+  #story { height: 400vh; } /* course compressed on mobile (full tuning: step 4) */
   .scenario-stage { height: auto; padding: 4rem 1.25rem; }
   .scenario-track { width: 100%; flex-direction: column; }
   .scenario-card { width: 100%; }
