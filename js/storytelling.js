@@ -53,12 +53,8 @@
     shape('rect', { x: 470, y: 958, width: 100, height: 16, rx: 8 });          // speaker
     shape('circle', { cx: 520, cy: 1410, r: 16 });                            // home dot
     shape('rect', { x: 300, y: 900, width: 440, height: 600, rx: 60 }, true);
-    // crowd — a field of outlined rings the ball weaves through (living in step 2)
-    var crowdRings = [];
-    [[760, 1600, 30], [980, 1620, 36], [1040, 1740, 28], [800, 1800, 34],
-     [700, 1700, 26], [900, 1660, 30], [1000, 1830, 24], [740, 1880, 30]].forEach(function (d) {
-      crowdRings.push(shape('circle', { cx: d[0], cy: d[1], r: d[2] }));
-    });
+    // crowd — faint outline set dressing behind the living dots (built later)
+    [[720, 1600, 28], [1032, 1642, 32], [1012, 1852, 26]].forEach(function (d) { shape('circle', { cx: d[0], cy: d[1], r: d[2] }); });
     shape('circle', { cx: 880, cy: 1720, r: 300 }, true);
     // doorway — a huge door outline the ball rolls out through
     shape('rect', { x: 560, y: 2050, width: 320, height: 540, rx: 8 });
@@ -138,7 +134,7 @@
     tl.to(anchor, { x: 632, duration: 2.0 }, 0)                              // roll the opening line
       .to(anchor, { x: 664, duration: 0.4, ease: 'power2.in' }, 2.0)         // creep to the lip
       .to(anchor, { y: 720, duration: 1.1, ease: 'power2.in' }, 2.5)         // fall (accelerate)
-      .to(anchor, { x: 700, duration: 1.1, ease: 'power1.in' }, 2.5)
+      .to(anchor, { x: 662, duration: 1.1, ease: 'power1.in' }, 2.5)         // lands on the pill's EDGE (uneven dip)
       .to(ballCircle, { scaleX: 1.4, scaleY: 0.58, duration: 0.1, ease: 'power2.in' }, 3.5)   // land squash
       .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 1.0, ease: 'elastic.out(1, 0.35)' }, 3.62)
       .to(anchor, { y: 690, duration: 0.28, ease: 'power2.out' }, 3.62)      // small bounce
@@ -173,19 +169,63 @@
       tl.to(g, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, wordTimes[i]);
     });
 
-    /* ---------- eyes: look ahead, glance down before drops, shut on landings ---------- */
+    /* ---------- living obstacles: the course itself pressures the ball ---------- */
+    // LUNCH — two dots already sit on the pill; the ball drops onto the EDGE,
+    // the pill tilts under the uneven weight, and they shuffle aside grudgingly
+    var lunchDots = [
+      C('circle', { cx: 660, cy: 700, r: 15, 'class': 'peer story-npc' }, peersG),
+      C('circle', { cx: 742, cy: 702, r: 14, 'class': 'peer story-npc' }, peersG)
+    ];
+    var lw = BEAT.lunch.label.length * 15.5 + 64;
+    tl.to(wp.lunch.g, { rotation: -3.4, transformOrigin: (BEAT.lunch.x + lw / 2) + 'px 720px', duration: 0.12, ease: 'power2.out' }, 3.55)
+      .to(wp.lunch.g, { rotation: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)' }, 3.7)
+      .to(lunchDots[0], { attr: { cx: 588 }, duration: 0.5, ease: 'power2.out' }, 3.62)   // grudging shuffle
+      .to(lunchDots[1], { attr: { cx: 808 }, duration: 0.6, ease: 'power2.out' }, 3.76);
+
+    // CROWD (centerpiece) — the ball lands among living dots; they close in
+    // behind it (the path narrows), then CARRY it off its line a short way.
+    var crowdPts = [[742, 1660, 16], [1010, 1662, 15], [1028, 1786, 17], [760, 1822, 15], [690, 1742, 14], [980, 1844, 16], [906, 1606, 15]];
+    var crowd = crowdPts.map(function (d) { return C('circle', { cx: d[0], cy: d[1], r: d[2], 'class': 'peer story-npc' }, peersG); });
+    tl.to(crowd[4], { attr: { cx: 812, cy: 1712 }, duration: 0.7, ease: 'power2.inOut' }, 8.6)   // close in behind the wake
+      .to(crowd[0], { attr: { cx: 828, cy: 1654 }, duration: 0.7, ease: 'power2.inOut' }, 8.7)
+      .to(crowd[6], { attr: { cx: 872, cy: 1634 }, duration: 0.7, ease: 'power2.inOut' }, 8.8);
+    tl.to(ball, { y: -48, x: 78, duration: 0.7, ease: 'power2.out' }, 8.75)   // lifted off its line — crowd-passed
+      .to(ball, { y: 0, x: 0, duration: 0.8, ease: 'power2.inOut' }, 9.45);   // set back down on its line
+    tl.to(crowd[1], { attr: { cx: 994, cy: 1690 }, duration: 0.7, ease: 'power2.out' }, 8.8)   // dots that carry it
+      .to(crowd[2], { attr: { cx: 964, cy: 1706 }, duration: 0.7, ease: 'power2.out' }, 8.85)
+      .to([crowd[1], crowd[2]], { attr: { cy: '+=28' }, duration: 0.8, ease: 'power2.inOut' }, 9.45); // release
+
+    // FOLLOWER — one dot peels off and trails the ball to the door, a step
+    // behind; it stops dead at the threshold and cannot cross. Ball exits alone.
+    var follower = C('circle', { cx: 942, cy: 1742, r: 15, 'class': 'peer story-npc' }, peersG);
+    gsap.set(follower, { opacity: 0 });
+    tl.to(follower, { opacity: 0.85, duration: 0.4 }, 9.5)
+      .to(follower, { attr: { cx: 832, cy: 2214 }, duration: 2.4, ease: 'power1.inOut' }, 9.6)  // trails to the threshold
+      .to(follower, { attr: { cx: 814 }, duration: 0.3, ease: 'power2.out' }, 12.0)             // reaches for the door…
+      .to(follower, { attr: { cx: 830 }, duration: 0.55, ease: 'back.out(2)' }, 12.3);          // …can't cross — recoils
+
+    /* ---------- eyes: look ahead, glance down before drops, shut on landings,
+       and SNAP WIDE when the crowd carries it ---------- */
     ILLO.faces(svg, tl, [{
       el: ballCircle, r: 26, tone: 'ink', look: [1, 0],
       steps: [
-        [2.1, 0.2, 0.9, 1, 0.4],   // glance down at the lip
-        [2.6, 0, 1, 0.5, 0.3],     // down + narrow through the fall
-        [3.5, 0, 0, 0.05, 0.1],    // squeeze shut on impact
-        [3.9, 1, 0, 1, 0.5],       // open, look ahead
-        [7.5, 0.2, 0.8, 1, 0.4],   // glance down before the crowd drop
-        [8.5, 0, 0, 0.05, 0.1],    // shut
-        [8.8, 1, 0, 1, 0.5]        // open, ahead to the door
+        [2.1, 0.2, 0.9, 1, 0.4],       // glance down at the lip
+        [2.6, 0, 1, 0.5, 0.3],         // down + narrow through the fall
+        [3.5, 0, 0, 0.05, 0.1],        // squeeze shut on impact
+        [3.9, 1, 0, 1, 0.5],           // open, look ahead
+        [7.5, 0.2, 0.8, 1, 0.4],       // glance down before the crowd drop
+        [8.5, 0, 0, 0.05, 0.1],        // shut on the crowd landing
+        [8.85, -0.2, -0.2, 1.7, 0.3],  // eyes SNAP WIDE — carried, didn't choose this
+        [9.5, 1, 0, 1, 0.6]            // set down, recover, look ahead to the door
       ]
     }]);
+    // the crowd + lunch dots watch the ball; the follower keeps its eyes on it
+    ILLO.faces(svg, null, crowd.map(function (c) {
+      var cx = +c.getAttribute('cx'), cy = +c.getAttribute('cy'), dx = 880 - cx, dy = 1720 - cy, d = Math.hypot(dx, dy) || 1;
+      return { el: c, r: +c.getAttribute('r'), tone: 'ink', look: [dx / d, dy / d] };
+    }).concat(lunchDots.map(function (c) {
+      return { el: c, r: +c.getAttribute('r'), tone: 'ink', look: [(+c.getAttribute('cx') < 700 ? 0.7 : -0.7), 0] };
+    }), [{ el: follower, r: 15, tone: 'ink', look: [-0.3, 0.9] }]));
 
     /* ---------- a cream ghost trail that rides the camera (svg-space echoes) ---------- */
     var echoes = [];
