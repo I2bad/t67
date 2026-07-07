@@ -26,6 +26,9 @@
     var ball = document.getElementById('storyBall');
     var ballCircle = ball.querySelector('.ballc');
     var C = function (t, a, p) { return ILLO.create(t, a, p); };
+    // narrow screens: the wide course won't fit, so the camera also follows the
+    // ball horizontally (locks it to centre-x) — pills land centred + readable
+    var MOBILE = window.matchMedia('(max-width: 768px)').matches;
 
     gsap.set(ballCircle, { transformOrigin: '50% 50%' });
 
@@ -119,7 +122,17 @@
     }
 
     /* ---------- the course ---------- */
-    function syncFar() { gsap.set(far, { y: (gsap.getProperty(course, 'y') || 0) * 0.8 }); }
+    function syncFar() {
+      var cy = gsap.getProperty(course, 'y') || 0;
+      gsap.set(far, { y: cy * 0.8 });
+      if (MOBILE) { // horizontal follow: keep the ball centred as the world pans
+        // follow the ball's FULL x (path + carry offset) so the crowd-carry
+        // can't shove it off a narrow screen
+        var bx = (gsap.getProperty(anchor, 'x') || 0) + (gsap.getProperty(ball, 'x') || 0);
+        var cx = 720 - bx;
+        gsap.set(course, { x: cx }); gsap.set(far, { x: cx * 0.8 });
+      }
+    }
 
     gsap.set(anchor, { x: START.x, y: START.y });
     gsap.set(course, { y: 150 }); // start centred on the opening roll line (world y300)
