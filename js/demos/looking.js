@@ -16,7 +16,9 @@ window.DEMOS.looking = function (svg) {
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
   gsap.set(ball, { motionPath: { path: stem, align: stem, alignOrigin: [0.5, 0.5], end: 0 } });
   peers.forEach(function (p) {
-    gsap.set(p, { motionPath: { path: peerPath, align: peerPath, alignOrigin: [0.5, 0.5], end: 0 } });
+    // start hidden at the path origin so they don't pile up under the ball at
+    // entry — they fade in only as each one launches into the stream
+    gsap.set(p, { motionPath: { path: peerPath, align: peerPath, alignOrigin: [0.5, 0.5], end: 0 }, opacity: 0 });
   });
   gsap.set(contrarian, { motionPath: { path: peerPath, align: peerPath, alignOrigin: [0.5, 0.5], end: 0 }, opacity: 0 });
   gsap.set(q('.guide-vis'), { opacity: 0 });
@@ -30,10 +32,11 @@ window.DEMOS.looking = function (svg) {
 
   /* beat 2 — THE STREAM COMMITS: traffic picks the lower branch */
   peers.forEach(function (p, i) {
-    tl.to(p, {
-      motionPath: { path: peerPath, align: peerPath, alignOrigin: [0.5, 0.5] },
-      duration: 4.2, ease: EASE.inOut
-    }, 1.2 + i * 0.75);
+    tl.to(p, { opacity: 0.82, duration: 0.3, ease: EASE.soft }, 1.2 + i * 0.75)
+      .to(p, {
+        motionPath: { path: peerPath, align: peerPath, alignOrigin: [0.5, 0.5] },
+        duration: 4.2, ease: EASE.inOut
+      }, 1.2 + i * 0.75);
   });
   // the crowd leaves footprints down its branch — literal evidence of others
   tl.to(q('.footprints'), { strokeDashoffset: 0, duration: 3.4, ease: EASE.soft }, 2.4);

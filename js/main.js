@@ -27,7 +27,7 @@
     gsap.ticker.lagSmoothing(0);
   }
 
-  var hashScrollTimer = null;
+  var hashScrollTimer = null, lastHashRefresh = 0;
   function getTargetScrollTop(target) {
     return Math.max(0, window.pageYOffset + target.getBoundingClientRect().top);
   }
@@ -39,8 +39,14 @@
     // lands us on the wrong section. Refresh, then wait a frame so the
     // refreshed pin spacers are reflected before we resolve the target top.
     if (hashScrollTimer) cancelAnimationFrame(hashScrollTimer);
-    if (ScrollTrigger.clearScrollMemory) ScrollTrigger.clearScrollMemory();
-    ScrollTrigger.refresh();
+    // refresh() is a full reflow — throttle it so rapid menu clicks can't stack
+    // reflows and freeze the renderer. Once every 700ms keeps offsets honest.
+    var now = performance.now();
+    if (now - lastHashRefresh > 700) {
+      if (ScrollTrigger.clearScrollMemory) ScrollTrigger.clearScrollMemory();
+      ScrollTrigger.refresh();
+      lastHashRefresh = now;
+    }
     hashScrollTimer = requestAnimationFrame(function () {
       hashScrollTimer = requestAnimationFrame(function () {
         var top = getTargetScrollTop(target);

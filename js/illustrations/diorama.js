@@ -19,15 +19,21 @@ ILLO.diorama = function (svg, name) {
   function label(x, y, t) { var e = ILLO.create('text', { x: x, y: y, 'class': 'prop-label' }, g); e.textContent = t; return e; }
 
   var scenes = {
-    // 01 — overhead lunch table: table outline, trays, one empty seat
+    // 01 — overhead lunch table: a central table with the diners seated around
+    // its rim, a tray in front of each, and one conspicuously empty seat
     belong: function () {
-      box(840, 188, 322, 234, 48, 'prop-line');                 // table top
-      [[858, 226, 46, 30], [1002, 202, 46, 30], [1052, 328, 46, 30], [1000, 400, 46, 30]].forEach(function (t) { box(t[0], t[1], t[2], t[3], 8); }); // trays
-      ring(880, 308, 30);                                        // the empty seat the ball drifts toward
+      var seats = [[966, 224], [1050, 256], [1060, 302], [1048, 348], [904, 350], [966, 378]], bcx = 966, bcy = 300;
+      box(908, 250, 116, 100, 34, 'prop-line');                 // the shared table
+      seats.forEach(function (s) {                              // a tray in front of each diner (toward the table)
+        var dx = bcx - s[0], dy = bcy - s[1], d = Math.hypot(dx, dy) || 1;
+        box(s[0] + dx / d * 24 - 9, s[1] + dy / d * 24 - 7, 18, 14, 4);
+      });
+      ring(884, 302, 22);                                       // the empty seat the ball drifts toward
     },
-    // 02 — classroom: blackboard mounting the Asch cards, a row of desks
+    // 02 — classroom: the blackboard mounts only the "what everyone says" board
+    // (so the small "what you saw" card stays a separate panel); a row of desks
     conformity: function () {
-      box(108, 76, 988, 324, 14, 'prop-line');                  // blackboard behind the cards
+      box(444, 84, 656, 322, 12, 'prop-line');                  // blackboard behind the right-hand board only
       [480, 640, 800, 960].forEach(function (x) { box(x - 46, 516, 92, 40, 8); }); // desks facing the board
     },
     // 03 — locker row: bays the full ball walks past, discarded parts left outside

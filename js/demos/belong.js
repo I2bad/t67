@@ -15,7 +15,7 @@ window.DEMOS.belong = function (svg) {
   // clean proximity network: connect each member to its two nearest
   // neighbours with straight threads (replaces the old crossing arcs that
   // read as scribble). Dedupe edges so no line is drawn twice.
-  var centers = [[918, 252], [978, 242], [1018, 298], [978, 356], [914, 346], [950, 300]];
+  var centers = [[966, 224], [1050, 256], [1060, 302], [1048, 348], [904, 350], [966, 378]];
   var threadWrap = q('.huddle-threads')[0];
   function link(x1, y1, x2, y2) {
     return ILLO.create('line', {
@@ -33,7 +33,7 @@ window.DEMOS.belong = function (svg) {
         link(centers[i][0], centers[i][1], centers[e.j][0], centers[e.j][1]);
       });
   });
-  var ballThread = link(950, 300, 884, 308); // the newcomer's first tie-in
+  var ballThread = link(966, 300, 884, 302); // the newcomer's first tie-in
 
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
   gsap.set(ball, { motionPath: { path: path, align: path, alignOrigin: [0.5, 0.5], end: 0 } });
@@ -87,8 +87,8 @@ window.DEMOS.belong = function (svg) {
     .to(ballThread, { strokeDashoffset: 0, duration: 0.7, ease: EASE.inOut }, 8.3)
     // members lean in a touch — the circle re-forms around the newcomer
     .to(members, {
-      x: function (i) { return (882 - centers[i][0]) * 0.06; },
-      y: function (i) { return (308 - centers[i][1]) * 0.06; },
+      x: function (i) { return (884 - centers[i][0]) * 0.06; },
+      y: function (i) { return (302 - centers[i][1]) * 0.06; },
       duration: 1.1, ease: EASE.soft, stagger: { each: 0.06 }
     }, 8.4)
     .to(q('.soft-glow'), { scale: 1.15, opacity: 0.1, duration: 1.4, ease: EASE.soft }, 8.4)

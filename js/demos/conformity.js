@@ -24,7 +24,11 @@ window.DEMOS.conformity = function (svg) {
   gsap.set(ball, { x: 620, y: 480 });
   gsap.set(ballCircle, { transformOrigin: '50% 50%' });
   gsap.set(q('.truth-hint'), { opacity: 0 });
+  // both panels stand from entry — the reference line in its own card, the
+  // three comparison lines on the board. Only the narrative animates below.
+  gsap.set(q('.asch-card'), { strokeDashoffset: 0 });
   gsap.set(q('.ref-line'), { strokeDashoffset: 0 });
+  gsap.set(q('.opt'), { strokeDashoffset: 0 });
 
   // the waiting crowd feels like people: tone variation + a soft idle
   // breathing while they stand in line (independent of the scrub)
@@ -37,17 +41,9 @@ window.DEMOS.conformity = function (svg) {
 
   var tl = gsap.timeline({ defaults: { ease: 'none' } });
 
-  /* beat 1 — THE TEST: cards and lines draw themselves */
-  tl.to(q('.asch-card'), {
-    strokeDashoffset: 0, duration: 1.2, ease: EASE.inOut, stagger: 0.5
-  }, 0)
-    .to(q('.ref-line'), { strokeDashoffset: 0, duration: 0.7, ease: EASE.inOut }, 0.9)
-    .to(q('.opt'), {
-      strokeDashoffset: 0, duration: 0.7, ease: EASE.inOut,
-      stagger: { each: 0.35, ease: EASE.soft }
-    }, 1.6)
-    // the honest match quietly marks itself — you can see it
-    .to(q('.truth-hint'), { opacity: 0.6, duration: 0.6, ease: EASE.soft }, 2.9)
+  /* beat 1 — THE TEST: the panels are already up. The honest match quietly
+     marks itself, and the ball forms its private belief toward the true line */
+  tl.to(q('.truth-hint'), { opacity: 0.6, duration: 0.6, ease: EASE.soft }, 2.9)
     .to(q('.belief-thread'), { strokeDashoffset: 0, duration: 0.9, ease: EASE.inOut }, 3.1);
 
   /* beat 2 — THE ROOM COMMITS: one by one, under the wrong line */

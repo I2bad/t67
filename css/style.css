@@ -265,20 +265,25 @@ main { position: relative; z-index: 1; }
 .dark .diorama .prop, .dark .diorama .prop-dot { fill: var(--cream); opacity: 0.13; }
 .dark .diorama .prop-line { stroke: var(--cream); opacity: 0.18; }
 .dark .diorama .prop-label { fill: var(--cream); opacity: 0.32; }
+/* the spotlight (Direct) and the pale bg (Saying No) wash their props out —
+   bring them up to the Unspoken office's readability */
+#direct .diorama .prop, #direct .diorama .prop-dot { opacity: 0.48; }
+#direct .diorama .prop-line { opacity: 0.54; }
+#saying-no .diorama .prop-line { opacity: 0.55; }
 
 /* SYSTEM 2 — field-notes: physics-diagram annotations. Low-contrast ink via
    fill/stroke-opacity, so the element's own opacity is free for scrubbed fades */
 .notes, .notes * { pointer-events: none; }
 .note-label {
-  fill: var(--ink); fill-opacity: 0.68;
+  fill: var(--ink); fill-opacity: 0.88;
   font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.05em;
 }
-.note-fig { font-size: 13px; fill-opacity: 0.6; letter-spacing: 0.14em; }
+.note-fig { font-size: 13px; fill-opacity: 0.82; letter-spacing: 0.14em; }
 .note-dline {
   fill: none; stroke: var(--ink); stroke-opacity: 0.4; stroke-width: 1.3;
   stroke-dasharray: 2 7; stroke-linecap: round;
 }
-.note-bracket { fill: none; stroke: var(--ink); stroke-opacity: 0.45; stroke-width: 1.3; }
+.note-bracket { fill: none; stroke: var(--ink); stroke-opacity: 0.62; stroke-width: 1.4; }
 .note-arrow {
   stroke: var(--accent, var(--ink)); stroke-opacity: 0.8; stroke-width: 2.4;
   fill: none; stroke-linecap: round; stroke-linejoin: round;
