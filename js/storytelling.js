@@ -29,6 +29,11 @@
 
     gsap.set(ballCircle, { transformOrigin: '50% 50%' });
 
+    // #3 COLOR ESCALATION — a viewport-fixed backdrop (behind everything) that
+    // starts pure hero ink and lets the lesson's colour bleed in by the doorway
+    var bg = C('rect', { x: -300, y: -300, width: 2040, height: 1500, 'class': 'course-bg', fill: '#0C0B0B' }, svg);
+    svg.insertBefore(bg, svg.firstChild);
+
     // ---- beats: world coordinates the course descends through ----
     var BEAT = {
       lunch: { x: 700, y: 720, label: 'the lunch table' },
@@ -133,8 +138,11 @@
     // BALL — bumpy physics segments
     tl.to(anchor, { x: 632, duration: 2.0 }, 0)                              // roll the opening line
       .to(anchor, { x: 664, duration: 0.4, ease: 'power2.in' }, 2.0)         // creep to the lip
-      .to(anchor, { y: 720, duration: 1.1, ease: 'power2.in' }, 2.5)         // fall (accelerate)
-      .to(anchor, { x: 662, duration: 1.1, ease: 'power1.in' }, 2.5)         // lands on the pill's EDGE (uneven dip)
+      // #2 HESITATION — it tips to the edge and resists (scroll continues, the
+      // ball hovers, peering down) before it commits. A protagonist deciding.
+      .to(anchor, { x: 676, duration: 0.35, ease: 'power1.inOut' }, 2.4)     // hover at the lip
+      .to(anchor, { y: 720, duration: 0.9, ease: 'power2.in' }, 2.75)        // COMMIT: fall (accelerate)
+      .to(anchor, { x: 662, duration: 0.9, ease: 'power1.in' }, 2.75)        // onto the pill's EDGE (uneven dip)
       .to(ballCircle, { scaleX: 1.4, scaleY: 0.58, duration: 0.1, ease: 'power2.in' }, 3.5)   // land squash
       .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 1.0, ease: 'elastic.out(1, 0.35)' }, 3.62)
       .to(anchor, { y: 690, duration: 0.28, ease: 'power2.out' }, 3.62)      // small bounce
@@ -146,6 +154,12 @@
       .to(ballCircle, { scaleX: 1.32, scaleY: 0.64, duration: 0.1, ease: 'power2.in' }, 8.5)  // crowd land squash
       .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.85, ease: 'elastic.out(1, 0.4)' }, 8.6)
       .to(anchor, { x: 720, y: 2320, duration: 2.6, ease: 'power1.inOut' }, 9.6); // roll out the door
+
+    // #3 the lesson's colour bleeds into the dark, one waypoint at a time
+    tl.to(bg, { fill: '#120E13', duration: 3.0, ease: 'none' }, 3.4)       // lunch: a first warmth
+      .to(bg, { fill: '#0F1016', duration: 2.6, ease: 'none' }, 6.5)       // phone: cool
+      .to(bg, { fill: '#171120', duration: 2.2, ease: 'none' }, 8.5)       // crowd: plum
+      .to(bg, { fill: '#221a2c', duration: 3.0, ease: 'none' }, 9.6);      // doorway: the coloured world
 
     // landing shockwaves (in the course group so they ride the camera)
     ILLO.impact(tl, 3.55, course, 700, 720, { size: 150, particles: 5 });
@@ -161,6 +175,25 @@
         .to(w.g, { y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' }, t + 0.1);
     }
     land(wp.lunch, 3.55); land(wp.phone, 6.5); land(wp.crowd, 8.52); land(wp.door, 12.0);
+
+    // #4 IMPACT ON TYPE (once only) — the phone label's letters scatter as
+    // physics objects when the ball rolls on, then reassemble into the pill
+    wp.phone.txt.textContent = ''; // the per-letter version takes over
+    (function () {
+      var lab = BEAT.phone.label, ls = 15.5, sx = BEAT.phone.x - (lab.length - 1) * ls / 2, i = 0;
+      lab.split('').forEach(function (ch) {
+        i++;
+        if (ch === ' ') return;
+        var x0 = sx + (i - 1) * ls, y0 = BEAT.phone.y + 9;
+        var lt = C('text', { x: x0, y: y0, 'class': 'wp-text', 'text-anchor': 'middle' }, wp.phone.g);
+        lt.textContent = ch;
+        var ang = Math.random() * Math.PI * 2, dist = 46 + Math.random() * 66;
+        gsap.set(lt, { opacity: 0, transformOrigin: x0 + 'px ' + y0 + 'px' });
+        tl.fromTo(lt, { opacity: 0, x: 0, y: 0, rotation: 0 },
+          { opacity: 1, x: Math.cos(ang) * dist, y: Math.sin(ang) * dist - 34, rotation: (Math.random() - 0.5) * 140, duration: 0.32, ease: 'power2.out', immediateRender: false }, 6.42 + i * 0.015)
+          .to(lt, { x: 0, y: 0, rotation: 0, duration: 0.72, ease: 'back.out(1.5)' }, 6.86 + i * 0.02); // reassemble
+      });
+    })();
 
     // sentence pills pop as the ball passes
     var wordTimes = [1.0, 3.7, 5.2, 6.7, 8.1, 11.2];
@@ -204,13 +237,27 @@
       .to(follower, { attr: { cx: 814 }, duration: 0.3, ease: 'power2.out' }, 12.0)             // reaches for the door…
       .to(follower, { attr: { cx: 830 }, duration: 0.55, ease: 'back.out(2)' }, 12.3);          // …can't cross — recoils
 
+    // #5 THE COUNTER CHASES — at the phone the like-badge (reused from Online)
+    // detaches, chases the ball, ringing up, until the crowd bounce flings it off
+    var badge = C('g', { 'class': 'story-badge' }, peersG);
+    C('circle', { cx: 0, cy: 0, r: 17, 'class': 'badge-dot' }, badge);
+    var bnum = C('text', { x: 0, y: 6, 'class': 'badge-num' }, badge); bnum.textContent = '0';
+    gsap.set(badge, { opacity: 0, x: 560, y: 1150 });
+    var bn = { v: 0 };
+    tl.to(badge, { opacity: 1, duration: 0.3 }, 6.3)                                  // pops off the phone
+      .to(badge, { x: 660, y: 1300, duration: 0.9, ease: 'power1.inOut' }, 6.6)       // gives chase…
+      .to(badge, { x: 812, y: 1660, duration: 1.2, ease: 'power1.inOut' }, 7.6)       // …trailing through the launch
+      .to(bn, { v: 214, duration: 2.0, ease: 'power1.in', onUpdate: function () { bnum.textContent = bn.v > 99 ? '99+' : Math.floor(bn.v); } }, 6.5)
+      .to(badge, { x: 1080, y: 1540, rotation: 40, duration: 0.5, ease: 'power2.out' }, 8.55)  // flung off on the bounce
+      .to(badge, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 8.7);
+
     /* ---------- eyes: look ahead, glance down before drops, shut on landings,
        and SNAP WIDE when the crowd carries it ---------- */
     ILLO.faces(svg, tl, [{
       el: ballCircle, r: 26, tone: 'ink', look: [1, 0],
       steps: [
-        [2.1, 0.2, 0.9, 1, 0.4],       // glance down at the lip
-        [2.6, 0, 1, 0.5, 0.3],         // down + narrow through the fall
+        [2.4, 0.15, 1, 1, 0.35],       // peer down at the lip (hesitation)
+        [2.9, 0, 1, 0.4, 0.3],         // down + narrow through the fall
         [3.5, 0, 0, 0.05, 0.1],        // squeeze shut on impact
         [3.9, 1, 0, 1, 0.5],           // open, look ahead
         [7.5, 0.2, 0.8, 1, 0.4],       // glance down before the crowd drop
