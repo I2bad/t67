@@ -448,23 +448,24 @@ html.reduced .footprints { stroke-dashoffset: 0; }
 #story { height: 660vh; position: relative; }
 .story-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 #storySvg { width: 100%; height: 100%; }
-/* set dressing: giant thin outlines, two depths, the section's cream ink */
-.course-bg { pointer-events: none; }
-.course-shape { fill: none; stroke: var(--cream); stroke-linecap: round; stroke-width: 2; opacity: 0.13; }
-.course-shape.deep { opacity: 0.06; stroke-width: 1.6; }
+/* set dressing: full-white line art. Hierarchy is stroke weight ONLY — no
+   opacity washes anywhere here. .course-anchor is the one large prop per
+   beat; .course-shape is every small accent (near or far layer — depth
+   comes from parallax speed, not from fading). */
+.course-bg { pointer-events: none; } /* exception: the colour bleed itself */
+.course-anchor { fill: none; stroke: var(--cream); stroke-linecap: round; stroke-width: 2; opacity: 1; }
+.course-shape { fill: none; stroke: var(--cream); stroke-linecap: round; stroke-width: 1; opacity: 1; }
 /* the only ground hint: a short dash that rides just under the rolling ball */
 .ground-dash { stroke: var(--cream); stroke-width: 3; stroke-linecap: round; opacity: 0; pointer-events: none; }
-/* soft light spilling through the doorway (a glow, not a solid prop) */
-.door-light { fill: var(--cream); opacity: 0.05; pointer-events: none; }
-/* ambient drifting dots — faint background life down the course */
-.story-ambient { fill: var(--cream); opacity: 0.28; }
 /* waypoint pills: thin outline until the ball lands, then a filled cream pill */
-.wp-box { fill: rgba(247, 245, 240, 0); stroke: var(--cream); stroke-width: 2.6; opacity: 0.55; }
+.wp-box { fill: rgba(247, 245, 240, 0); stroke: var(--cream); stroke-width: 2.6; opacity: 1; }
 .wp-text { font-family: var(--font-mono); font-size: 27px; fill: #141313; text-anchor: middle; opacity: 0; }
 .wp.lit .wp-box { fill: rgba(247, 245, 240, 1); stroke-opacity: 0; }
 /* the sentence, as small cream pills */
 .sw-box { fill: var(--cream); }
 .sw-text { font-family: var(--font-mono); font-size: 20px; fill: #141313; text-anchor: middle; }
+/* living dots on the course (lunch/crowd/follower): solid, no translucency */
+.story-npc { opacity: 1; }
 
 /* ============================================================
    Section headings (dark sections)

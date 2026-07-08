@@ -47,75 +47,58 @@
     };
     var START = { x: 300, y: 300 };
 
-    /* ---------- set dressing: giant thin-outline shapes (two depths) ---------- */
+    /* ---------- set dressing: full-white line art, two-tier hierarchy ----------
+       Hierarchy is stroke weight only — never opacity. ONE large "anchor" shape
+       per beat (~2px, breaks the frame edge); everything else is a small
+       "accent" (~1px), clustered in a single tight group near the anchor, from
+       the SAME scene family as the anchor. Two depth layers max (near/far, for
+       parallax only — not for fading anything out). */
+    function anchorShape(tag, attrs) {
+      attrs['class'] = 'course-anchor';
+      return C(tag, attrs, shapes);
+    }
     function shape(tag, attrs, deep) {
-      attrs['class'] = 'course-shape' + (deep ? ' deep' : '');
+      attrs['class'] = 'course-shape';
       return C(tag, attrs, deep ? far : shapes);
     }
-    // lunch — a big table oval + legs (and a deeper echo)
-    shape('ellipse', { cx: 700, cy: 792, rx: 300, ry: 96 });
-    shape('line', { x1: 470, y1: 862, x2: 470, y2: 946 });
-    shape('line', { x1: 930, y1: 862, x2: 930, y2: 946 });
-    shape('ellipse', { cx: 690, cy: 720, rx: 470, ry: 170 }, true);
-    // phone — an oversized phone the ball rolls across (+ deep echo)
-    shape('rect', { x: 372, y: 940, width: 296, height: 496, rx: 44 });
+    function rprop(tag, attrs, r, deep) { var e = shape(tag, attrs, deep); if (r) e.setAttribute('transform', 'rotate(' + r[0] + ' ' + r[1] + ' ' + r[2] + ')'); return e; }
+
+    // LUNCH — anchor: the table. Accents (table family only): a pulled-out
+    // chair, a tipped chair, a tray + cup ON the table, one crumpled paper —
+    // one cluster hugging the table's near edge; the far side of the frame
+    // (where the ball arrives from) stays empty.
+    anchorShape('ellipse', { cx: 700, cy: 792, rx: 300, ry: 96 });
+    shape('rect', { x: 940, y: 880, width: 60, height: 60, rx: 10 });          // chair, pulled out
+    rprop('rect', { x: 860, y: 906, width: 56, height: 56, rx: 10 }, [42, 888, 934]); // chair, tipped
+    shape('rect', { x: 826, y: 772, width: 56, height: 24, rx: 6 });           // tray, on the table
+    shape('circle', { cx: 862, cy: 758, r: 9 });                              // a cup on the tray
+    shape('circle', { cx: 700, cy: 916, r: 10 }); shape('circle', { cx: 700, cy: 916, r: 5 }); // crumpled paper, on the floor
+
+    // PHONE — anchor: the phone. Accents (phone/chat family only): two chat
+    // bubbles, one heart, a face-down second phone, one earbud — one cluster
+    // to the phone's left; nothing crosses another outline.
+    anchorShape('rect', { x: 372, y: 940, width: 296, height: 496, rx: 44 });
     shape('rect', { x: 470, y: 958, width: 100, height: 16, rx: 8 });          // speaker
     shape('circle', { cx: 520, cy: 1410, r: 16 });                            // home dot
-    shape('rect', { x: 300, y: 900, width: 440, height: 600, rx: 60 }, true);
-    // crowd — faint outline set dressing behind the living dots (built later)
-    [[720, 1600, 28], [1032, 1642, 32], [1012, 1852, 26]].forEach(function (d) { shape('circle', { cx: d[0], cy: d[1], r: d[2] }); });
-    shape('circle', { cx: 880, cy: 1720, r: 300 }, true);
-    // doorway — a huge door outline the ball rolls out through
-    shape('rect', { x: 560, y: 2050, width: 320, height: 540, rx: 8 });
-    shape('rect', { x: 588, y: 2078, width: 264, height: 512, rx: 4 });
-    shape('circle', { cx: 828, cy: 2330, r: 7 });                            // knob
-    shape('rect', { x: 500, y: 1990, width: 440, height: 660, rx: 14 }, true);
+    shape('rect', { x: 176, y: 972, width: 92, height: 50, rx: 20 });          // chat bubble 1
+    shape('rect', { x: 150, y: 1078, width: 76, height: 42, rx: 18 });         // chat bubble 2
+    shape('path', { d: 'M170,1150 C170,1136 182,1128 192,1136 C202,1128 214,1136 214,1150 C214,1160 192,1174 192,1174 C192,1174 170,1160 170,1150 Z' }); // heart, clear of the bubbles
+    rprop('rect', { x: 152, y: 1272, width: 96, height: 172, rx: 20 }, [-16, 200, 1358]); // face-down phone, below
+    shape('circle', { cx: 176, cy: 1494, r: 10 }); shape('line', { x1: 176, y1: 1504, x2: 172, y2: 1534 }); // earbud, clear of the phone
 
-    /* ---------- densified scene props: outline-only, clear of path + pills ---------- */
-    function rprop(tag, attrs, r, deep) { var e = shape(tag, attrs, deep); if (r) e.setAttribute('transform', 'rotate(' + r[0] + ' ' + r[1] + ' ' + r[2] + ')'); return e; }
-    function heart(cx, cy, s, deep) {
-      return shape('path', { d: 'M' + cx + ',' + (cy + s * 0.35) + ' C' + (cx - s * 1.1) + ',' + (cy - s * 0.35) + ' ' + (cx - s * 0.5) + ',' + (cy - s * 1.05) + ' ' + cx + ',' + (cy - s * 0.35) + ' C' + (cx + s * 0.5) + ',' + (cy - s * 1.05) + ' ' + (cx + s * 1.1) + ',' + (cy - s * 0.35) + ' ' + cx + ',' + (cy + s * 0.35) + ' Z' }, deep);
-    }
-    // LUNCH — chairs (one pulled out, one tipped over), trays + cups, crumpled paper (all right of the down-left exit)
-    shape('rect', { x: 980, y: 742, width: 66, height: 66, rx: 12 });
-    shape('rect', { x: 1082, y: 806, width: 66, height: 66, rx: 12 });
-    rprop('rect', { x: 872, y: 918, width: 64, height: 64, rx: 12 }, [44, 904, 950]);
-    shape('rect', { x: 812, y: 780, width: 62, height: 26, rx: 6 });
-    shape('circle', { cx: 858, cy: 762, r: 10 }); shape('circle', { cx: 928, cy: 792, r: 9 });
-    shape('circle', { cx: 1016, cy: 902, r: 13 }); shape('circle', { cx: 1016, cy: 902, r: 7 });
-    // PHONE — chat bubbles rising, a face-down phone, scattered hearts, an earbud (all left of the phone)
-    shape('rect', { x: 196, y: 1006, width: 96, height: 52, rx: 20 });
-    shape('rect', { x: 236, y: 1092, width: 78, height: 44, rx: 18 });
-    shape('rect', { x: 184, y: 1188, width: 108, height: 56, rx: 22 });
-    rprop('rect', { x: 168, y: 1320, width: 108, height: 196, rx: 22 }, [-18, 222, 1418]);
-    heart(300, 962, 12); heart(226, 1052, 10); heart(158, 1150, 9);
-    shape('circle', { cx: 336, cy: 1420, r: 12 }); shape('line', { x1: 336, y1: 1432, x2: 330, y2: 1470 });
-    // SAY (phone→crowd transition, world y~1230-1480) — a couple more props so
-    // this stretch isn't empty: a small side table, a second chat bubble
-    shape('rect', { x: 838, y: 1246, width: 70, height: 46, rx: 8 });
-    shape('line', { x1: 856, y1: 1292, x2: 856, y2: 1330 }); shape('line', { x1: 902, y1: 1292, x2: 902, y2: 1330 });
-    shape('rect', { x: 792, y: 1408, width: 84, height: 46, rx: 18 });
-    // CROWD — big out-of-focus dots (deep), footprints, a dropped cup
-    shape('circle', { cx: 1108, cy: 1632, r: 74 }, true); shape('circle', { cx: 628, cy: 1812, r: 62 }, true); shape('circle', { cx: 1010, cy: 1918, r: 54 }, true);
-    [[712, 1982], [758, 2016], [812, 2000], [792, 2052]].forEach(function (p) { shape('ellipse', { cx: p[0], cy: p[1], rx: 11, ry: 6 }); });
-    rprop('rect', { x: 686, y: 1852, width: 42, height: 24, rx: 8 }, [24, 707, 1864]);
-    // DOORWAY — coat hook, floor mat, a soft light wedge, a chair facing away
-    shape('path', { d: 'M604,2108 h20 v14' });
-    shape('ellipse', { cx: 720, cy: 2560, rx: 150, ry: 26 });
-    C('path', { d: 'M704,2078 L878,2052 L900,2588 L708,2588 Z', 'class': 'door-light' }, far);
-    shape('rect', { x: 852, y: 2360, width: 74, height: 74, rx: 10 });
-    // DO (doorway zone) — a couple more props: a wall frame, a small plant
-    shape('rect', { x: 430, y: 2064, width: 52, height: 68, rx: 4 }); shape('line', { x1: 442, y1: 2076, x2: 470, y2: 2076 });
-    shape('circle', { cx: 966, cy: 2258, r: 20 }); shape('line', { x1: 966, y1: 2258, x2: 966, y2: 2292 });
-    // ambient props between beats (tiny — discover, not notice)
-    shape('path', { d: 'M330,948 l34,-14 l-14,30 l-8,-14 Z' });               // paper plane
-    shape('path', { d: 'M1060,1498 q14,-12 27,-1 q-3,21 -27,14 Z' });         // sock
-    shape('circle', { cx: 596, cy: 2016, r: 9 }); shape('circle', { cx: 596, cy: 2016, r: 4 }); // bottle cap
+    // CROWD — no static anchor prop; the living crowd (built further down)
+    // IS the anchor here. Accents (dots/footprints ONLY): just the footprint
+    // trail — a separate background "depth" circle kept bleeding into the
+    // doorway frame at some scroll positions and read as an orphan dot.
+    [[730, 1978], [772, 2008], [820, 1992]].forEach(function (p) { shape('ellipse', { cx: p[0], cy: p[1], rx: 10, ry: 5 }); }); // footprints
 
-    // ambient drifting dots down the whole course — something is always in
-    // motion, so the scroll never reads as dead (kept off the ball's path)
-    var ambient = [[196, 440, 8], [1190, 700, 7], [232, 980, 7], [1210, 1420, 8], [980, 2040, 7], [300, 2200, 7], [1160, 2360, 8]];
-    var ambientDots = ambient.map(function (a) { return C('circle', { cx: a[0], cy: a[1], r: a[2], 'class': 'peer story-ambient' }, far); });
+    // DOORWAY — anchor: the door frame (one clean outline, not double-drawn).
+    // Accents (doorway family only): a coat hook, a floor mat — one cluster
+    // hugging the door's base.
+    anchorShape('rect', { x: 560, y: 2050, width: 320, height: 540, rx: 8 });
+    shape('circle', { cx: 828, cy: 2330, r: 7 });                             // knob
+    shape('path', { d: 'M604,2108 h20 v14' });                                // coat hook
+    shape('ellipse', { cx: 720, cy: 2560, rx: 150, ry: 26 });                 // floor mat
 
     // No telegraph line: the ball's ghost trail shows where it's BEEN, and the
     // props/pill edges are the ground. The only hint is a short ~28px dash that
@@ -228,16 +211,15 @@
       .to(gc, { v: 1, duration: 0.25, ease: 'none' }, 2.65)  // lands, rolls the slope
       .to(gc, { v: 0, duration: 0.2, ease: 'none' }, 5.85)   // launches
       .to(gc, { v: 1, duration: 0.25, ease: 'none' }, 7.65); // lands, rolls out
-    // continuous drift on the ambient dots — motion is never absent
-    ambientDots.forEach(function (d, i) {
-      gsap.to(d, { x: (i % 2 ? 22 : -22), y: (i % 3 ? 16 : -16), duration: 3.2 + i * 0.5, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-    });
 
-    // #3 the lesson's colour bleeds into the dark, one waypoint at a time
+    // #3 the lesson's colour bleeds into the dark, one waypoint at a time —
+    // then eases back to EXACTLY #scenarios' own background (#0C0B0B) by the
+    // exit, so the handoff into "YOU HAVE FELT IT BEFORE" has no seam.
     tl.to(bg, { fill: '#120E13', duration: 3.0, ease: 'none' }, 2.35)       // lunch: a first warmth
       .to(bg, { fill: '#0F1016', duration: 2.6, ease: 'none' }, 5.45)       // phone: cool
       .to(bg, { fill: '#171120', duration: 2.2, ease: 'none' }, 7.45)       // crowd: plum
-      .to(bg, { fill: '#221a2c', duration: 3.0, ease: 'none' }, 8.55);      // doorway: the coloured world
+      .to(bg, { fill: '#1A1420', duration: 2.0, ease: 'none' }, 8.55)       // doorway: the coloured world
+      .to(bg, { fill: '#0C0B0B', duration: 1.8, ease: 'none' }, 11.35);     // …and back to black on the way out
 
     // landing shockwaves (in the course group so they ride the camera)
     ILLO.impact(tl, 2.50, course, 700, 720, { size: 150, particles: 5 });
@@ -379,10 +361,11 @@
         e.el.style.opacity = Math.min(0.4, d * 0.02) * (1 - j * 0.22);
         tx = e.x; ty = e.y;
       }
-      // short ground dash under the ball while rolling
+      // short ground dash under the ball while rolling — full white, no wash;
+      // gc.v is the 0/1 grounded↔airborne switch, not an opacity fader
       groundDash.setAttribute('x1', c.x - 14); groundDash.setAttribute('x2', c.x + 14);
       groundDash.setAttribute('y1', c.y + 25); groundDash.setAttribute('y2', c.y + 25);
-      groundDash.style.opacity = gc.v * 0.45;
+      groundDash.style.opacity = gc.v;
     }
     gsap.ticker.add(trailTick);
     ScrollTrigger.create({
