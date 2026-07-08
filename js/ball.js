@@ -27,12 +27,11 @@
       onRepeat: function () { if (physicsOwnsBall()) this.kill(); }
     });
 
-    var tl = gsap.timeline({
-      defaults: { ease: 'none' },
-      scrollTrigger: {
-        trigger: '#intro', start: 'top top', end: 'bottom bottom', scrub: 0.8
-      }
-    });
+    // Same shape as the 8 concept demos: build the whole timeline plain and
+    // paused first, wire it to native scroll with a separate ScrollTrigger.create
+    // once every tween below has been added.
+    var tl = gsap.timeline({ defaults: { ease: 'none' } });
+    tl.pause();
 
     // Giant sentences travel horizontally past the pinned ball
     tl.fromTo(line1, { x: () => window.innerWidth * 0.55 },
@@ -85,5 +84,11 @@
         { el: heroSvg.querySelector('.hero-peer.p2'), r: 11, tone: 'ink', look: [-1, 0] }
       ]);
     }
+
+    // The whole hero timeline is fully built — wire it to native scroll now.
+    ScrollTrigger.create({
+      trigger: '#intro', start: 'top top', end: 'bottom bottom',
+      scrub: 0.8, animation: tl
+    });
   };
 })();

@@ -178,10 +178,13 @@
     gsap.set(anchor, { x: START.x, y: START.y });
     gsap.set(course, { y: 150 }); // start centred on the opening roll line (world y300)
 
-    var tl = gsap.timeline({
-      defaults: { ease: 'none' },
-      scrollTrigger: { trigger: '#story', start: 'top top', end: 'bottom bottom', scrub: 0.8, onUpdate: syncFar }
-    });
+    // Built as a plain, unattached timeline first — exactly the shape the 8
+    // concept demos use (js/main.js: build(svg) -> tl.pause() -> a SEPARATE
+    // ScrollTrigger.create({..., animation: tl}) once the whole timeline
+    // exists). The ScrollTrigger wiring happens at the very end of this
+    // function, after every tween below has been added.
+    var tl = gsap.timeline({ defaults: { ease: 'none' } });
+    tl.pause();
 
     // CAMERA — smooth descent through the beat centres (lags the ball's drops,
     // by design — see the matching ball segment below; lags preserved exactly)
@@ -385,6 +388,13 @@
     ScrollTrigger.create({
       trigger: '#story', start: 'top bottom', end: 'bottom top',
       onToggle: function (s) { active = s.isActive; if (!active) { primed = false; groundDash.style.opacity = 0; echoes.forEach(function (e) { e.el.style.opacity = 0; }); } }
+    });
+
+    // The whole course timeline is fully built — wire it to native scroll now,
+    // in the exact same shape the 8 concept demos use.
+    ScrollTrigger.create({
+      trigger: '#story', start: 'top top', end: 'bottom bottom',
+      scrub: 0.8, animation: tl, onUpdate: syncFar
     });
   };
 })();
