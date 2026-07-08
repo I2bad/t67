@@ -29,12 +29,36 @@
       });
       window.__lenis = lenis; // handy for debugging / console scroll control
       lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add(function (time) {
+      var lastRaf = performance.now();
+      function rafTick(time) {
         // one bad frame inside Lenis must never permanently wedge scrolling —
         // catch so gsap.ticker keeps calling this every subsequent frame
-        try { lenis.raf(time * 1000); } catch (err) { if (window.console) console.error('lenis raf', err); }
-      });
+        try { lenis.raf(time * 1000); lastRaf = performance.now(); } catch (err) { if (window.console) console.error('lenis raf', err); }
+      }
+      gsap.ticker.add(rafTick);
       gsap.ticker.lagSmoothing(0);
+
+      // Watchdog: the whole site's scroll depends on this RAF loop landing
+      // every frame. Battery-saver throttling, a backgrounded tab's paused
+      // rAF, or a heavy main-thread stall can all starve it. If real wheel
+      // input arrives but Lenis hasn't ticked in ~200ms, stop trusting it —
+      // destroy it and let native scroll (which ScrollTrigger already listens
+      // to independently) take over. Passive listener: never blocks the wheel.
+      // Must remove rafTick from the ticker too, or it keeps calling
+      // lenis.raf() on a destroyed instance every frame forever.
+      var watchdogDone = false;
+      function lenisWatchdog() {
+        if (watchdogDone || !lenis) return;
+        if (performance.now() - lastRaf > 200) {
+          watchdogDone = true;
+          if (window.console) console.warn('Lenis raf stalled — falling back to native scroll');
+          gsap.ticker.remove(rafTick);
+          try { lenis.destroy(); } catch (e) {}
+          lenis = null; window.__lenis = null;
+          window.removeEventListener('wheel', lenisWatchdog);
+        }
+      }
+      window.addEventListener('wheel', lenisWatchdog, { passive: true });
     } catch (err) {
       lenis = null;
       if (window.console) console.error('Lenis init failed — falling back to native scroll', err);
