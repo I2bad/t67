@@ -3,12 +3,13 @@
    world) and a BUMPY ball (rolls, falls, lands with squash + shockwave, rolls a
    slope, launches off a ramp, rolls out the doorway). Because the camera is
    smooth and the ball path is bumpy, drops read as real on-screen falls while
-   the camera gives the trip its length. Scroll-scrubbed only (reversible).
+   the camera gives the trip its length. Scroll-scrubbed only (reversible) —
+   the whole thing is one GSAP timeline whose progress is driven by native
+   scrollY via ScrollTrigger's scrub; there is no separate input listener of
+   any kind here. "Hesitation" is a pure visual pause baked into the timeline
+   (the ball's x tween just idles for a beat) — it never touches scroll input.
    Keeps the four waypoint labels + the sentence; keeps ball gradient/shadow/
-   trail/eyes. Exposes window.initStory(ctx).
-
-   COMMIT 1 — core mechanic: camera, physics segments, waypoint pills, parallax
-   set dressing, eyes, trail. (Living obstacles + differentiators land next.) */
+   trail/eyes. Exposes window.initStory(ctx). */
 (function () {
   'use strict';
   var NS = 'http://www.w3.org/2000/svg';
@@ -89,6 +90,11 @@
     rprop('rect', { x: 168, y: 1320, width: 108, height: 196, rx: 22 }, [-18, 222, 1418]);
     heart(300, 962, 12); heart(226, 1052, 10); heart(158, 1150, 9);
     shape('circle', { cx: 336, cy: 1420, r: 12 }); shape('line', { x1: 336, y1: 1432, x2: 330, y2: 1470 });
+    // SAY (phone→crowd transition, world y~1230-1480) — a couple more props so
+    // this stretch isn't empty: a small side table, a second chat bubble
+    shape('rect', { x: 838, y: 1246, width: 70, height: 46, rx: 8 });
+    shape('line', { x1: 856, y1: 1292, x2: 856, y2: 1330 }); shape('line', { x1: 902, y1: 1292, x2: 902, y2: 1330 });
+    shape('rect', { x: 792, y: 1408, width: 84, height: 46, rx: 18 });
     // CROWD — big out-of-focus dots (deep), footprints, a dropped cup
     shape('circle', { cx: 1108, cy: 1632, r: 74 }, true); shape('circle', { cx: 628, cy: 1812, r: 62 }, true); shape('circle', { cx: 1010, cy: 1918, r: 54 }, true);
     [[712, 1982], [758, 2016], [812, 2000], [792, 2052]].forEach(function (p) { shape('ellipse', { cx: p[0], cy: p[1], rx: 11, ry: 6 }); });
@@ -98,6 +104,9 @@
     shape('ellipse', { cx: 720, cy: 2560, rx: 150, ry: 26 });
     C('path', { d: 'M704,2078 L878,2052 L900,2588 L708,2588 Z', 'class': 'door-light' }, far);
     shape('rect', { x: 852, y: 2360, width: 74, height: 74, rx: 10 });
+    // DO (doorway zone) — a couple more props: a wall frame, a small plant
+    shape('rect', { x: 430, y: 2064, width: 52, height: 68, rx: 4 }); shape('line', { x1: 442, y1: 2076, x2: 470, y2: 2076 });
+    shape('circle', { cx: 966, cy: 2258, r: 20 }); shape('line', { x1: 966, y1: 2258, x2: 966, y2: 2292 });
     // ambient props between beats (tiny — discover, not notice)
     shape('path', { d: 'M330,948 l34,-14 l-14,30 l-8,-14 Z' });               // paper plane
     shape('path', { d: 'M1060,1498 q14,-12 27,-1 q-3,21 -27,14 Z' });         // sock
@@ -174,60 +183,62 @@
       scrollTrigger: { trigger: '#story', start: 'top top', end: 'bottom bottom', scrub: 0.8, onUpdate: syncFar }
     });
 
-    // CAMERA — smooth descent through the beat centres (lags the ball's drops)
-    tl.to(course, { y: -270, duration: 3.4, ease: 'power1.inOut' }, 0)       // → lunch
-      .to(course, { y: -730, duration: 3.0, ease: 'power1.inOut' }, 4.6)     // → phone
-      .to(course, { y: -1270, duration: 2.6, ease: 'power1.inOut' }, 7.0)    // → crowd
-      .to(course, { y: -1870, duration: 3.0, ease: 'power1.inOut' }, 9.6);   // → doorway
+    // CAMERA — smooth descent through the beat centres (lags the ball's drops,
+    // by design — see the matching ball segment below; lags preserved exactly)
+    tl.to(course, { y: -270, duration: 2.35, ease: 'power1.inOut' }, 0)      // → lunch (opening compressed, see below)
+      .to(course, { y: -730, duration: 3.0, ease: 'power1.inOut' }, 3.55)    // → phone
+      .to(course, { y: -1270, duration: 2.6, ease: 'power1.inOut' }, 5.95)   // → crowd
+      .to(course, { y: -1870, duration: 3.0, ease: 'power1.inOut' }, 8.55);  // → doorway
 
-    // BALL — bumpy physics segments
-    tl.to(anchor, { x: 632, duration: 2.0 }, 0)                              // roll the opening line
-      .to(anchor, { x: 664, duration: 0.4, ease: 'power2.in' }, 2.0)         // creep to the lip
-      // #2 HESITATION — it tips to the edge and resists (scroll continues, the
-      // ball hovers, peering down) before it commits. A protagonist deciding.
-      .to(anchor, { x: 676, duration: 0.35, ease: 'power1.inOut' }, 2.4)     // hover at the lip
-      .to(anchor, { y: 720, duration: 0.9, ease: 'power2.in' }, 2.75)        // COMMIT: fall (accelerate)
-      .to(anchor, { x: 662, duration: 0.9, ease: 'power1.in' }, 2.75)        // onto the pill's EDGE (uneven dip)
-      .to(ballCircle, { scaleX: 1.4, scaleY: 0.58, duration: 0.1, ease: 'power2.in' }, 3.5)   // land squash
-      .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 1.0, ease: 'elastic.out(1, 0.35)' }, 3.62)
-      .to(anchor, { y: 690, duration: 0.28, ease: 'power2.out' }, 3.62)      // small bounce
-      .to(anchor, { y: 720, duration: 0.5, ease: 'bounce.out' }, 3.9)
-      .to(anchor, { x: 520, y: 1180, duration: 2.0, ease: 'power1.inOut' }, 4.7) // roll the slope
-      .to(anchor, { y: 1088, duration: 0.7, ease: 'power2.out' }, 7.0)       // launch: up
-      .to(anchor, { x: 880, duration: 1.6, ease: 'none' }, 7.0)              // launch: across
-      .to(anchor, { y: 1720, duration: 0.9, ease: 'power2.in' }, 7.7)        // launch: down
-      .to(ballCircle, { scaleX: 1.32, scaleY: 0.64, duration: 0.1, ease: 'power2.in' }, 8.5)  // crowd land squash
-      .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.85, ease: 'elastic.out(1, 0.4)' }, 8.6)
-      .to(anchor, { x: 720, y: 2320, duration: 2.4, ease: 'power1.inOut' }, 9.6)  // roll to the doorway
+    // BALL — bumpy physics segments. The opening (roll/creep/hesitate) is
+    // deliberately short: the course should get to its first payoff fast.
+    tl.to(anchor, { x: 632, duration: 1.1 }, 0)                              // roll the opening line
+      .to(anchor, { x: 664, duration: 0.3, ease: 'power2.in' }, 1.1)         // creep to the lip
+      // HESITATION — purely visual: the ball's x idles at the lip for a beat
+      // while the timeline (and scroll) keep moving; it never blocks input.
+      .to(anchor, { x: 676, duration: 0.3, ease: 'power1.inOut' }, 1.4)      // hover at the lip
+      .to(anchor, { y: 720, duration: 0.9, ease: 'power2.in' }, 1.7)         // COMMIT: fall (accelerate)
+      .to(anchor, { x: 662, duration: 0.9, ease: 'power1.in' }, 1.7)         // onto the pill's EDGE (uneven dip)
+      .to(ballCircle, { scaleX: 1.4, scaleY: 0.58, duration: 0.1, ease: 'power2.in' }, 2.45)   // land squash
+      .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 1.0, ease: 'elastic.out(1, 0.35)' }, 2.57)
+      .to(anchor, { y: 690, duration: 0.28, ease: 'power2.out' }, 2.57)      // small bounce
+      .to(anchor, { y: 720, duration: 0.5, ease: 'bounce.out' }, 2.85)
+      .to(anchor, { x: 520, y: 1180, duration: 2.0, ease: 'power1.inOut' }, 3.65) // roll the slope
+      .to(anchor, { y: 1088, duration: 0.7, ease: 'power2.out' }, 5.95)      // launch: up
+      .to(anchor, { x: 880, duration: 1.6, ease: 'none' }, 5.95)             // launch: across
+      .to(anchor, { y: 1720, duration: 0.9, ease: 'power2.in' }, 6.65)       // launch: down
+      .to(ballCircle, { scaleX: 1.32, scaleY: 0.64, duration: 0.1, ease: 'power2.in' }, 7.45)  // crowd land squash
+      .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.85, ease: 'elastic.out(1, 0.4)' }, 7.55)
+      .to(anchor, { x: 720, y: 2320, duration: 2.4, ease: 'power1.inOut' }, 8.55)  // roll to the doorway
       // THE EXIT: it rolls THROUGH the doorway and out, alone, eyes forward —
       // straight into "YOU HAVE FELT IT BEFORE"
-      .to(anchor, { y: 2560, duration: 1.1, ease: 'power1.in' }, 12.4);
+      .to(anchor, { y: 2560, duration: 1.1, ease: 'power1.in' }, 11.35);
 
     // camera follows the ball out through the door
-    tl.to(course, { y: -2110, duration: 1.3, ease: 'power1.inOut' }, 12.5);
+    tl.to(course, { y: -2110, duration: 1.3, ease: 'power1.inOut' }, 11.45);
 
     // ground-contact dash: a short mark under the ball WHILE it rolls, fading
     // out while airborne. The only ground hint — never drawn ahead of the ball.
     var groundDash = C('line', { 'class': 'ground-dash' }, svg);
     var gc = { v: 1 };
-    tl.to(gc, { v: 0, duration: 0.2, ease: 'none' }, 2.5)    // leaves the lip → airborne
-      .to(gc, { v: 1, duration: 0.25, ease: 'none' }, 3.7)   // lands, rolls the slope
-      .to(gc, { v: 0, duration: 0.2, ease: 'none' }, 6.9)    // launches
-      .to(gc, { v: 1, duration: 0.25, ease: 'none' }, 8.7);  // lands, rolls out
+    tl.to(gc, { v: 0, duration: 0.2, ease: 'none' }, 1.45)   // leaves the lip → airborne
+      .to(gc, { v: 1, duration: 0.25, ease: 'none' }, 2.65)  // lands, rolls the slope
+      .to(gc, { v: 0, duration: 0.2, ease: 'none' }, 5.85)   // launches
+      .to(gc, { v: 1, duration: 0.25, ease: 'none' }, 7.65); // lands, rolls out
     // continuous drift on the ambient dots — motion is never absent
     ambientDots.forEach(function (d, i) {
       gsap.to(d, { x: (i % 2 ? 22 : -22), y: (i % 3 ? 16 : -16), duration: 3.2 + i * 0.5, yoyo: true, repeat: -1, ease: 'sine.inOut' });
     });
 
     // #3 the lesson's colour bleeds into the dark, one waypoint at a time
-    tl.to(bg, { fill: '#120E13', duration: 3.0, ease: 'none' }, 3.4)       // lunch: a first warmth
-      .to(bg, { fill: '#0F1016', duration: 2.6, ease: 'none' }, 6.5)       // phone: cool
-      .to(bg, { fill: '#171120', duration: 2.2, ease: 'none' }, 8.5)       // crowd: plum
-      .to(bg, { fill: '#221a2c', duration: 3.0, ease: 'none' }, 9.6);      // doorway: the coloured world
+    tl.to(bg, { fill: '#120E13', duration: 3.0, ease: 'none' }, 2.35)       // lunch: a first warmth
+      .to(bg, { fill: '#0F1016', duration: 2.6, ease: 'none' }, 5.45)       // phone: cool
+      .to(bg, { fill: '#171120', duration: 2.2, ease: 'none' }, 7.45)       // crowd: plum
+      .to(bg, { fill: '#221a2c', duration: 3.0, ease: 'none' }, 8.55);      // doorway: the coloured world
 
     // landing shockwaves (in the course group so they ride the camera)
-    ILLO.impact(tl, 3.55, course, 700, 720, { size: 150, particles: 5 });
-    ILLO.impact(tl, 8.52, course, 880, 1720, { size: 130, particles: 4 });
+    ILLO.impact(tl, 2.50, course, 700, 720, { size: 150, particles: 5 });
+    ILLO.impact(tl, 7.47, course, 880, 1720, { size: 130, particles: 4 });
 
     // waypoint reveals — copy delivered by impact, not fade
     function land(w, t) {
@@ -238,7 +249,7 @@
         .to(w.g, { y: 4, duration: 0.1, ease: 'power2.out' }, t)             // dip under the ball's weight
         .to(w.g, { y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' }, t + 0.1);
     }
-    land(wp.lunch, 3.55); land(wp.phone, 6.5); land(wp.crowd, 8.52); land(wp.door, 12.0);
+    land(wp.lunch, 2.50); land(wp.phone, 5.45); land(wp.crowd, 7.47); land(wp.door, 10.95);
 
     // #4 IMPACT ON TYPE (once only) — the phone label's letters scatter as
     // physics objects when the ball rolls on, then reassemble into the pill
@@ -254,13 +265,13 @@
         var ang = Math.random() * Math.PI * 2, dist = 46 + Math.random() * 66;
         gsap.set(lt, { opacity: 0, transformOrigin: x0 + 'px ' + y0 + 'px' });
         tl.fromTo(lt, { opacity: 0, x: 0, y: 0, rotation: 0 },
-          { opacity: 1, x: Math.cos(ang) * dist, y: Math.sin(ang) * dist - 34, rotation: (Math.random() - 0.5) * 140, duration: 0.32, ease: 'power2.out', immediateRender: false }, 6.42 + i * 0.015)
-          .to(lt, { x: 0, y: 0, rotation: 0, duration: 0.72, ease: 'back.out(1.5)' }, 6.86 + i * 0.02); // reassemble
+          { opacity: 1, x: Math.cos(ang) * dist, y: Math.sin(ang) * dist - 34, rotation: (Math.random() - 0.5) * 140, duration: 0.32, ease: 'power2.out', immediateRender: false }, 5.37 + i * 0.015)
+          .to(lt, { x: 0, y: 0, rotation: 0, duration: 0.72, ease: 'back.out(1.5)' }, 5.81 + i * 0.02); // reassemble
       });
     })();
 
     // sentence pills pop as the ball passes
-    var wordTimes = [1.0, 3.7, 5.2, 6.7, 8.1, 11.2];
+    var wordTimes = [0.5, 2.65, 4.15, 5.65, 7.05, 10.15];
     wordPills.forEach(function (g, i) {
       gsap.set(g, { opacity: 0, scale: 0.6, transformOrigin: WORDS[i][1] + 'px ' + WORDS[i][2] + 'px' });
       tl.to(g, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, wordTimes[i]);
@@ -274,32 +285,32 @@
       C('circle', { cx: 742, cy: 702, r: 14, 'class': 'peer story-npc' }, peersG)
     ];
     var lw = BEAT.lunch.label.length * 15.5 + 64;
-    tl.to(wp.lunch.g, { rotation: -3.4, transformOrigin: (BEAT.lunch.x + lw / 2) + 'px 720px', duration: 0.12, ease: 'power2.out' }, 3.55)
-      .to(wp.lunch.g, { rotation: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)' }, 3.7)
-      .to(lunchDots[0], { attr: { cx: 588 }, duration: 0.5, ease: 'power2.out' }, 3.62)   // grudging shuffle
-      .to(lunchDots[1], { attr: { cx: 808 }, duration: 0.6, ease: 'power2.out' }, 3.76);
+    tl.to(wp.lunch.g, { rotation: -3.4, transformOrigin: (BEAT.lunch.x + lw / 2) + 'px 720px', duration: 0.12, ease: 'power2.out' }, 2.50)
+      .to(wp.lunch.g, { rotation: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)' }, 2.65)
+      .to(lunchDots[0], { attr: { cx: 588 }, duration: 0.5, ease: 'power2.out' }, 2.57)   // grudging shuffle
+      .to(lunchDots[1], { attr: { cx: 808 }, duration: 0.6, ease: 'power2.out' }, 2.71);
 
     // CROWD (centerpiece) — the ball lands among living dots; they close in
     // behind it (the path narrows), then CARRY it off its line a short way.
     var crowdPts = [[742, 1660, 16], [1010, 1662, 15], [1028, 1786, 17], [760, 1822, 15], [690, 1742, 14], [980, 1844, 16], [906, 1606, 15]];
     var crowd = crowdPts.map(function (d) { return C('circle', { cx: d[0], cy: d[1], r: d[2], 'class': 'peer story-npc' }, peersG); });
-    tl.to(crowd[4], { attr: { cx: 812, cy: 1712 }, duration: 0.7, ease: 'power2.inOut' }, 8.6)   // close in behind the wake
-      .to(crowd[0], { attr: { cx: 828, cy: 1654 }, duration: 0.7, ease: 'power2.inOut' }, 8.7)
-      .to(crowd[6], { attr: { cx: 872, cy: 1634 }, duration: 0.7, ease: 'power2.inOut' }, 8.8);
-    tl.to(ball, { y: -48, x: 78, duration: 0.7, ease: 'power2.out' }, 8.75)   // lifted off its line — crowd-passed
-      .to(ball, { y: 0, x: 0, duration: 0.8, ease: 'power2.inOut' }, 9.45);   // set back down on its line
-    tl.to(crowd[1], { attr: { cx: 994, cy: 1690 }, duration: 0.7, ease: 'power2.out' }, 8.8)   // dots that carry it
-      .to(crowd[2], { attr: { cx: 964, cy: 1706 }, duration: 0.7, ease: 'power2.out' }, 8.85)
-      .to([crowd[1], crowd[2]], { attr: { cy: '+=28' }, duration: 0.8, ease: 'power2.inOut' }, 9.45); // release
+    tl.to(crowd[4], { attr: { cx: 812, cy: 1712 }, duration: 0.7, ease: 'power2.inOut' }, 7.55)   // close in behind the wake
+      .to(crowd[0], { attr: { cx: 828, cy: 1654 }, duration: 0.7, ease: 'power2.inOut' }, 7.65)
+      .to(crowd[6], { attr: { cx: 872, cy: 1634 }, duration: 0.7, ease: 'power2.inOut' }, 7.75);
+    tl.to(ball, { y: -48, x: 78, duration: 0.7, ease: 'power2.out' }, 7.70)   // lifted off its line — crowd-passed
+      .to(ball, { y: 0, x: 0, duration: 0.8, ease: 'power2.inOut' }, 8.40);   // set back down on its line
+    tl.to(crowd[1], { attr: { cx: 994, cy: 1690 }, duration: 0.7, ease: 'power2.out' }, 7.75)   // dots that carry it
+      .to(crowd[2], { attr: { cx: 964, cy: 1706 }, duration: 0.7, ease: 'power2.out' }, 7.80)
+      .to([crowd[1], crowd[2]], { attr: { cy: '+=28' }, duration: 0.8, ease: 'power2.inOut' }, 8.40); // release
 
     // FOLLOWER — one dot peels off and trails the ball to the door, a step
     // behind; it stops dead at the threshold and cannot cross. Ball exits alone.
     var follower = C('circle', { cx: 942, cy: 1742, r: 15, 'class': 'peer story-npc' }, peersG);
     gsap.set(follower, { opacity: 0 });
-    tl.to(follower, { opacity: 0.85, duration: 0.4 }, 9.5)
-      .to(follower, { attr: { cx: 806, cy: 2140 }, duration: 2.4, ease: 'power1.inOut' }, 9.6)  // trails to the threshold
-      .to(follower, { attr: { cx: 786 }, duration: 0.3, ease: 'power2.out' }, 12.2)             // reaches for the door…
-      .to(follower, { attr: { cx: 806 }, duration: 0.6, ease: 'back.out(2)' }, 12.5);           // …can't cross — recoils, stays behind
+    tl.to(follower, { opacity: 0.85, duration: 0.4 }, 8.45)
+      .to(follower, { attr: { cx: 806, cy: 2140 }, duration: 2.4, ease: 'power1.inOut' }, 8.55)  // trails to the threshold
+      .to(follower, { attr: { cx: 786 }, duration: 0.3, ease: 'power2.out' }, 11.15)             // reaches for the door…
+      .to(follower, { attr: { cx: 806 }, duration: 0.6, ease: 'back.out(2)' }, 11.45);           // …can't cross — recoils, stays behind
 
     // #5 THE COUNTER CHASES — at the phone the like-badge (reused from Online)
     // detaches, chases the ball, ringing up, until the crowd bounce flings it off
@@ -308,26 +319,26 @@
     var bnum = C('text', { x: 0, y: 6, 'class': 'badge-num' }, badge); bnum.textContent = '0';
     gsap.set(badge, { opacity: 0, x: 560, y: 1150 });
     var bn = { v: 0 };
-    tl.to(badge, { opacity: 1, duration: 0.3 }, 6.3)                                  // pops off the phone
-      .to(badge, { x: 660, y: 1300, duration: 0.9, ease: 'power1.inOut' }, 6.6)       // gives chase…
-      .to(badge, { x: 812, y: 1660, duration: 1.2, ease: 'power1.inOut' }, 7.6)       // …trailing through the launch
-      .to(bn, { v: 214, duration: 2.0, ease: 'power1.in', onUpdate: function () { bnum.textContent = bn.v > 99 ? '99+' : Math.floor(bn.v); } }, 6.5)
-      .to(badge, { x: 1080, y: 1540, rotation: 40, duration: 0.5, ease: 'power2.out' }, 8.55)  // flung off on the bounce
-      .to(badge, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 8.7);
+    tl.to(badge, { opacity: 1, duration: 0.3 }, 5.25)                                  // pops off the phone
+      .to(badge, { x: 660, y: 1300, duration: 0.9, ease: 'power1.inOut' }, 5.55)       // gives chase…
+      .to(badge, { x: 812, y: 1660, duration: 1.2, ease: 'power1.inOut' }, 6.55)       // …trailing through the launch
+      .to(bn, { v: 214, duration: 2.0, ease: 'power1.in', onUpdate: function () { bnum.textContent = bn.v > 99 ? '99+' : Math.floor(bn.v); } }, 5.45)
+      .to(badge, { x: 1080, y: 1540, rotation: 40, duration: 0.5, ease: 'power2.out' }, 7.50)  // flung off on the bounce
+      .to(badge, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 7.65);
 
     /* ---------- eyes: look ahead, glance down before drops, shut on landings,
        and SNAP WIDE when the crowd carries it ---------- */
     ILLO.faces(svg, tl, [{
       el: ballCircle, r: 26, tone: 'ink', look: [1, 0],
       steps: [
-        [2.4, 0.15, 1, 1, 0.35],       // peer down at the lip (hesitation)
-        [2.9, 0, 1, 0.4, 0.3],         // down + narrow through the fall
-        [3.5, 0, 0, 0.05, 0.1],        // squeeze shut on impact
-        [3.9, 1, 0, 1, 0.5],           // open, look ahead
-        [7.5, 0.2, 0.8, 1, 0.4],       // glance down before the crowd drop
-        [8.5, 0, 0, 0.05, 0.1],        // shut on the crowd landing
-        [8.85, -0.2, -0.2, 1.7, 0.3],  // eyes SNAP WIDE — carried, didn't choose this
-        [9.5, 1, 0, 1, 0.6]            // set down, recover, look ahead to the door
+        [1.35, 0.15, 1, 1, 0.3],       // peer down at the lip (hesitation)
+        [1.85, 0, 1, 0.4, 0.3],        // down + narrow through the fall
+        [2.45, 0, 0, 0.05, 0.1],       // squeeze shut on impact
+        [2.85, 1, 0, 1, 0.5],          // open, look ahead
+        [6.45, 0.2, 0.8, 1, 0.4],      // glance down before the crowd drop
+        [7.45, 0, 0, 0.05, 0.1],       // shut on the crowd landing
+        [7.80, -0.2, -0.2, 1.7, 0.3],  // eyes SNAP WIDE — carried, didn't choose this
+        [8.45, 1, 0, 1, 0.6]           // set down, recover, look ahead to the door
       ]
     }]);
     // the crowd + lunch dots watch the ball; the follower keeps its eyes on it

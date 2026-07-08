@@ -16,15 +16,29 @@
      physics and WebGL all run off gsap.ticker. */
   var lenis = null;
   if (!reduced) {
-    lenis = new Lenis({
-      duration: 1.35,
-      easing: function (t) { return 1 - Math.pow(1 - t, 3.4); },
-      smoothWheel: true
-    });
-    window.__lenis = lenis; // handy for debugging / console scroll control
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
+    // Hardening: if Lenis fails to construct (a blocked CDN script, a hostile
+    // extension, etc.) this must NOT throw here — a synchronous throw at
+    // top-level would abort every statement below it in this file, including
+    // all the hash-nav/menu/section wiring. Native browser scroll still works
+    // with lenis === null; ScrollTrigger just reads the native scrollY.
+    try {
+      lenis = new Lenis({
+        duration: 1.35,
+        easing: function (t) { return 1 - Math.pow(1 - t, 3.4); },
+        smoothWheel: true
+      });
+      window.__lenis = lenis; // handy for debugging / console scroll control
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function (time) {
+        // one bad frame inside Lenis must never permanently wedge scrolling —
+        // catch so gsap.ticker keeps calling this every subsequent frame
+        try { lenis.raf(time * 1000); } catch (err) { if (window.console) console.error('lenis raf', err); }
+      });
+      gsap.ticker.lagSmoothing(0);
+    } catch (err) {
+      lenis = null;
+      if (window.console) console.error('Lenis init failed — falling back to native scroll', err);
+    }
   }
 
   var hashScrollTimer = null, lastHashRefresh = 0;
@@ -316,11 +330,18 @@
      Booted BEFORE initHero so ball.js knows whether physics owns the ball. */
   function bootLayers(tier) {
     if (reduced) return;
-    if (tier !== 'low' && window.initBackgroundGL && !window.BG) {
-      window.BG = window.initBackgroundGL(tier);
-    }
-    if (tier === 'high' && window.initHeroPhysics && !window.PHYSICS && !QUALITY.mobile) {
-      window.PHYSICS = window.initHeroPhysics();
+    // Hardening: WebGL/Matter.js init can throw on odd GPU/driver combos —
+    // that must stay contained here, never abort the rest of this script
+    // (initHero/initStory/menu/hash-nav all run AFTER this call).
+    try {
+      if (tier !== 'low' && window.initBackgroundGL && !window.BG) {
+        window.BG = window.initBackgroundGL(tier);
+      }
+      if (tier === 'high' && window.initHeroPhysics && !window.PHYSICS && !QUALITY.mobile) {
+        window.PHYSICS = window.initHeroPhysics();
+      }
+    } catch (err) {
+      if (window.console) console.error('bootLayers failed — continuing without WebGL/physics', err);
     }
   }
   bootLayers(QUALITY.tier);
@@ -330,16 +351,22 @@
     if (tier === 'low' && window.BG) { BG.destroy(); window.BG = null; }
   });
 
-  /* ---------- Hero + storytelling (ball.js / storytelling.js) ---------- */
+  /* ---------- Hero + storytelling (ball.js / storytelling.js) ----------
+     Hardening: matchMedia invokes this callback SYNCHRONOUSLY when the query
+     already matches, as a plain statement in this IIFE — an uncaught throw
+     here would abort everything below (magnetic hovers, cursor, zoom
+     transition, font-ready refresh). A half-built scrub timeline can also
+     leave the sticky course frozen on one frame for its whole scroll range,
+     which reads exactly like "scroll stopped working" even though it hasn't. */
   var mm = gsap.matchMedia();
   mm.add('(min-width: 769px)', function () {
-    window.initHero(ctx);
+    try { window.initHero(ctx); } catch (err) { if (window.console) console.error('initHero failed', err); }
   });
   mm.add('(max-width: 768px)', function () {
     // mobile: no kinetic scrub — park the sentences readably
     gsap.set('.hero-line', { position: 'relative', top: 'auto', bottom: 'auto', x: 0, margin: '1rem 1.25rem' });
   });
-  window.initStory(ctx);
+  try { window.initStory(ctx); } catch (err) { if (window.console) console.error('initStory failed', err); }
 
   /* ---------- Scenario showcase: pinned horizontal slider (desktop) ---------- */
   mm.add('(min-width: 769px)', function () {

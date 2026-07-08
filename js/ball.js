@@ -45,9 +45,11 @@
     // otherwise real collisions produce it (Phase 2 wow moment #1).
     tl.call(function () {}, [], 3); // keep timeline length stable either way
     if (!physicsOwnsBall()) {
-      // Peer dots slide in along the line...
-      tl.to('.hero-peer.p1', { attr: { cx: 790 }, duration: 2, ease: EASE.in }, 3)
-        .to('.hero-peer.p2', { attr: { cx: 866 }, duration: 2, ease: EASE.in }, 3.2);
+      // Peer dots are already on-screen at load (idle-breathing continuously,
+      // see main.js) — they start sliding in almost immediately, so the
+      // opening scroll never reads as "just a ball zoom with nothing else moving"
+      tl.to('.hero-peer.p1', { attr: { cx: 790 }, duration: 1.3, ease: EASE.in }, 1.0)
+        .to('.hero-peer.p2', { attr: { cx: 866 }, duration: 1.3, ease: EASE.in }, 1.2);
 
       // ...anticipation: the first dot pulls back a touch before striking
       tl.to('.hero-peer.p1', { attr: { cx: 812 }, duration: 0.3, ease: EASE.soft }, 4.7)
