@@ -417,7 +417,7 @@ html.reduced .footprints { stroke-dashoffset: 0; }
 /* ============================================================
    Hero
    ============================================================ */
-#intro { height: 320vh; position: relative; }
+#intro { height: 200vh; position: relative; }
 .hero-stage {
   position: sticky; top: 0; height: 100vh; overflow: hidden;
   display: flex; align-items: center;
@@ -445,15 +445,19 @@ html.reduced .footprints { stroke-dashoffset: 0; }
    Storytelling stretch
    ============================================================ */
 /* the intro obstacle course — a long pinned scrub the ball travels through */
-#story { height: 520vh; position: relative; }
+#story { height: 430vh; position: relative; }
 .story-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 #storySvg { width: 100%; height: 100%; }
 /* set dressing: giant thin outlines, two depths, the section's cream ink */
 .course-bg { pointer-events: none; }
 .course-shape { fill: none; stroke: var(--cream); stroke-linecap: round; stroke-width: 2; opacity: 0.13; }
 .course-shape.deep { opacity: 0.06; stroke-width: 1.6; }
-/* the track the ball rolls on — brighter than set dressing (it's the floor) */
-.course-track-line { fill: none; stroke: var(--cream); stroke-width: 3; stroke-linecap: round; opacity: 0.32; }
+/* the only ground hint: a short dash that rides just under the rolling ball */
+.ground-dash { stroke: var(--cream); stroke-width: 3; stroke-linecap: round; opacity: 0; pointer-events: none; }
+/* soft light spilling through the doorway (a glow, not a solid prop) */
+.door-light { fill: var(--cream); opacity: 0.05; pointer-events: none; }
+/* ambient drifting dots — faint background life down the course */
+.story-ambient { fill: var(--cream); opacity: 0.28; }
 /* waypoint pills: thin outline until the ball lands, then a filled cream pill */
 .wp-box { fill: rgba(247, 245, 240, 0); stroke: var(--cream); stroke-width: 2.6; opacity: 0.55; }
 .wp-text { font-family: var(--font-mono); font-size: 27px; fill: #141313; text-anchor: middle; opacity: 0; }

@@ -70,15 +70,47 @@
     shape('circle', { cx: 828, cy: 2330, r: 7 });                            // knob
     shape('rect', { x: 500, y: 1990, width: 440, height: 660, rx: 14 }, true);
 
-    /* ---------- the track: thin lines the ball actually rolls on ----------
-       laid at ball-bottom (world y + 26); the opening line simply ends, and
-       the ball falls off it onto the lunch table. */
-    var track = svg.querySelector('.course-track');
-    function trk(d) { return C('path', { d: d, 'class': 'course-track-line' }, track); }
-    trk('M180,326 H690');                       // the opening line (ends → drop)
-    trk('M700,748 L520,1208');                  // slope down to the phone
-    trk('M452,1236 L612,1150');                 // the launch ramp
-    trk('M880,1746 L720,2346');                 // the run-out to the doorway
+    /* ---------- densified scene props: outline-only, clear of path + pills ---------- */
+    function rprop(tag, attrs, r, deep) { var e = shape(tag, attrs, deep); if (r) e.setAttribute('transform', 'rotate(' + r[0] + ' ' + r[1] + ' ' + r[2] + ')'); return e; }
+    function heart(cx, cy, s, deep) {
+      return shape('path', { d: 'M' + cx + ',' + (cy + s * 0.35) + ' C' + (cx - s * 1.1) + ',' + (cy - s * 0.35) + ' ' + (cx - s * 0.5) + ',' + (cy - s * 1.05) + ' ' + cx + ',' + (cy - s * 0.35) + ' C' + (cx + s * 0.5) + ',' + (cy - s * 1.05) + ' ' + (cx + s * 1.1) + ',' + (cy - s * 0.35) + ' ' + cx + ',' + (cy + s * 0.35) + ' Z' }, deep);
+    }
+    // LUNCH — chairs (one pulled out, one tipped over), trays + cups, crumpled paper (all right of the down-left exit)
+    shape('rect', { x: 980, y: 742, width: 66, height: 66, rx: 12 });
+    shape('rect', { x: 1082, y: 806, width: 66, height: 66, rx: 12 });
+    rprop('rect', { x: 872, y: 918, width: 64, height: 64, rx: 12 }, [44, 904, 950]);
+    shape('rect', { x: 812, y: 780, width: 62, height: 26, rx: 6 });
+    shape('circle', { cx: 858, cy: 762, r: 10 }); shape('circle', { cx: 928, cy: 792, r: 9 });
+    shape('circle', { cx: 1016, cy: 902, r: 13 }); shape('circle', { cx: 1016, cy: 902, r: 7 });
+    // PHONE — chat bubbles rising, a face-down phone, scattered hearts, an earbud (all left of the phone)
+    shape('rect', { x: 196, y: 1006, width: 96, height: 52, rx: 20 });
+    shape('rect', { x: 236, y: 1092, width: 78, height: 44, rx: 18 });
+    shape('rect', { x: 184, y: 1188, width: 108, height: 56, rx: 22 });
+    rprop('rect', { x: 168, y: 1320, width: 108, height: 196, rx: 22 }, [-18, 222, 1418]);
+    heart(300, 962, 12); heart(226, 1052, 10); heart(158, 1150, 9);
+    shape('circle', { cx: 336, cy: 1420, r: 12 }); shape('line', { x1: 336, y1: 1432, x2: 330, y2: 1470 });
+    // CROWD — big out-of-focus dots (deep), footprints, a dropped cup
+    shape('circle', { cx: 1108, cy: 1632, r: 74 }, true); shape('circle', { cx: 628, cy: 1812, r: 62 }, true); shape('circle', { cx: 1010, cy: 1918, r: 54 }, true);
+    [[712, 1982], [758, 2016], [812, 2000], [792, 2052]].forEach(function (p) { shape('ellipse', { cx: p[0], cy: p[1], rx: 11, ry: 6 }); });
+    rprop('rect', { x: 686, y: 1852, width: 42, height: 24, rx: 8 }, [24, 707, 1864]);
+    // DOORWAY — coat hook, floor mat, a soft light wedge, a chair facing away
+    shape('path', { d: 'M604,2108 h20 v14' });
+    shape('ellipse', { cx: 720, cy: 2560, rx: 150, ry: 26 });
+    C('path', { d: 'M704,2078 L878,2052 L900,2588 L708,2588 Z', 'class': 'door-light' }, far);
+    shape('rect', { x: 852, y: 2360, width: 74, height: 74, rx: 10 });
+    // ambient props between beats (tiny — discover, not notice)
+    shape('path', { d: 'M330,948 l34,-14 l-14,30 l-8,-14 Z' });               // paper plane
+    shape('path', { d: 'M1060,1498 q14,-12 27,-1 q-3,21 -27,14 Z' });         // sock
+    shape('circle', { cx: 596, cy: 2016, r: 9 }); shape('circle', { cx: 596, cy: 2016, r: 4 }); // bottle cap
+
+    // ambient drifting dots down the whole course — something is always in
+    // motion, so the scroll never reads as dead (kept off the ball's path)
+    var ambient = [[196, 440, 8], [1190, 700, 7], [232, 980, 7], [1210, 1420, 8], [980, 2040, 7], [300, 2200, 7], [1160, 2360, 8]];
+    var ambientDots = ambient.map(function (a) { return C('circle', { cx: a[0], cy: a[1], r: a[2], 'class': 'peer story-ambient' }, far); });
+
+    // No telegraph line: the ball's ghost trail shows where it's BEEN, and the
+    // props/pill edges are the ground. The only hint is a short ~28px dash that
+    // follows just under the ball while it's rolling (built with the trail).
 
     /* ---------- waypoint pills: outline → fill + stamp + dip on landing ---------- */
     function waypoint(beat) {
@@ -166,7 +198,26 @@
       .to(anchor, { y: 1720, duration: 0.9, ease: 'power2.in' }, 7.7)        // launch: down
       .to(ballCircle, { scaleX: 1.32, scaleY: 0.64, duration: 0.1, ease: 'power2.in' }, 8.5)  // crowd land squash
       .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.85, ease: 'elastic.out(1, 0.4)' }, 8.6)
-      .to(anchor, { x: 720, y: 2320, duration: 2.6, ease: 'power1.inOut' }, 9.6); // roll out the door
+      .to(anchor, { x: 720, y: 2320, duration: 2.4, ease: 'power1.inOut' }, 9.6)  // roll to the doorway
+      // THE EXIT: it rolls THROUGH the doorway and out, alone, eyes forward —
+      // straight into "YOU HAVE FELT IT BEFORE"
+      .to(anchor, { y: 2560, duration: 1.1, ease: 'power1.in' }, 12.4);
+
+    // camera follows the ball out through the door
+    tl.to(course, { y: -2110, duration: 1.3, ease: 'power1.inOut' }, 12.5);
+
+    // ground-contact dash: a short mark under the ball WHILE it rolls, fading
+    // out while airborne. The only ground hint — never drawn ahead of the ball.
+    var groundDash = C('line', { 'class': 'ground-dash' }, svg);
+    var gc = { v: 1 };
+    tl.to(gc, { v: 0, duration: 0.2, ease: 'none' }, 2.5)    // leaves the lip → airborne
+      .to(gc, { v: 1, duration: 0.25, ease: 'none' }, 3.7)   // lands, rolls the slope
+      .to(gc, { v: 0, duration: 0.2, ease: 'none' }, 6.9)    // launches
+      .to(gc, { v: 1, duration: 0.25, ease: 'none' }, 8.7);  // lands, rolls out
+    // continuous drift on the ambient dots — motion is never absent
+    ambientDots.forEach(function (d, i) {
+      gsap.to(d, { x: (i % 2 ? 22 : -22), y: (i % 3 ? 16 : -16), duration: 3.2 + i * 0.5, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    });
 
     // #3 the lesson's colour bleeds into the dark, one waypoint at a time
     tl.to(bg, { fill: '#120E13', duration: 3.0, ease: 'none' }, 3.4)       // lunch: a first warmth
@@ -246,9 +297,9 @@
     var follower = C('circle', { cx: 942, cy: 1742, r: 15, 'class': 'peer story-npc' }, peersG);
     gsap.set(follower, { opacity: 0 });
     tl.to(follower, { opacity: 0.85, duration: 0.4 }, 9.5)
-      .to(follower, { attr: { cx: 832, cy: 2214 }, duration: 2.4, ease: 'power1.inOut' }, 9.6)  // trails to the threshold
-      .to(follower, { attr: { cx: 814 }, duration: 0.3, ease: 'power2.out' }, 12.0)             // reaches for the door…
-      .to(follower, { attr: { cx: 830 }, duration: 0.55, ease: 'back.out(2)' }, 12.3);          // …can't cross — recoils
+      .to(follower, { attr: { cx: 806, cy: 2140 }, duration: 2.4, ease: 'power1.inOut' }, 9.6)  // trails to the threshold
+      .to(follower, { attr: { cx: 786 }, duration: 0.3, ease: 'power2.out' }, 12.2)             // reaches for the door…
+      .to(follower, { attr: { cx: 806 }, duration: 0.6, ease: 'back.out(2)' }, 12.5);           // …can't cross — recoils, stays behind
 
     // #5 THE COUNTER CHASES — at the phone the like-badge (reused from Online)
     // detaches, chases the ball, ringing up, until the crowd bounce flings it off
@@ -314,11 +365,15 @@
         e.el.style.opacity = Math.min(0.4, d * 0.02) * (1 - j * 0.22);
         tx = e.x; ty = e.y;
       }
+      // short ground dash under the ball while rolling
+      groundDash.setAttribute('x1', c.x - 14); groundDash.setAttribute('x2', c.x + 14);
+      groundDash.setAttribute('y1', c.y + 25); groundDash.setAttribute('y2', c.y + 25);
+      groundDash.style.opacity = gc.v * 0.45;
     }
     gsap.ticker.add(trailTick);
     ScrollTrigger.create({
       trigger: '#story', start: 'top bottom', end: 'bottom top',
-      onToggle: function (s) { active = s.isActive; if (!active) { primed = false; echoes.forEach(function (e) { e.el.style.opacity = 0; }); } }
+      onToggle: function (s) { active = s.isActive; if (!active) { primed = false; groundDash.style.opacity = 0; echoes.forEach(function (e) { e.el.style.opacity = 0; }); } }
     });
   };
 })();
