@@ -38,6 +38,13 @@
     var bg = C('rect', { x: -300, y: -300, width: 2040, height: 1500, 'class': 'course-bg', fill: '#0C0B0B' }, svg);
     svg.insertBefore(bg, svg.firstChild);
 
+    // gradient for the doorway's light wedge — the one sanctioned soft-fill
+    // exception; everything else in the course stays stroke-only
+    var defs = C('defs', {}, svg);
+    var doorGrad = C('linearGradient', { id: 'doorLightGrad', x1: '0%', y1: '0%', x2: '0%', y2: '100%' }, defs);
+    C('stop', { offset: '0%', 'stop-color': '#F7F5F0', 'stop-opacity': 0.22 }, doorGrad);
+    C('stop', { offset: '100%', 'stop-color': '#F7F5F0', 'stop-opacity': 0 }, doorGrad);
+
     // ---- beats: world coordinates the course descends through ----
     var BEAT = {
       lunch: { x: 700, y: 720, label: 'the lunch table' },
@@ -92,13 +99,22 @@
     // doorway frame at some scroll positions and read as an orphan dot.
     [[730, 1978], [772, 2008], [820, 1992]].forEach(function (p) { shape('ellipse', { cx: p[0], cy: p[1], rx: 10, ry: 5 }); }); // footprints
 
-    // DOORWAY — anchor: the door frame (one clean outline, not double-drawn).
-    // Accents (doorway family only): a coat hook, a floor mat — one cluster
-    // hugging the door's base.
-    anchorShape('rect', { x: 560, y: 2050, width: 320, height: 540, rx: 8 });
-    shape('circle', { cx: 828, cy: 2330, r: 7 });                             // knob
+    // DOORWAY — anchor is the door AS A WHOLE (frame + leaf ajar + threshold),
+    // all at anchor weight since they're one object, not separate props.
+    // "door" must read in half a second: frame, a leaf swung open at an angle
+    // (hinged left, clear of the ball's centred exit path), a handle, and a
+    // threshold line where the frame meets the floor.
+    anchorShape('rect', { x: 560, y: 2050, width: 320, height: 540, rx: 8 });  // frame
+    var leaf = anchorShape('rect', { x: 553, y: 2100, width: 14, height: 250, rx: 3 }); // leaf, closed position…
+    leaf.setAttribute('transform', 'rotate(-22 560 2100)');                   // …swung ajar from the left hinge
+    anchorShape('line', { x1: 520, y1: 2590, x2: 920, y2: 2590 });             // threshold — floor runs past the frame
+    // accents: the leaf's handle, a coat hook, a floor mat — one cluster at the door's base
+    shape('circle', { cx: 640, cy: 2297, r: 6 });                             // handle, on the open leaf
     shape('path', { d: 'M604,2108 h20 v14' });                                // coat hook
     shape('ellipse', { cx: 720, cy: 2560, rx: 150, ry: 26 });                 // floor mat
+    // light spilling through the open gap (right of the leaf) — the one
+    // sanctioned soft-fill gradient in the whole course
+    C('path', { d: 'M654,2100 L840,2100 L900,2620 L580,2620 Z', fill: 'url(#doorLightGrad)', 'class': 'door-light-wedge' }, far);
 
     // No telegraph line: the ball's ghost trail shows where it's BEEN, and the
     // props/pill edges are the ground. The only hint is a short ~28px dash that
@@ -127,10 +143,26 @@
       return g;
     });
 
+    // the course's closing line — the actual payoff of the sentence it's been
+    // spelling out. Same impact-stamp treatment as the other word pills, but
+    // it fires once, right as the ball crosses the threshold and exits.
+    var CLOSE = ['hold your line', 720, 2450];
+    var closeW = CLOSE[0].length * 12 + 34;
+    var closePill = C('g', { 'class': 'sw' }, pillsG);
+    C('rect', { x: CLOSE[1] - closeW / 2, y: CLOSE[2] - 20, width: closeW, height: 40, rx: 20, 'class': 'sw-box' }, closePill);
+    C('text', { x: CLOSE[1], y: CLOSE[2] + 7, 'class': 'sw-text' }, closePill).textContent = CLOSE[0];
+    gsap.set(closePill, { opacity: 0, scale: 0.6, transformOrigin: '720px 2450px' }); // hidden until stamped in
+
+    // the reclaimed line — the straight line the ball rode in the hero,
+    // reappearing ahead of it as it commits to the exit. Draws on, never
+    // telegraphed ahead of time (it only appears once the ball is committing).
+    var reclaim = C('line', { x1: 600, y1: 2650, x2: 900, y2: 2650, pathLength: 1, 'class': 'story-reclaim' }, shapes);
+
     /* ---------- reduced motion: a simple scrubbed descent, pills pre-filled ---------- */
     if (reduced) {
       [wp.lunch, wp.phone, wp.crowd, wp.door].forEach(function (w) { w.g.classList.add('lit'); gsap.set(w.txt, { opacity: 1 }); });
       gsap.set(wordPills, { opacity: 1 });
+      gsap.set(closePill, { opacity: 1 });
       gsap.set(anchor, { x: START.x, y: START.y });
       gsap.set(course, { y: 150 });
       var rtl = gsap.timeline({ scrollTrigger: { trigger: '#story', start: 'top top', end: 'bottom bottom', scrub: 0.6, onUpdate: syncFar } });
@@ -195,13 +227,27 @@
       .to(anchor, { y: 1720, duration: 0.9, ease: 'power2.in' }, 6.65)       // launch: down
       .to(ballCircle, { scaleX: 1.32, scaleY: 0.64, duration: 0.1, ease: 'power2.in' }, 7.45)  // crowd land squash
       .to(ballCircle, { scaleX: 1, scaleY: 1, duration: 0.85, ease: 'elastic.out(1, 0.4)' }, 7.55)
-      .to(anchor, { x: 720, y: 2320, duration: 2.4, ease: 'power1.inOut' }, 8.55)  // roll to the doorway
-      // THE EXIT: it rolls THROUGH the doorway and out, alone, eyes forward —
-      // straight into "YOU HAVE FELT IT BEFORE"
-      .to(anchor, { y: 2560, duration: 1.1, ease: 'power1.in' }, 11.35);
+      .to(anchor, { x: 720, y: 2320, duration: 2.4, ease: 'power1.inOut' }, 8.55)  // roll to the doorway — arrives, holds
+      // THE FINALE HESITATION: it stands at the threshold. One beat of
+      // quiet — a small breath — before it commits. (Eyes glance back at
+      // the follower during this window; see the faces block below.)
+      .to(ballCircle, { scale: 1.06, duration: 0.7, ease: 'sine.inOut' }, 11.7)
+      .to(ballCircle, { scale: 1, duration: 0.7, ease: 'sine.inOut' }, 12.4)
+      // THE EXIT: it commits and rolls THROUGH the doorway and out, alone,
+      // eyes forward — straight into "YOU HAVE FELT IT BEFORE"
+      .to(anchor, { y: 2560, duration: 1.1, ease: 'power1.in' }, 13.35);
 
     // camera follows the ball out through the door
-    tl.to(course, { y: -2110, duration: 1.3, ease: 'power1.inOut' }, 11.45);
+    tl.to(course, { y: -2110, duration: 1.3, ease: 'power1.inOut' }, 13.45);
+
+    // the reclaimed line draws on ahead of it as it commits — clean and true,
+    // the line it rode before the course ever knocked it around
+    tl.to(reclaim, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out', immediateRender: false }, 13.9);
+
+    // the closing line stamps in as the ball crosses the threshold — the
+    // payoff of the sentence the whole course has been spelling out
+    tl.fromTo(closePill, { opacity: 0, scale: 0.6 },
+      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)', transformOrigin: '720px 2450px', immediateRender: false }, 14.0);
 
     // ground-contact dash: a short mark under the ball WHILE it rolls, fading
     // out while airborne. The only ground hint — never drawn ahead of the ball.
@@ -219,7 +265,7 @@
       .to(bg, { fill: '#0F1016', duration: 2.6, ease: 'none' }, 5.45)       // phone: cool
       .to(bg, { fill: '#171120', duration: 2.2, ease: 'none' }, 7.45)       // crowd: plum
       .to(bg, { fill: '#1A1420', duration: 2.0, ease: 'none' }, 8.55)       // doorway: the coloured world
-      .to(bg, { fill: '#0C0B0B', duration: 1.8, ease: 'none' }, 11.35);     // …and back to black on the way out
+      .to(bg, { fill: '#0C0B0B', duration: 1.8, ease: 'none' }, 13.35);     // …and back to black as it commits
 
     // landing shockwaves (in the course group so they ride the camera)
     ILLO.impact(tl, 2.50, course, 700, 720, { size: 150, particles: 5 });
@@ -289,13 +335,15 @@
       .to([crowd[1], crowd[2]], { attr: { cy: '+=28' }, duration: 0.8, ease: 'power2.inOut' }, 8.40); // release
 
     // FOLLOWER — one dot peels off and trails the ball to the door, a step
-    // behind; it stops dead at the threshold and cannot cross. Ball exits alone.
+    // behind; it stops dead at the threshold and cannot cross. It waits
+    // through the ball's hesitation, then makes its own small attempt as the
+    // ball commits — and watches the ball go alone.
     var follower = C('circle', { cx: 942, cy: 1742, r: 15, 'class': 'peer story-npc' }, peersG);
     gsap.set(follower, { opacity: 0 });
     tl.to(follower, { opacity: 0.85, duration: 0.4 }, 8.45)
-      .to(follower, { attr: { cx: 806, cy: 2140 }, duration: 2.4, ease: 'power1.inOut' }, 8.55)  // trails to the threshold
-      .to(follower, { attr: { cx: 786 }, duration: 0.3, ease: 'power2.out' }, 11.15)             // reaches for the door…
-      .to(follower, { attr: { cx: 806 }, duration: 0.6, ease: 'back.out(2)' }, 11.45);           // …can't cross — recoils, stays behind
+      .to(follower, { attr: { cx: 806, cy: 2140 }, duration: 2.4, ease: 'power1.inOut' }, 8.55)  // trails to the threshold, waits
+      .to(follower, { attr: { cx: 786 }, duration: 0.3, ease: 'power2.out' }, 13.35)             // reaches, as the ball commits…
+      .to(follower, { attr: { cx: 806 }, duration: 0.6, ease: 'back.out(2)' }, 13.65);           // …can't cross — recoils, watches it go
 
     // #5 THE COUNTER CHASES — at the phone the like-badge (reused from Online)
     // detaches, chases the ball, ringing up, until the crowd bounce flings it off
@@ -323,7 +371,11 @@
         [6.45, 0.2, 0.8, 1, 0.4],      // glance down before the crowd drop
         [7.45, 0, 0, 0.05, 0.1],       // shut on the crowd landing
         [7.80, -0.2, -0.2, 1.7, 0.3],  // eyes SNAP WIDE — carried, didn't choose this
-        [8.45, 1, 0, 1, 0.6]           // set down, recover, look ahead to the door
+        [8.45, 1, 0, 1, 0.6],          // set down, recover, look ahead to the door
+        // THE FINALE HESITATION — glances back at the follower one last time…
+        [11.3, 0.43, -0.9, 1, 0.5],
+        // …then commits: eyes forward and down, into the exit
+        [13.3, 0.1, 0.9, 1, 0.3]
       ]
     }]);
     // the crowd + lunch dots watch the ball; the follower keeps its eyes on it

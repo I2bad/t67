@@ -445,7 +445,7 @@ html.reduced .footprints { stroke-dashoffset: 0; }
    Storytelling stretch
    ============================================================ */
 /* the intro obstacle course — a long pinned scrub the ball travels through */
-#story { height: 660vh; position: relative; }
+#story { height: 760vh; position: relative; }
 .story-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 #storySvg { width: 100%; height: 100%; }
 /* set dressing: full-white line art. Hierarchy is stroke weight ONLY — no
@@ -466,6 +466,12 @@ html.reduced .footprints { stroke-dashoffset: 0; }
 .sw-text { font-family: var(--font-mono); font-size: 20px; fill: #141313; text-anchor: middle; }
 /* living dots on the course (lunch/crowd/follower): solid, no translucency */
 .story-npc { opacity: 1; }
+/* the finale door: light spilling through the opening is the one sanctioned
+   subtle fill-gradient exception (everything else stays stroke-only) */
+.door-light-wedge { pointer-events: none; }
+/* the reclaimed straight line, drawn on as the ball commits to the exit */
+.story-reclaim { fill: none; stroke: var(--cream); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+html.reduced .story-reclaim { stroke-dashoffset: 0; }
 
 /* ============================================================
    Section headings (dark sections)
@@ -698,7 +704,7 @@ html.reduced .arrow-art { stroke-dashoffset: 0; }
   .hero-stage { position: relative; height: 100vh; }
   .hero-lines { position: relative; padding-top: 5.5rem; }
   .hero-line { font-size: clamp(2rem, 9vw, 4rem); white-space: normal; }
-  #story { height: 600vh; }
+  #story { height: 690vh; }
   .scenario-stage { height: auto; padding: 4rem 1.25rem; }
   .scenario-track { width: 100%; flex-direction: column; }
   .scenario-card { width: 100%; }
